@@ -5,7 +5,7 @@ function Sidebar({ items }) {
     <aside className="sidebar">
       <div className="brand-block">
         <p className="brand-kicker">Smart Campus Platform</p>
-        <h1> NEXORA</h1>
+        <h1> NEXORA </h1>
         <p className="brand-copy">
           Centralize campus operations with one connected command center.
         </p>
