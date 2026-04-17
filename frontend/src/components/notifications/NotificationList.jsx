@@ -32,6 +32,7 @@ export function NotificationList({ notifications, onRead, compact = false }) {
             className="block rounded-3xl border border-[#e4ddcf] bg-[#fbf8f1] p-4 transition duration-300 hover:-translate-y-0.5 hover:border-[#d3c099] hover:bg-[#fffdf8]"
             to={notification.link}
           >
+            
             {content}
           </Link>
         ) : (
