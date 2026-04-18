@@ -26,6 +26,7 @@ export function NotificationList({ notifications, onRead, compact = false }) {
           </>
         )
 
+        
         return notification.link ? (
           <Link
             key={notification.id}
