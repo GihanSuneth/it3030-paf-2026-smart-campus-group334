@@ -122,6 +122,7 @@ export function BookingForm({ resources, onSubmit, submitLabel = 'Submit Booking
       {error ? <p className="text-sm text-red-600">{error}</p> : null}
       {success ? <p className="text-sm text-emerald-600">{success}</p> : null}
 
+
       <button className="btn-primary w-full justify-center" disabled={submitting} type="submit">
         {submitting ? 'Saving...' : submitLabel}
       </button>
