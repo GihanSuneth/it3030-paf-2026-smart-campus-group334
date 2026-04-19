@@ -15,7 +15,9 @@ export function ManageTicketsPage() {
   }
 
   if (error) {
+
     return <ErrorState message={error} />
+  
   }
 
   const openCount = data.filter((ticket) => ticket.status === 'OPEN').length
