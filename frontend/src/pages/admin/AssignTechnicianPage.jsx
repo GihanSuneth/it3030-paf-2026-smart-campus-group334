@@ -63,7 +63,7 @@ export function AssignTechnicianPage() {
       ) : (
         <EmptyState
           title="No tickets need assignment"
-          message="All current tickets already have technician Ownership."
+          message="All current tickets already have Technician Ownership."
         />
       )}
     </PageContainer>
