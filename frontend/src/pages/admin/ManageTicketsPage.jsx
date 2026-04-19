@@ -7,6 +7,7 @@ import { PageContainer } from '../../components/layout/PageContainer'
 import { TicketCard } from '../../components/tickets/TicketCard'
 import { useMockQuery } from '../../hooks/useMockQuery'
 
+
 export function ManageTicketsPage() {
   const { data, loading, error } = useMockQuery(() => ticketApi.getAllTickets(), [])
 
