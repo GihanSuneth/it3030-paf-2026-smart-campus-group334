@@ -22,6 +22,26 @@ export function NotificationsPage() {
         }
       />
 
+      <section className="grid gap-4 md:grid-cols-3">
+        <article className="info-band">
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Inbox</p>
+          <p className="mt-2 text-3xl font-semibold tracking-tight text-slate-950">{notifications.length}</p>
+          <p className="mt-2 text-sm leading-6 text-slate-600">A single place for bookings, ticket updates, and assignment activity.</p>
+        </article>
+        <article className="info-band">
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Unread</p>
+          <p className="mt-2 text-3xl font-semibold tracking-tight text-slate-950">{unreadCount}</p>
+          <p className="mt-2 text-sm leading-6 text-slate-600">Unread items should be easy to identify and clear in batches.</p>
+        </article>
+        <article className="info-band">
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Status</p>
+          <p className="mt-2 text-lg font-semibold tracking-tight text-slate-950">
+            {unreadCount > 0 ? 'Needs review' : 'All caught up'}
+          </p>
+          <p className="mt-2 text-sm leading-6 text-slate-600">Use the header action to reduce clutter after reviewing recent activity.</p>
+        </article>
+      </section>
+
       {notifications.length > 0 ? (
         <NotificationList notifications={notifications} onRead={markAsRead} />
       ) : (

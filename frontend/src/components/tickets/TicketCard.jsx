@@ -3,7 +3,7 @@ import { TicketStatusBadge } from './TicketStatusBadge'
 
 export function TicketCard({ ticket, href = `/tickets/${ticket.id}` }) {
   return (
-    <article className="panel flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
+    <article className="interactive-card flex flex-col gap-3 xl:flex-row xl:items-start xl:justify-between">
       <div className="space-y-2">
         <div className="flex flex-wrap items-center gap-3">
           <h3 className="text-lg font-semibold text-slate-950">{ticket.title}</h3>
@@ -12,8 +12,8 @@ export function TicketCard({ ticket, href = `/tickets/${ticket.id}` }) {
         <p className="text-sm text-slate-500">
           {ticket.resourceName} · {ticket.location}
         </p>
-        <p className="text-sm text-slate-600">{ticket.description}</p>
-        <div className="flex flex-wrap gap-3 text-sm text-slate-500">
+        <p className="text-sm leading-6 text-slate-600">{ticket.description}</p>
+        <div className="flex flex-wrap gap-2.5 text-sm text-slate-500">
           <span>Priority: {ticket.priority}</span>
           <span>Category: {ticket.category}</span>
           {ticket.assignedTechnicianName ? (

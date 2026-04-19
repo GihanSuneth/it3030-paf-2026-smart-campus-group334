@@ -1,18 +1,18 @@
 export function PageHeader({ eyebrow, title, description, actions }) {
   return (
-    <div className="flex flex-col gap-4 border-b border-[#e2dccd] pb-4 md:flex-row md:items-end md:justify-between">
-      <div className="space-y-2.5">
+    <div className="flex flex-col gap-3 border-b border-slate-200 pb-3 md:flex-row md:items-end md:justify-between">
+      <div className="space-y-2">
         {eyebrow ? (
-          <span className="text-sm font-bold uppercase tracking-[0.24em] text-[#775b35]">
+          <span className="text-xs font-bold uppercase tracking-[0.26em] text-blue-700">
             {eyebrow}
           </span>
         ) : null}
-        <h1 className="font-serif-display text-4xl font-semibold tracking-tight text-slate-950 md:text-[2.7rem]">
+        <h1 className="font-serif-display text-[2.35rem] font-semibold tracking-tight text-slate-950 md:text-[2.55rem]">
           {title}
         </h1>
-        {description ? <p className="max-w-3xl text-lg leading-8 text-slate-600">{description}</p> : null}
+        {description ? <p className="max-w-2xl text-base leading-7 text-slate-600">{description}</p> : null}
       </div>
-      {actions ? <div className="flex flex-wrap gap-3 md:justify-end">{actions}</div> : null}
+      {actions ? <div className="flex flex-wrap gap-2.5 md:justify-end">{actions}</div> : null}
     </div>
   )
 }

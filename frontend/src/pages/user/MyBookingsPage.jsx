@@ -23,7 +23,10 @@ export function MyBookingsPage() {
     return <ErrorState message={bookingsQuery.error || resourcesQuery.error} />
   }
 
+  const bookings = bookingsQuery.data
   const resourceMap = new Map(resourcesQuery.data.map((resource) => [resource.id, resource.name]))
+  const pendingCount = bookings.filter((booking) => booking.status === BOOKING_STATUSES.PENDING).length
+  const approvedCount = bookings.filter((booking) => booking.status === BOOKING_STATUSES.APPROVED).length
 
   async function cancelBooking(bookingId) {
     await bookingApi.updateBookingStatus(
@@ -41,9 +44,27 @@ export function MyBookingsPage() {
         description="Track the status of each request and cancel when needed."
       />
 
-      {bookingsQuery.data.length > 0 ? (
-        <div className="space-y-4">
-          {bookingsQuery.data.map((booking) => (
+      <section className="grid gap-4 md:grid-cols-3">
+        <article className="info-band">
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Total Requests</p>
+          <p className="mt-2 text-3xl font-semibold tracking-tight text-slate-950">{bookings.length}</p>
+          <p className="mt-2 text-sm leading-6 text-slate-600">Every booking you have submitted is visible here.</p>
+        </article>
+        <article className="info-band">
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Awaiting Review</p>
+          <p className="mt-2 text-3xl font-semibold tracking-tight text-slate-950">{pendingCount}</p>
+          <p className="mt-2 text-sm leading-6 text-slate-600">Pending requests can still be canceled before approval.</p>
+        </article>
+        <article className="info-band">
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Approved</p>
+          <p className="mt-2 text-3xl font-semibold tracking-tight text-slate-950">{approvedCount}</p>
+          <p className="mt-2 text-sm leading-6 text-slate-600">Approved sessions are ready for planning and attendance.</p>
+        </article>
+      </section>
+
+      {bookings.length > 0 ? (
+        <div className="list-stack">
+          {bookings.map((booking) => (
             <BookingCard
               key={booking.id}
               actions={
