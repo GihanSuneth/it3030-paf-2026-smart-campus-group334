@@ -8,6 +8,7 @@ import { TicketCard } from '../../components/tickets/TicketCard'
 import { useAuth } from '../../hooks/useAuth'
 import { useMockQuery } from '../../hooks/useMockQuery'
 
+
 export function AssignedTicketsPage() {
   const { currentUser } = useAuth()
   const { data, loading, error } = useMockQuery(
@@ -25,7 +26,6 @@ export function AssignedTicketsPage() {
 
   return (
     <PageContainer>
-
       <PageHeader
         eyebrow="Assigned Work"
         title="Assigned Tickets"
@@ -49,6 +49,5 @@ export function AssignedTicketsPage() {
         />
       )}
     </PageContainer>
-    
   )
 }
