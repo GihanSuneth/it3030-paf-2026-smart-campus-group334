@@ -39,6 +39,7 @@ export function TechnicianDashboardPage() {
           </Link>
         }
       />
+      
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         <StatCard label="Assigned Tickets" value={data.length} />
