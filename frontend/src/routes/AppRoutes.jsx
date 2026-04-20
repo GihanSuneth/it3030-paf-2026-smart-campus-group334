@@ -29,6 +29,7 @@ import { UpdateTicketStatusPage } from '../pages/technician/UpdateTicketStatusPa
 import { ProtectedRoute } from './ProtectedRoute'
 import { RoleRoute } from './RoleRoute'
 
+
 function HomeRoute() {
   const { currentUser } = useAuth()
 
