@@ -17,7 +17,6 @@ export function ResolutionNotesPage() {
     return <LoadingState label="Loading resolution notes..." />
   }
 
-  
   if (ticketQuery.error) {
     return <ErrorState message={ticketQuery.error} />
   }
