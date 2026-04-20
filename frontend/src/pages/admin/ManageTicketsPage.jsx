@@ -25,6 +25,7 @@ export function ManageTicketsPage() {
   const inProgressCount = data.filter((ticket) => ticket.status === 'IN_PROGRESS').length
   const unresolvedCount = data.filter((ticket) => ticket.status !== 'RESOLVED' && ticket.status !== 'CLOSED').length
 
+  
   return (
     <PageContainer>
       <PageHeader
