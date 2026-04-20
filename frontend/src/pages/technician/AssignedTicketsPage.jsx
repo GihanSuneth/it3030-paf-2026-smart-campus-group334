@@ -25,6 +25,7 @@ export function AssignedTicketsPage() {
 
   return (
     <PageContainer>
+
       <PageHeader
         eyebrow="Assigned Work"
         title="Assigned Tickets"
@@ -48,5 +49,6 @@ export function AssignedTicketsPage() {
         />
       )}
     </PageContainer>
+    
   )
 }
