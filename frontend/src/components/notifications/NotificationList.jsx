@@ -8,16 +8,19 @@ export function NotificationList({ notifications, onRead, compact = false }) {
         const content = (
           <>
             <div className="space-y-1">
-              <h3 className="text-base font-semibold text-slate-950">{notification.title}</h3>
-              <p className="text-base leading-7 text-slate-600">{notification.message}</p>
+              <h3 className="text-sm font-bold text-slate-900">{notification.title}</h3>
+              <p className="text-sm leading-6 text-slate-500">{notification.message}</p>
             </div>
-            <div className="flex items-center justify-between gap-3">
-              <span className="text-sm text-slate-400">{formatDateTime(notification.createdAt)}</span>
+            <div className="flex items-center justify-between gap-3 pt-2">
+              <span className="text-xs text-slate-400">{formatDateTime(notification.createdAt)}</span>
               {onRead ? (
                 <button
-                  className="text-sm font-semibold text-[#775b35]"
+                  className="text-xs font-bold text-slate-600 hover:text-slate-900"
                   type="button"
-                  onClick={() => onRead(notification.id)}
+                  onClick={(e) => {
+                    e.preventDefault(); // Prevent link navigation if inside one
+                    onRead(notification.id);
+                  }}
                 >
                   Mark read
                 </button>
@@ -30,16 +33,15 @@ export function NotificationList({ notifications, onRead, compact = false }) {
         return notification.link ? (
           <Link
             key={notification.id}
-            className="block rounded-3xl border border-[#e4ddcf] bg-[#fbf8f1] p-4 transition duration-300 hover:-translate-y-0.5 hover:border-[#d3c099] hover:bg-[#fffdf8]"
+            className="block rounded-xl bg-slate-50 p-4 transition duration-200 hover:bg-slate-100"
             to={notification.link}
           >
-            
             {content}
           </Link>
         ) : (
           <article
             key={notification.id}
-            className="rounded-3xl border border-slate-200 bg-slate-50 p-4"
+            className="rounded-xl bg-slate-50 p-4"
           >
             {content}
           </article>
