@@ -1,9 +1,11 @@
 export function StatCard({ label, value, hint }) {
   return (
-    <article className="metric-card-lux micro-lift space-y-2">
-      <p className="text-base font-semibold text-slate-600">{label}</p>
-      <h3 className="text-[2.2rem] font-semibold tracking-tight text-slate-950">{value}</h3>
-      {hint ? <p className="text-base leading-7 text-slate-600">{hint}</p> : null}
+    <article className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm min-h-[9rem] flex flex-col justify-between">
+      <div>
+        <p className="text-sm font-bold text-slate-900">{label}</p>
+        <h3 className="mt-2 text-3xl font-bold text-slate-900">{value}</h3>
+      </div>
+      {hint ? <p className="mt-4 text-sm leading-6 text-slate-500">{hint}</p> : null}
     </article>
   )
 }

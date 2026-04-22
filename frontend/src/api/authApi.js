@@ -58,4 +58,26 @@ export const authApi = {
       handler: () => readDatabase().users,
     })
   },
+
+  oauthLogin(provider, role = ROLES.USER) {
+    return simulateRequest({
+      method: 'post',
+      url: `/auth/oauth/${provider}`,
+      handler: () => {
+        if (!Object.values(ROLES).includes(role)) {
+          throw new Error('Please choose a valid role.')
+        }
+
+        const database = readDatabase()
+        const matchedUser = database.users.find((user) => user.role === role)
+
+        if (!matchedUser) {
+          throw new Error('No mock user found for the selected role.')
+        }
+
+        saveSessionUser(matchedUser)
+        return matchedUser
+      },
+    })
+  },
 }

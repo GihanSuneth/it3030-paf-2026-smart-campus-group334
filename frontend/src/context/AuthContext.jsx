@@ -24,6 +24,18 @@ export function AuthProvider({ children }) {
     }
   }
 
+  async function oauthLogin(provider, role) {
+    setAuthLoading(true)
+    
+    try {
+      const user = await authApi.oauthLogin(provider, role)
+      setCurrentUser(user)
+      return user
+    } finally {
+      setAuthLoading(false)
+    }
+  }
+
   async function logout() {
     setAuthLoading(true)
 
@@ -42,6 +54,7 @@ export function AuthProvider({ children }) {
         authLoading,
         isAuthenticated: Boolean(currentUser),
         login,
+        oauthLogin,
         logout,
       }}
     >
