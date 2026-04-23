@@ -8,6 +8,8 @@ import { TicketCard } from '../../components/tickets/TicketCard'
 import { useAuth } from '../../hooks/useAuth'
 import { useMockQuery } from '../../hooks/useMockQuery'
 
+import { StatCard } from '../../components/common/StatCard'
+
 export function MyTicketsPage() {
   const { currentUser } = useAuth()
   const { data, loading, error } = useMockQuery(() => ticketApi.getMyTickets(currentUser.id), [
@@ -23,7 +25,7 @@ export function MyTicketsPage() {
   }
 
   const openCount = data.filter((ticket) => ticket.status === 'OPEN').length
-  const inProgressCount = data.filter((ticket) => ticket.status === 'IN_PROGRESS').length
+  const processingCount = data.filter((ticket) => ['IN_PROGRESS', 'RESOLVED'].includes(ticket.status)).length
 
   return (
     <PageContainer>
@@ -33,28 +35,30 @@ export function MyTicketsPage() {
         description="Follow the current status of every issue you reported."
       />
 
-      <section className="grid gap-4 md:grid-cols-3">
-        <article className="info-band">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Reported Issues</p>
-          <p className="mt-2 text-3xl font-semibold tracking-tight text-slate-950">{data.length}</p>
-          <p className="mt-2 text-sm leading-6 text-slate-600">Your submissions stay visible until resolved or closed.</p>
-        </article>
-        <article className="info-band">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Open</p>
-          <p className="mt-2 text-3xl font-semibold tracking-tight text-slate-950">{openCount}</p>
-          <p className="mt-2 text-sm leading-6 text-slate-600">Open tickets are waiting for assignment or first review.</p>
-        </article>
-        <article className="info-band">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">In Progress</p>
-          <p className="mt-2 text-3xl font-semibold tracking-tight text-slate-950">{inProgressCount}</p>
-          <p className="mt-2 text-sm leading-6 text-slate-600">These issues are already being worked on by support staff.</p>
-        </article>
+      <section className="grid gap-4 md:grid-cols-3 mb-8">
+        <StatCard 
+          label="Reported Issues" 
+          value={data.length} 
+          hint="Total tickets submitted in this workflow."
+        />
+        <StatCard 
+          label="Open Tickets" 
+          value={openCount} 
+          hint="Waiting for assignment or initial triage."
+        />
+        <StatCard 
+          label="In Progress / Resolved" 
+          value={processingCount} 
+          hint="Technicians are currently working on these."
+        />
       </section>
 
       {data.length > 0 ? (
-        <div className="list-stack">
+        <div className="flex flex-col gap-5">
           {data.map((ticket) => (
-            <TicketCard key={ticket.id} ticket={ticket} />
+            <div key={ticket.id} className="p-1">
+              <TicketCard ticket={ticket} />
+            </div>
           ))}
         </div>
       ) : (

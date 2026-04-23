@@ -11,10 +11,13 @@ import { RESOURCE_STATUSES } from '../../constants/statuses'
 import { useMockQuery } from '../../hooks/useMockQuery'
 import { useState } from 'react'
 
+import { RESOURCE_CATEGORIES, EQUIPMENT_TYPES, SPACE_TYPES } from '../../constants/resources'
+
 export function ResourcesPage() {
+  const [activeTab, setActiveTab] = useState(RESOURCE_CATEGORIES.EQUIPMENT) // EQUIPMENT or SPACES
   const [filters, setFilters] = useState({
     query: '',
-    type: 'ALL',
+    type: 'ALL', // Sub-type within category
     location: 'ALL',
     status: 'ALL',
   })
@@ -55,17 +58,34 @@ export function ResourcesPage() {
         }
       />
 
+      <div className="flex bg-slate-100 p-1.5 rounded-2xl w-fit mb-8">
+        <button 
+          onClick={() => { setActiveTab(RESOURCE_CATEGORIES.EQUIPMENT); updateFilter('type', 'ALL') }}
+          className={`px-8 py-2.5 rounded-[14px] text-sm font-bold transition-all ${activeTab === RESOURCE_CATEGORIES.EQUIPMENT ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+        >
+          Equipment
+        </button>
+        <button 
+          onClick={() => { setActiveTab(RESOURCE_CATEGORIES.SPACES); updateFilter('type', 'ALL') }}
+          className={`px-8 py-2.5 rounded-[14px] text-sm font-bold transition-all ${activeTab === RESOURCE_CATEGORIES.SPACES ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+        >
+          Space Resources
+        </button>
+      </div>
+
       <ResourceFilterBar
         filters={filters}
         locations={locations}
         onChange={updateFilter}
         statuses={Object.values(RESOURCE_STATUSES)}
-        types={types}
+        types={activeTab === 'EQUIPMENT' ? EQUIPMENT_TYPES : SPACE_TYPES}
       />
 
       {resources.length > 0 ? (
-        <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          {resources.map((resource) => (
+        <section className="flex flex-col gap-4">
+          {resources
+            .filter(r => (activeTab === RESOURCE_CATEGORIES.EQUIPMENT ? EQUIPMENT_TYPES.includes(r.type) : SPACE_TYPES.includes(r.type)))
+            .map((resource) => (
             <ResourceCard key={resource.id} resource={resource} />
           ))}
         </section>

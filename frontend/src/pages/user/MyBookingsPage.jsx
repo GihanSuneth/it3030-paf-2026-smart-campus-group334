@@ -10,6 +10,8 @@ import { BOOKING_STATUSES } from '../../constants/statuses'
 import { useAuth } from '../../hooks/useAuth'
 import { useMockQuery } from '../../hooks/useMockQuery'
 
+import { StatCard } from '../../components/common/StatCard'
+
 export function MyBookingsPage() {
   const { currentUser } = useAuth()
   const bookingsQuery = useMockQuery(() => bookingApi.getMyBookings(currentUser.id), [currentUser.id])
@@ -34,49 +36,51 @@ export function MyBookingsPage() {
       { status: BOOKING_STATUSES.CANCELLED },
       currentUser,
     )
+    await bookingsQuery.refetch()
   }
 
   return (
     <PageContainer>
       <PageHeader
-        eyebrow="Bookings"
+        eyebrow="Reservations"
         title="My Bookings"
         description="Track the status of each request and cancel when needed."
       />
 
-      <section className="grid gap-4 md:grid-cols-3">
-        <article className="info-band">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Total Requests</p>
-          <p className="mt-2 text-3xl font-semibold tracking-tight text-slate-950">{bookings.length}</p>
-          <p className="mt-2 text-sm leading-6 text-slate-600">Every booking you have submitted is visible here.</p>
-        </article>
-        <article className="info-band">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Awaiting Review</p>
-          <p className="mt-2 text-3xl font-semibold tracking-tight text-slate-950">{pendingCount}</p>
-          <p className="mt-2 text-sm leading-6 text-slate-600">Pending requests can still be canceled before approval.</p>
-        </article>
-        <article className="info-band">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Approved</p>
-          <p className="mt-2 text-3xl font-semibold tracking-tight text-slate-950">{approvedCount}</p>
-          <p className="mt-2 text-sm leading-6 text-slate-600">Approved sessions are ready for planning and attendance.</p>
-        </article>
+      <section className="grid gap-4 md:grid-cols-3 mb-8">
+        <StatCard 
+          label="Total Requests" 
+          value={bookings.length} 
+          hint="Every session you have scheduled."
+        />
+        <StatCard 
+          label="Awaiting Review" 
+          value={pendingCount} 
+          hint="Pending admin approval."
+        />
+        <StatCard 
+          label="Approved Slots" 
+          value={approvedCount} 
+          hint="Confirmed bookings ready for use."
+        />
       </section>
 
       {bookings.length > 0 ? (
-        <div className="list-stack">
+        <div className="flex flex-col gap-5">
           {bookings.map((booking) => (
-            <BookingCard
-              key={booking.id}
-              actions={
-                [BOOKING_STATUSES.PENDING, BOOKING_STATUSES.APPROVED].includes(booking.status) ? (
-                  <button className="btn-ghost" type="button" onClick={() => cancelBooking(booking.id)}>
-                    Cancel Booking
-                  </button>
-                ) : null
-              }
-              booking={booking}
-              resourceName={resourceMap.get(booking.resourceId) ?? 'Resource'}
-            />
+            <div key={booking.id} className="p-0.5">
+              <BookingCard
+                actions={
+                  [BOOKING_STATUSES.PENDING, BOOKING_STATUSES.APPROVED].includes(booking.status) ? (
+                    <button className="btn-secondary !text-rose-600 !border-rose-100 hover:!bg-rose-50" type="button" onClick={() => cancelBooking(booking.id)}>
+                      Cancel Slot
+                    </button>
+                  ) : null
+                }
+                booking={booking}
+                resourceName={resourceMap.get(booking.resourceId) ?? 'Resource'}
+              />
+            </div>
           ))}
         </div>
       ) : (
