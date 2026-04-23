@@ -99,35 +99,36 @@ export function DashboardPage() {
   
   return (
     <PageContainer>
-      <section className="hero-panel space-y-5">
+      <section className="rounded-2xl border border-slate-200 bg-white p-6 md:p-8 space-y-6 shadow-sm">
         <PageHeader
           eyebrow="Shared Dashboard"
           title="Campus Summary"
           description="A common entry point with role-specific quick actions, live counts, and a clearer overview of what needs attention."
           actions={quickActions.map((action) => (
-            <Link key={action.path} className="btn-ghost" to={action.path}>
+            <Link key={action.path} className="btn-ghost !rounded-lg !py-2 border-slate-200 hover:border-slate-300 shadow-sm" to={action.path}>
               {action.label}
             </Link>
           ))}
         />
 
-        <div className="grid gap-4 lg:grid-cols-[minmax(0,1.15fr)_24rem]">
-          <div className="section-panel">
-            <p className="text-lg font-semibold text-slate-950">Workspace Focus</p>
-            <p className="mt-2 text-base leading-7 text-slate-600">
+      </section>
+
+      <section className="grid gap-4 md:grid-cols-2">
+          <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+            <p className="text-sm font-bold text-slate-900">Workspace Focus</p>
+            <p className="mt-2 text-sm leading-6 text-slate-500">
               This dashboard keeps the most relevant campus information visible first, then lets each role move quickly into detailed tasks.
             </p>
           </div>
-          <div className="section-panel">
-            <p className="text-lg font-semibold text-slate-950">Current Role</p>
-            <p className="mt-2 text-[2rem] font-semibold text-slate-950">
+          <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+            <p className="text-sm font-bold text-slate-900">Current Role</p>
+            <p className="mt-2 text-2xl font-bold text-slate-900">
               {currentUser.role === ROLES.USER ? 'User' : currentUser.role === ROLES.ADMIN ? 'Admin' : 'Technician'}
             </p>
-            <p className="mt-2 text-base leading-7 text-slate-600">
+            <p className="mt-2 text-sm leading-6 text-slate-500">
               Navigation and permissions adapt automatically for this workspace.
             </p>
           </div>
-        </div>
       </section>
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
@@ -136,19 +137,23 @@ export function DashboardPage() {
         ))}
       </section>
 
-      <section className="grid gap-5 xl:grid-cols-[minmax(0,1.3fr)_25rem]">
-        <article className="section-panel">
-          <h2 className="text-2xl font-semibold text-slate-950">Role Workflow</h2>
-          <p className="mt-2 text-base leading-7 text-slate-600">
-            Open your dedicated workspace for detailed operations and day-to-day management.
-          </p>
-          <Link className="btn-primary mt-5" to={ROLE_HOME_PATHS[currentUser.role]}>
-            Open {currentUser.role === ROLES.USER ? 'User' : currentUser.role === ROLES.ADMIN ? 'Admin' : 'Technician'} Dashboard
-          </Link>
+      <section className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+        <article className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm flex flex-col justify-between">
+          <div>
+            <h2 className="text-lg font-bold text-slate-900">Role Workflow</h2>
+            <p className="mt-2 text-sm leading-6 text-slate-500">
+              Open your dedicated workspace for detailed operations and day-to-day management.
+            </p>
+          </div>
+          <div className="mt-6">
+            <Link className="btn-primary !rounded-lg !py-2 hover:bg-[#152845] transition text-white text-sm font-bold shadow-sm inline-block" to={ROLE_HOME_PATHS[currentUser.role]}>
+              Open {currentUser.role === ROLES.USER ? 'User' : currentUser.role === ROLES.ADMIN ? 'Admin' : 'Technician'} Dashboard
+            </Link>
+          </div>
         </article>
 
-        <article className="section-panel">
-          <h2 className="text-2xl font-semibold text-slate-950">Recent Notifications</h2>
+        <article className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+          <h2 className="text-lg font-bold text-slate-900">Recent Notifications</h2>
           <p className="mt-2 text-base leading-7 text-slate-600">
             Latest updates across bookings, tickets, and assignments.
           </p>
