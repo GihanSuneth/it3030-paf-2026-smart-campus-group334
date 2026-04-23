@@ -102,6 +102,7 @@ export function BookingForm({ resources, onSubmit, submitLabel = 'Submit Booking
           }
         />
       </label>
+      
       <label className="space-y-2">
         <span className="text-sm font-semibold text-slate-700">Expected attendees</span>
         <input
