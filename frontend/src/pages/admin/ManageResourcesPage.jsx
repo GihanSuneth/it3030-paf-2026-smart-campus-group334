@@ -8,6 +8,8 @@ import { useMockQuery } from '../../hooks/useMockQuery'
 import { LoadingState } from '../../components/common/LoadingState'
 import { ErrorState } from '../../components/common/ErrorState'
 
+import { RESOURCE_CATEGORIES, EQUIPMENT_TYPES, SPACE_TYPES } from '../../constants/resources'
+
 const initialForm = {
   name: '',
   type: 'Lecture Hall',
@@ -22,6 +24,7 @@ const initialForm = {
 export function ManageResourcesPage() {
   const { currentUser } = useAuth()
   const query = useMockQuery(() => resourceApi.getResources(), [])
+  const [activeTab, setActiveTab] = useState(RESOURCE_CATEGORIES.EQUIPMENT)
   const [formState, setFormState] = useState(initialForm)
   const [message, setMessage] = useState('')
 
@@ -84,18 +87,37 @@ export function ManageResourcesPage() {
         </article>
       </section>
 
+      <div className="flex bg-slate-100 p-1.5 rounded-2xl w-fit mb-8">
+        <button 
+          onClick={() => setActiveTab(RESOURCE_CATEGORIES.EQUIPMENT)}
+          className={`px-8 py-2.5 rounded-[14px] text-sm font-bold transition-all ${activeTab === RESOURCE_CATEGORIES.EQUIPMENT ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+        >
+          Equipment
+        </button>
+        <button 
+          onClick={() => setActiveTab(RESOURCE_CATEGORIES.SPACES)}
+          className={`px-8 py-2.5 rounded-[14px] text-sm font-bold transition-all ${activeTab === RESOURCE_CATEGORIES.SPACES ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+        >
+          Space Resources
+        </button>
+      </div>
+
       <section className="page-grid">
         <div className="list-stack">
-          {query.data.map((resource) => (
-            <div key={resource.id} className="space-y-2.5">
-              <ResourceCard resource={resource} />
-              <div className="flex justify-end">
-                <button className="btn-ghost" type="button" onClick={() => toggleStatus(resource)}>
-                  Toggle Status
-                </button>
-              </div>
-            </div>
-          ))}
+          <div className="flex flex-col gap-4">
+            {query.data
+              .filter(r => (activeTab === RESOURCE_CATEGORIES.EQUIPMENT ? EQUIPMENT_TYPES.includes(r.type) : SPACE_TYPES.includes(r.type)))
+              .map((resource) => (
+                <div key={resource.id} className="group relative">
+                  <ResourceCard resource={resource} />
+                  <div className="absolute top-6 right-6 flex gap-2 opacity-0 group-hover:opacity-100 transition-all">
+                    <button className="btn-secondary !py-2 !px-4 !rounded-xl text-xs" type="button" onClick={() => toggleStatus(resource)}>
+                      {resource.status === 'ACTIVE' ? 'Set Offline' : 'Set Online'}
+                    </button>
+                  </div>
+                </div>
+              ))}
+          </div>
         </div>
 
         <form className="form-shell" onSubmit={handleSubmit}>
@@ -129,10 +151,12 @@ export function ManageResourcesPage() {
                     setFormState((current) => ({ ...current, type: event.target.value }))
                   }
                 >
-                  <option>Lecture Hall</option>
-                  <option>Computer Lab</option>
-                  <option>Meeting Room</option>
-                  <option>Innovation Space</option>
+                  <optgroup label="Equipment">
+                    {EQUIPMENT_TYPES.map(t => <option key={t}>{t}</option>)}
+                  </optgroup>
+                  <optgroup label="Spaces">
+                    {SPACE_TYPES.map(t => <option key={t}>{t}</option>)}
+                  </optgroup>
                 </select>
               </label>
               <label className="space-y-2">

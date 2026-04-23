@@ -50,8 +50,8 @@ export function NotificationProvider({ children }) {
     await refreshNotifications()
   }
 
-  const unreadCount = notifications.filter(
-    (notification) => !notification.readBy.includes(currentUser?.id),
+  const unreadCount = (notifications || []).filter(
+    (notification) => !(notification?.readBy || []).includes(currentUser?.id),
   ).length
 
   return (

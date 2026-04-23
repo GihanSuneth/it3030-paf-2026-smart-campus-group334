@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { getResourceCategory, RESOURCE_CATEGORIES } from '../../constants/resources'
 
 const initialState = {
   resourceId: '',
@@ -14,6 +15,9 @@ export function BookingForm({ resources, onSubmit, submitLabel = 'Submit Booking
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
+
+  const equipment = resources.filter(r => getResourceCategory(r.type) === RESOURCE_CATEGORIES.EQUIPMENT)
+  const spaces = resources.filter(r => getResourceCategory(r.type) === RESOURCE_CATEGORIES.SPACES)
 
   async function handleSubmit(event) {
     event.preventDefault()
@@ -64,11 +68,24 @@ export function BookingForm({ resources, onSubmit, submitLabel = 'Submit Booking
                 }
               >
                 <option value="">Select a resource</option>
-                {resources.map((resource) => (
-                  <option key={resource.id} value={resource.id}>
-                    {resource.name}
-                  </option>
-                ))}
+                {equipment.length > 0 && (
+                  <optgroup label="Equipment">
+                    {equipment.map((resource) => (
+                      <option key={resource.id} value={resource.id}>
+                        {resource.name}
+                      </option>
+                    ))}
+                  </optgroup>
+                )}
+                {spaces.length > 0 && (
+                  <optgroup label="Spaces">
+                    {spaces.map((resource) => (
+                      <option key={resource.id} value={resource.id}>
+                        {resource.name}
+                      </option>
+                    ))}
+                  </optgroup>
+                )}
               </select>
             </label>
             <label className="space-y-2">

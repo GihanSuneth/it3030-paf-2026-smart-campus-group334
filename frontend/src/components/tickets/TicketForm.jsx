@@ -1,5 +1,7 @@
 import { useState } from 'react'
 
+import { getResourceCategory, RESOURCE_CATEGORIES } from '../../constants/resources'
+
 const initialState = {
   resourceId: '',
   location: '',
@@ -16,6 +18,9 @@ export function TicketForm({ resources, onSubmit, submitLabel = 'Create Ticket' 
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
+
+  const equipment = resources.filter(r => getResourceCategory(r.type) === RESOURCE_CATEGORIES.EQUIPMENT)
+  const spaces = resources.filter(r => getResourceCategory(r.type) === RESOURCE_CATEGORIES.SPACES)
 
   async function handleSubmit(event) {
     event.preventDefault()
@@ -85,11 +90,24 @@ export function TicketForm({ resources, onSubmit, submitLabel = 'Create Ticket' 
                 onChange={(event) => handleResourceChange(event.target.value)}
               >
                 <option value="">Choose a resource</option>
-                {resources.map((resource) => (
-                  <option key={resource.id} value={resource.id}>
-                    {resource.name}
-                  </option>
-                ))}
+                {equipment.length > 0 && (
+                  <optgroup label="Equipment">
+                    {equipment.map((resource) => (
+                      <option key={resource.id} value={resource.id}>
+                        {resource.name}
+                      </option>
+                    ))}
+                  </optgroup>
+                )}
+                {spaces.length > 0 && (
+                  <optgroup label="Spaces">
+                    {spaces.map((resource) => (
+                      <option key={resource.id} value={resource.id}>
+                        {resource.name}
+                      </option>
+                    ))}
+                  </optgroup>
+                )}
               </select>
             </label>
             <label className="space-y-2">
@@ -137,22 +155,22 @@ export function TicketForm({ resources, onSubmit, submitLabel = 'Create Ticket' 
           </div>
         </div>
 
-        <div className="field-group space-y-4">
-          <label className="space-y-2">
-            <span className="text-sm font-semibold text-slate-700">Description</span>
+        <div className="field-group space-y-6">
+          <label className="space-y-2 block">
+            <span className="text-xs font-bold uppercase tracking-widest text-slate-500">Problem Description</span>
             <textarea
               className="textarea"
               required
-              rows="5"
+              placeholder="What specifically isn't working? Please provide as much detail as possible..."
               value={formState.description}
               onChange={(event) =>
                 setFormState((current) => ({ ...current, description: event.target.value }))
               }
             />
           </label>
-          <div className="grid gap-4 md:grid-cols-[minmax(0,0.7fr)_minmax(0,1.3fr)]">
+          <div className="grid gap-6 md:grid-cols-[1fr_1.5fr]">
             <label className="space-y-2">
-              <span className="text-sm font-semibold text-slate-700">Priority</span>
+              <span className="text-xs font-bold uppercase tracking-widest text-slate-500">Urgency Level</span>
               <select
                 className="input"
                 value={formState.priority}
@@ -160,25 +178,33 @@ export function TicketForm({ resources, onSubmit, submitLabel = 'Create Ticket' 
                   setFormState((current) => ({ ...current, priority: event.target.value }))
                 }
               >
-                <option value="LOW">LOW</option>
-                <option value="MEDIUM">MEDIUM</option>
-                <option value="HIGH">HIGH</option>
+                <option value="LOW">LOW - Minor inconvenience</option>
+                <option value="MEDIUM">MEDIUM - Affecting workflow</option>
+                <option value="HIGH">HIGH - Critical failure</option>
               </select>
             </label>
-            <label className="space-y-2">
-              <span className="text-sm font-semibold text-slate-700">Image attachments</span>
-              <div className="rounded-[20px] border border-dashed border-slate-300 bg-slate-50 p-4">
-                <input accept="image/*" className="w-full text-sm text-slate-500" multiple type="file" onChange={handleFiles} />
-                <p className="mt-3 text-xs text-slate-500">Upload up to 3 images for the support team.</p>
+            <div className="space-y-2">
+              <span className="text-xs font-bold uppercase tracking-widest text-slate-500">Visual Evidence (Images)</span>
+              <div className="rounded-xl border-2 border-dashed border-slate-200 bg-slate-50/50 p-4 transition-all hover:bg-white hover:border-indigo-300">
+                <input 
+                  accept="image/*" 
+                  className="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 cursor-pointer" 
+                  multiple 
+                  type="file" 
+                  onChange={handleFiles} 
+                />
+                <p className="mt-2 text-[10px] text-slate-400 font-medium italic">Max 3 images. Photos of error messages or physical damage are helpful.</p>
                 {formState.attachments.length > 0 ? (
-                  <ul className="mt-3 space-y-1 text-sm text-slate-600">
+                  <div className="mt-3 flex flex-wrap gap-2">
                     {formState.attachments.map((attachment) => (
-                      <li key={attachment.name}>{attachment.name}</li>
+                      <span key={attachment.name} className="inline-flex items-center gap-1.5 px-2 py-1 rounded-md bg-white border border-slate-100 text-[10px] font-bold text-slate-600 shadow-sm">
+                        {attachment.name}
+                      </span>
                     ))}
-                  </ul>
+                  </div>
                 ) : null}
               </div>
-            </label>
+            </div>
           </div>
         </div>
 

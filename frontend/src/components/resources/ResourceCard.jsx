@@ -2,33 +2,47 @@ import { Link } from 'react-router-dom'
 
 export function ResourceCard({ resource }) {
   return (
-    <article className="interactive-card flex h-full flex-col justify-between gap-3">
-      <div className="space-y-2.5">
-        <div className="flex items-start justify-between gap-4">
-          <div>
-            <h3 className="text-lg font-semibold text-slate-950">{resource.name}</h3>
-            <p className="text-sm text-slate-500">{resource.location}</p>
-          </div>
-          <span
-            className={`status-chip ${
-              resource.status === 'ACTIVE' ? 'status-green' : 'status-red'
-            }`}
-          >
+    <article className="glass-card hover:border-indigo-400/30 flex flex-col md:flex-row items-center gap-6 p-6 cursor-pointer group/card transition-all">
+      <div className="h-20 w-20 flex-shrink-0 bg-slate-50 rounded-2xl border border-slate-200 flex items-center justify-center group-hover/card:scale-105 group-hover/card:bg-white transition-all duration-300">
+        <span className="text-2xl">
+          {resource.type.includes('Lab') ? '💻' : 
+           resource.type.includes('Hall') || resource.type.includes('Auditorium') ? '🏢' : 
+           resource.type.includes('Projector') ? '📹' : '🛠️'}
+        </span>
+      </div>
+
+      <div className="flex-1 min-w-0 space-y-2">
+        <div className="flex items-center gap-3">
+          <h3 className="text-xl font-bold text-slate-950 truncate">{resource.name}</h3>
+          <span className={`status-chip ${resource.status === 'ACTIVE' ? 'status-green' : 'status-red'}`}>
             {resource.status}
           </span>
         </div>
-        <p className="text-sm leading-6 text-slate-600">{resource.description}</p>
-        <div className="grid grid-cols-2 gap-2.5 text-sm text-slate-500">
-          <span>Type: {resource.type}</span>
-          <span>Capacity: {resource.capacity}</span>
-          <span>Start: {resource.availabilityStart}</span>
-          <span>End: {resource.availabilityEnd}</span>
+        
+        <div className="flex flex-col gap-1">
+          <p className="text-xs font-bold text-indigo-500 uppercase tracking-wider">{resource.type}</p>
+          <p className="text-sm font-medium text-slate-500">{resource.location} • Capacity: {resource.capacity}</p>
+        </div>
+
+        <div className="bg-slate-50/80 rounded-xl p-3 border border-slate-100">
+          <p className="text-sm text-slate-600 leading-relaxed italic">
+            "{resource.description || 'No description provided for this resource.'}"
+          </p>
+        </div>
+        
+        <div className="flex flex-wrap gap-x-6 gap-y-2 pt-1 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+          <span className="flex items-center gap-1.5">Availability: <span className="text-slate-600">{resource.availabilityStart} - {resource.availabilityEnd}</span></span>
         </div>
       </div>
 
-      <Link className="btn-ghost w-full justify-center text-center" to={`/resources/${resource.id}`}>
-        View Details
-      </Link>
+      <div className="flex-shrink-0 w-full md:w-auto">
+        <Link 
+          className="btn-primary w-full md:w-auto justify-center whitespace-nowrap" 
+          to={`/resources/${resource.id}`}
+        >
+          View Details
+        </Link>
+      </div>
     </article>
   )
 }

@@ -3,28 +3,32 @@ import { TicketStatusBadge } from './TicketStatusBadge'
 
 export function TicketCard({ ticket, href = `/tickets/${ticket.id}` }) {
   return (
-    <article className="interactive-card flex flex-col gap-3 xl:flex-row xl:items-start xl:justify-between">
-      <div className="space-y-2">
+    <article className="glass-card flex flex-col md:flex-row items-center gap-6 p-5 cursor-pointer group hover-lift">
+      <div className="flex-1 min-w-0 space-y-2">
         <div className="flex flex-wrap items-center gap-3">
-          <h3 className="text-lg font-semibold text-slate-950">{ticket.title}</h3>
           <TicketStatusBadge status={ticket.status} />
+          <h3 className="text-lg font-bold text-slate-950 truncate">{ticket.title}</h3>
+          <span className="text-[10px] font-black text-slate-300 uppercase tracking-widest hidden sm:inline">#{ticket.id.slice(0, 8)}</span>
         </div>
-        <p className="text-sm text-slate-500">
-          {ticket.resourceName} · {ticket.location}
+        
+        <p className="text-sm font-medium text-slate-500">
+          <span className="text-indigo-500 font-bold">{ticket.resourceName}</span> · {ticket.location}
         </p>
-        <p className="text-sm leading-6 text-slate-600">{ticket.description}</p>
-        <div className="flex flex-wrap gap-2.5 text-sm text-slate-500">
-          <span>Priority: {ticket.priority}</span>
-          <span>Category: {ticket.category}</span>
-          {ticket.assignedTechnicianName ? (
-            <span>Technician: {ticket.assignedTechnicianName}</span>
-          ) : null}
+
+        <div className="flex flex-wrap gap-x-6 gap-y-2 pt-1 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+          <span>Priority: <span className={ticket.priority === 'HIGH' ? 'text-rose-500' : 'text-slate-600'}>{ticket.priority}</span></span>
+          <span>Category: <span className="text-slate-600">{ticket.category}</span></span>
+          {ticket.assignedTechnicianName && (
+             <span className="text-indigo-400">Assigned: <span className="text-indigo-600">{ticket.assignedTechnicianName}</span></span>
+          )}
         </div>
       </div>
 
-      <Link className="btn-ghost text-center" to={href}>
-        View Ticket
-      </Link>
+      <div className="flex-shrink-0 w-full md:w-auto">
+        <Link className="btn-primary w-full md:w-auto justify-center whitespace-nowrap !py-2 !px-5 shadow-sm" to={href}>
+          Track Issue
+        </Link>
+      </div>
     </article>
   )
 }

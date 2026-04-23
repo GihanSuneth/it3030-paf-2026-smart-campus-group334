@@ -23,14 +23,24 @@ export function readDatabase() {
     return clone(seedData)
   }
 
-  const storedValue = window.localStorage.getItem(DATABASE_KEY)
+  try {
+    const storedValue = window.localStorage.getItem(DATABASE_KEY)
 
-  if (!storedValue) {
+    if (!storedValue || storedValue === 'null') {
+      window.localStorage.setItem(DATABASE_KEY, JSON.stringify(seedData))
+      return clone(seedData)
+    }
+
+    const parsed = JSON.parse(storedValue)
+    if (!parsed || typeof parsed !== 'object' || !parsed.users) {
+       throw new Error('Malformed database')
+    }
+    return parsed
+  } catch (e) {
+    console.warn('Database corrupted, restoring seed data...')
     window.localStorage.setItem(DATABASE_KEY, JSON.stringify(seedData))
     return clone(seedData)
   }
-
-  return JSON.parse(storedValue)
 }
 
 export function writeDatabase(database) {
