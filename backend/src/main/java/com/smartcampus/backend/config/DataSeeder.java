@@ -163,12 +163,14 @@ public class DataSeeder {
     }
 
     private Resource buildPhysical(String assetId, String name, String code, String type, String category, String location, String assignedTo, int serviceOrder) {
+        boolean spare = "Storage".equalsIgnoreCase(assignedTo);
         return Resource.builder()
                 .assetId(assetId)
                 .name(name)
                 .code(code)
                 .type(type)
                 .category(category)
+                .stockType(spare ? "SPARE" : "STANDARD")
                 .location(location)
                 .capacity(0)
                 .status("ACTIVE")

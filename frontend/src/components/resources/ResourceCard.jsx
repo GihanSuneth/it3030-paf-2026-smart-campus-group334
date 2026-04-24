@@ -31,7 +31,22 @@ export function ResourceCard({ resource }) {
         </div>
         
         <div className="flex flex-wrap gap-x-6 gap-y-2 pt-1 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-          <span className="flex items-center gap-1.5">Availability: <span className="text-slate-600">{resource.availabilityStart} - {resource.availabilityEnd}</span></span>
+          <span className="flex items-center gap-1.5">Code: <span className="text-slate-600">{resource.code}</span></span>
+          {resource.assetId ? (
+            <span className="flex items-center gap-1.5">Asset ID: <span className="text-slate-600">{resource.assetId}</span></span>
+          ) : null}
+          {resource.stockType ? (
+            <span className="flex items-center gap-1.5">Stock: <span className="text-slate-600">{resource.stockType}</span></span>
+          ) : null}
+          {typeof resource.available === 'boolean' ? (
+            <span className="flex items-center gap-1.5">Available: <span className="text-slate-600">{resource.available ? 'Yes' : 'No'}</span></span>
+          ) : null}
+          {resource.assignedTo ? (
+            <span className="flex items-center gap-1.5">Assigned To: <span className="text-slate-600">{resource.assignedTo}</span></span>
+          ) : null}
+          {resource.serviceOrder ? (
+            <span className="flex items-center gap-1.5">Service Order: <span className="text-slate-600">{resource.serviceOrder}</span></span>
+          ) : null}
         </div>
       </div>
 

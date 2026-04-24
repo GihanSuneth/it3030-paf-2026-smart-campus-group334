@@ -11,23 +11,18 @@ import { RESOURCE_STATUSES } from '../../constants/statuses'
 import { useMockQuery } from '../../hooks/useMockQuery'
 import { useState } from 'react'
 
-import { RESOURCE_CATEGORIES, EQUIPMENT_TYPES, SPACE_TYPES } from '../../constants/resources'
+import { RESOURCE_CATEGORIES, EQUIPMENT_TYPES, SPACE_TYPES, getResourceCategory } from '../../constants/resources'
 
 export function ResourcesPage() {
-  const [activeTab, setActiveTab] = useState(RESOURCE_CATEGORIES.EQUIPMENT) // EQUIPMENT or SPACES
+  const [activeTab, setActiveTab] = useState(RESOURCE_CATEGORIES.EQUIPMENT)
   const [filters, setFilters] = useState({
     query: '',
-    type: 'ALL', // Sub-type within category
+    type: 'ALL',
     location: 'ALL',
     status: 'ALL',
   })
 
-  const { data, loading, error } = useMockQuery(() => resourceApi.getResources(filters), [
-    filters.query,
-    filters.type,
-    filters.location,
-    filters.status,
-  ])
+  const { data, loading, error } = useMockQuery(() => resourceApi.getResources(), [])
 
   function updateFilter(key, value) {
     setFilters((current) => ({ ...current, [key]: value }))
@@ -42,8 +37,25 @@ export function ResourcesPage() {
   }
 
   const resources = data ?? []
-  const types = [...new Set(resources.map((resource) => resource.type))]
-  const locations = [...new Set(resources.map((resource) => resource.location))]
+  const categoryResources = resources.filter(
+    (resource) => getResourceCategory(resource.type, resource.category) === activeTab,
+  )
+
+  const filteredResources = categoryResources.filter((resource) => {
+    const matchesQuery =
+      !filters.query ||
+      resource.name.toLowerCase().includes(filters.query.toLowerCase()) ||
+      resource.location.toLowerCase().includes(filters.query.toLowerCase()) ||
+      resource.code.toLowerCase().includes(filters.query.toLowerCase())
+
+    const matchesType = filters.type === 'ALL' || resource.type === filters.type
+    const matchesLocation = filters.location === 'ALL' || resource.location === filters.location
+    const matchesStatus = filters.status === 'ALL' || resource.status === filters.status
+
+    return matchesQuery && matchesType && matchesLocation && matchesStatus
+  })
+
+  const locations = [...new Set(categoryResources.map((resource) => resource.location))].sort()
 
   return (
     <PageContainer>
@@ -78,14 +90,12 @@ export function ResourcesPage() {
         locations={locations}
         onChange={updateFilter}
         statuses={Object.values(RESOURCE_STATUSES)}
-        types={activeTab === 'EQUIPMENT' ? EQUIPMENT_TYPES : SPACE_TYPES}
+        types={activeTab === RESOURCE_CATEGORIES.EQUIPMENT ? EQUIPMENT_TYPES : SPACE_TYPES}
       />
 
-      {resources.length > 0 ? (
+      {filteredResources.length > 0 ? (
         <section className="flex flex-col gap-4">
-          {resources
-            .filter(r => (activeTab === RESOURCE_CATEGORIES.EQUIPMENT ? EQUIPMENT_TYPES.includes(r.type) : SPACE_TYPES.includes(r.type)))
-            .map((resource) => (
+          {filteredResources.map((resource) => (
             <ResourceCard key={resource.id} resource={resource} />
           ))}
         </section>

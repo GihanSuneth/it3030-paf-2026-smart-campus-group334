@@ -22,6 +22,7 @@ public class Resource {
     private String code;
     private String type; // CLASSROOM, LAB, EQUIPMENT
     private String category;
+    private String stockType;
     private String location;
     private int capacity;
     private String status; // AVAILABLE, MAINTAINANCE, OCCUPIED
