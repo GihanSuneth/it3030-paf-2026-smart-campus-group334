@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Service
 @RequiredArgsConstructor
@@ -32,6 +33,7 @@ public class TicketService {
     }
 
     public Ticket createTicket(Ticket ticket) {
+        ticket.setTicketCode(generateTicketCode());
         ticket.setStatus("CREATED");
         ticket.setCreatedAt(LocalDateTime.now());
         ticket.setUpdatedAt(LocalDateTime.now());
@@ -72,5 +74,14 @@ public class TicketService {
         ticket.getComments().add(comment);
         ticket.setUpdatedAt(LocalDateTime.now());
         return ticketRepository.save(ticket);
+    }
+
+    public String generateTicketCode() {
+        String candidate;
+        do {
+            int value = ThreadLocalRandom.current().nextInt(16001, 99999);
+            candidate = "TKT" + value;
+        } while (ticketRepository.existsByTicketCode(candidate));
+        return candidate;
     }
 }

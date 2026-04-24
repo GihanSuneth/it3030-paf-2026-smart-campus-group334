@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { getResourceCategory, RESOURCE_CATEGORIES } from '../../constants/resources'
 
 const initialState = {
@@ -16,8 +16,14 @@ export function BookingForm({
   onSubmit,
   onCheckAvailability,
   submitLabel = 'Submit Booking',
+  initialResourceId = '',
+  initialBookingType = RESOURCE_CATEGORIES.SPACES,
 }) {
-  const [formState, setFormState] = useState(initialState)
+  const [formState, setFormState] = useState({
+    ...initialState,
+    bookingType: initialBookingType,
+    resourceId: initialResourceId,
+  })
   const [submitting, setSubmitting] = useState(false)
   const [checkingAvailability, setCheckingAvailability] = useState(false)
   const [error, setError] = useState('')
@@ -31,6 +37,21 @@ export function BookingForm({
     (resource) => getResourceCategory(resource.type, resource.category) === RESOURCE_CATEGORIES.SPACES,
   )
   const visibleResources = formState.bookingType === RESOURCE_CATEGORIES.EQUIPMENT ? equipment : spaces
+  const selectedResource = useMemo(
+    () => resources.find((resource) => resource.id === formState.resourceId) || null,
+    [resources, formState.resourceId],
+  )
+
+  useEffect(() => {
+    setFormState((current) => ({
+      ...current,
+      bookingType: initialBookingType,
+      resourceId: initialResourceId,
+    }))
+    setAvailability(null)
+    setError('')
+    setSuccess('')
+  }, [initialBookingType, initialResourceId])
 
   async function handleAvailabilityCheck() {
     setCheckingAvailability(true)
@@ -63,7 +84,11 @@ export function BookingForm({
 
     try {
       await onSubmit({ ...formState, expectedAttendees: Number(formState.expectedAttendees) })
-      setFormState(initialState)
+      setFormState({
+        ...initialState,
+        bookingType: initialBookingType,
+        resourceId: '',
+      })
       setAvailability(null)
       setSuccess('Booking request submitted successfully.')
     } catch (submitError) {
@@ -117,9 +142,10 @@ export function BookingForm({
                 className="input"
                 required
                 value={formState.resourceId}
-                onChange={(event) =>
+                onChange={(event) => {
+                  setAvailability(null)
                   setFormState((current) => ({ ...current, resourceId: event.target.value }))
-                }
+                }}
               >
                 <option value="">Select a resource</option>
                 {visibleResources.map((resource) => (
@@ -167,6 +193,32 @@ export function BookingForm({
             </label>
           </div>
         </div>
+
+        {selectedResource ? (
+          <div className="field-group space-y-4">
+            <div className="rounded-2xl border border-indigo-100 bg-indigo-50/60 p-4">
+              <p className="text-sm font-semibold text-slate-900">Selected resource details</p>
+              <div className="mt-3 grid gap-3 md:grid-cols-2">
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-wider text-slate-500">Resource</p>
+                  <p className="mt-1 text-sm text-slate-700">{selectedResource.name}</p>
+                </div>
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-wider text-slate-500">Location</p>
+                  <p className="mt-1 text-sm text-slate-700">{selectedResource.location}</p>
+                </div>
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-wider text-slate-500">Code</p>
+                  <p className="mt-1 text-sm text-slate-700">{selectedResource.code}</p>
+                </div>
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-wider text-slate-500">Status</p>
+                  <p className="mt-1 text-sm text-slate-700">{selectedResource.status}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        ) : null}
 
         <div className="field-group space-y-4">
           <label className="space-y-2">

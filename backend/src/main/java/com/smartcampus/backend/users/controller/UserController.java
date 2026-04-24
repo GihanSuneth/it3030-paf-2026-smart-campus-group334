@@ -1,6 +1,7 @@
 package com.smartcampus.backend.users.controller;
 
 import com.smartcampus.backend.common.response.ApiResponse;
+import com.smartcampus.backend.users.dto.CreateTechnicianRequest;
 import com.smartcampus.backend.users.model.User;
 import com.smartcampus.backend.users.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -40,5 +41,10 @@ public class UserController {
     public ApiResponse<String> updateRole(@PathVariable String userId, @RequestParam String role) {
         userService.updateRole(userId, role);
         return ApiResponse.success("User role updated successfully", null);
+    }
+
+    @PostMapping("/technicians")
+    public ApiResponse<User> createTechnician(@RequestBody CreateTechnicianRequest request) {
+        return ApiResponse.success("Technician created successfully", userService.createTechnician(request));
     }
 }

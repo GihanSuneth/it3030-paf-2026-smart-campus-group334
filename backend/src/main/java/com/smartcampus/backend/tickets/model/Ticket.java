@@ -18,6 +18,7 @@ import java.util.List;
 public class Ticket {
     @Id
     private String id;
+    private String ticketCode;
     private String title;
     private String description;
     private String category; // TECHNICAL, FACILITY, OTHER

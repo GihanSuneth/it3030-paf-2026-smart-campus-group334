@@ -11,4 +11,5 @@ public interface TicketRepository extends MongoRepository<Ticket, String> {
     List<Ticket> findByUserId(String userId);
     List<Ticket> findByTechnicianId(String technicianId);
     List<Ticket> findByStatus(String status);
+    boolean existsByTicketCode(String ticketCode);
 }

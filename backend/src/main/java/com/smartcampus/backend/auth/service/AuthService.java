@@ -54,11 +54,16 @@ public class AuthService {
             throw new RuntimeException("Email already registered");
         }
 
+        if (!"USER".equalsIgnoreCase(request.getRole())) {
+            throw new RuntimeException("Only student and staff accounts can be requested through signup.");
+        }
+
         User user = User.builder()
                 .name(request.getName())
                 .email(email)
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(request.getRole())
+                .department(request.getRegNo() == null || request.getRegNo().isBlank() ? "Staff" : "Student")
                 .faculty(request.getFaculty())
                 .regNo(request.getRegNo())
                 .academicYear(request.getAcademicYear())

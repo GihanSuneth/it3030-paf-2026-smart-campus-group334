@@ -68,6 +68,36 @@ public class ResourceService {
         if (resourceDetails.getAmenities() != null && !resourceDetails.getAmenities().isEmpty()) {
             resource.setAmenities(resourceDetails.getAmenities());
         }
+        if (resourceDetails.getTotalPcs() != null) {
+            resource.setTotalPcs(resourceDetails.getTotalPcs());
+        }
+        if (resourceDetails.getWorkingPcs() != null) {
+            resource.setWorkingPcs(resourceDetails.getWorkingPcs());
+        }
+        if (resourceDetails.getSmartBoardCount() != null) {
+            resource.setSmartBoardCount(resourceDetails.getSmartBoardCount());
+        }
+        if (resourceDetails.getWorkingSmartBoards() != null) {
+            resource.setWorkingSmartBoards(resourceDetails.getWorkingSmartBoards());
+        }
+        if (resourceDetails.getProjectorCount() != null) {
+            resource.setProjectorCount(resourceDetails.getProjectorCount());
+        }
+        if (resourceDetails.getWorkingProjectors() != null) {
+            resource.setWorkingProjectors(resourceDetails.getWorkingProjectors());
+        }
+        if (resourceDetails.getScreenCount() != null) {
+            resource.setScreenCount(resourceDetails.getScreenCount());
+        }
+        if (resourceDetails.getWorkingScreens() != null) {
+            resource.setWorkingScreens(resourceDetails.getWorkingScreens());
+        }
+        if (resourceDetails.getSoundSystemCount() != null) {
+            resource.setSoundSystemCount(resourceDetails.getSoundSystemCount());
+        }
+        if (resourceDetails.getWorkingSoundSystems() != null) {
+            resource.setWorkingSoundSystems(resourceDetails.getWorkingSoundSystems());
+        }
 
         enrichResource(resource, id);
         return resourceRepository.save(resource);
@@ -97,6 +127,16 @@ public class ResourceService {
             }
 
             resource.setCapacity(0);
+            resource.setTotalPcs(null);
+            resource.setWorkingPcs(null);
+            resource.setSmartBoardCount(null);
+            resource.setWorkingSmartBoards(null);
+            resource.setProjectorCount(null);
+            resource.setWorkingProjectors(null);
+            resource.setScreenCount(null);
+            resource.setWorkingScreens(null);
+            resource.setSoundSystemCount(null);
+            resource.setWorkingSoundSystems(null);
 
             if (!hasText(resource.getAssetId())) {
                 resource.setAssetId(generateEquipmentId(resource.getType()));
@@ -105,24 +145,32 @@ public class ResourceService {
             if (!hasText(resource.getCode())) {
                 resource.setCode(resource.getAssetId());
             }
+
+            if (!hasText(resource.getStatus())) {
+                resource.setStatus("WORKING");
+            }
         } else {
             resource.setAssetId(null);
             resource.setStockType(null);
             resource.setAvailable(resource.getAvailable() == null ? true : resource.getAvailable());
             resource.setAssignedTo(null);
+            resource.setServiceOrder(null);
 
             if (!hasText(resource.getCode()) && hasText(resource.getLocation())) {
                 resource.setCode(generateSpaceCode(resource.getLocation()));
             }
+
+            if (!hasText(resource.getStatus())) {
+                resource.setStatus("AVAILABLE");
+            }
+
+            normalizeSpaceMetrics(resource);
         }
 
-        if (!hasText(resource.getStatus())) {
-            resource.setStatus("ACTIVE");
-        }
         if (resource.getAvailable() == null) {
-            resource.setAvailable("ACTIVE".equalsIgnoreCase(resource.getStatus()));
+            resource.setAvailable(isAvailableStatus(resource));
         }
-        if (!"ACTIVE".equalsIgnoreCase(resource.getStatus())) {
+        if (!isAvailableStatus(resource)) {
             resource.setAvailable(false);
         }
 
@@ -167,5 +215,40 @@ public class ResourceService {
 
     private boolean hasText(String value) {
         return value != null && !value.isBlank();
+    }
+
+    private boolean isAvailableStatus(Resource resource) {
+        if ("PHYSICAL_RESOURCE".equalsIgnoreCase(resource.getCategory())) {
+            return "WORKING".equalsIgnoreCase(resource.getStatus());
+        }
+        return "AVAILABLE".equalsIgnoreCase(resource.getStatus());
+    }
+
+    private void normalizeSpaceMetrics(Resource resource) {
+        resource.setCapacity(normalizeNumber(resource.getCapacity()));
+        resource.setTotalPcs(normalizeNumber(resource.getTotalPcs()));
+        resource.setSmartBoardCount(normalizeNumber(resource.getSmartBoardCount()));
+        resource.setProjectorCount(normalizeNumber(resource.getProjectorCount()));
+        resource.setScreenCount(normalizeNumber(resource.getScreenCount()));
+        resource.setSoundSystemCount(normalizeNumber(resource.getSoundSystemCount()));
+
+        resource.setWorkingPcs(clampWorking(resource.getWorkingPcs(), resource.getTotalPcs()));
+        resource.setWorkingSmartBoards(clampWorking(resource.getWorkingSmartBoards(), resource.getSmartBoardCount()));
+        resource.setWorkingProjectors(clampWorking(resource.getWorkingProjectors(), resource.getProjectorCount()));
+        resource.setWorkingScreens(clampWorking(resource.getWorkingScreens(), resource.getScreenCount()));
+        resource.setWorkingSoundSystems(clampWorking(resource.getWorkingSoundSystems(), resource.getSoundSystemCount()));
+    }
+
+    private Integer normalizeNumber(Integer value) {
+        if (value == null || value < 0) {
+            return 0;
+        }
+        return value;
+    }
+
+    private Integer clampWorking(Integer working, Integer total) {
+        int safeTotal = normalizeNumber(total);
+        int safeWorking = normalizeNumber(working);
+        return Math.min(safeWorking, safeTotal);
     }
 }

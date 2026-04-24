@@ -31,9 +31,7 @@ public class DataSeeder {
                 seedUsers();
             }
 
-            if (resourceRepository.count() <= 4) {
-                seedResources();
-            }
+            seedResources();
 
             if (ticketRepository.count() == 0) {
                 seedTickets();
@@ -69,37 +67,43 @@ public class DataSeeder {
 
     private void seedResources() {
         List<Resource> resources = List.of(
-                buildSpace("PC Lab A405", "LAB-A405", "PC Lab", "SPACE", "Main Building - A405", 60, List.of("Smart Board", "Projector", "Audio System", "PCs and Monitors")),
-                buildSpace("PC Lab A403", "LAB-A403", "PC Lab", "SPACE", "Main Building - A403", 48, List.of("Smart Board", "Projector", "PCs and Monitors")),
-                buildSpace("PC Lab A404", "LAB-A404", "PC Lab", "SPACE", "Main Building - A404", 52, List.of("Smart Board", "Projector", "PCs and Monitors")),
-                buildSpace("PC Lab F1304", "LAB-F1304", "PC Lab", "SPACE", "New Building - F1304", 55, List.of("Smart Board", "Audio System", "PCs and Monitors")),
-                buildSpace("PC Lab G605", "LAB-G605", "PC Lab", "SPACE", "New Building - G605", 45, List.of("Projector", "PCs and Monitors")),
+                buildPcLab("PC Lab A405", "LAB-A405", "Main Building - A405", 60, 55, 1, 1, 1),
+                buildPcLab("PC Lab A403", "LAB-A403", "Main Building - A403", 48, 45, 1, 1, 0),
+                buildPcLab("PC Lab A404", "LAB-A404", "Main Building - A404", 52, 48, 1, 1, 0),
+                buildPcLab("PC Lab F1304", "LAB-F1304", "New Building - F1304", 55, 53, 1, 0, 1),
+                buildPcLab("PC Lab G605", "LAB-G605", "New Building - G605", 45, 41, 0, 1, 0),
 
-                buildSpace("Lecture Hall F303", "LH-F303", "Lecture Hall", "SPACE", "New Building - F303", 120, List.of("Smart Board", "Projector", "Audio System")),
-                buildSpace("Lecture Hall G606", "LH-G606", "Lecture Hall", "SPACE", "New Building - G606", 100, List.of("Projector", "Audio System")),
-                buildSpace("Lecture Hall B405", "LH-B405", "Lecture Hall", "SPACE", "Main Building - B405", 110, List.of("Smart Board", "Projector")),
-                buildSpace("Lecture Hall B303", "LH-B303", "Lecture Hall", "SPACE", "Main Building - B303", 90, List.of("Projector")),
+                buildLectureHall("Lecture Hall F303", "LH-F303", "New Building - F303", 120, 1, 1, 1),
+                buildLectureHall("Lecture Hall G606", "LH-G606", "New Building - G606", 100, 1, 1, 1),
+                buildLectureHall("Lecture Hall B405", "LH-B405", "Main Building - B405", 110, 1, 1, 1),
+                buildLectureHall("Lecture Hall B303", "LH-B303", "Main Building - B303", 90, 1, 1, 0),
 
-                buildSpace("Main Building Auditorium", "AUD-MAIN", "Auditorium", "SPACE", "Main Building Auditorium", 350, List.of("Smart Board", "Projector", "Audio System")),
-                buildSpace("Colosium 1", "AUD-G1303", "Auditorium", "SPACE", "New Building - G1303", 280, List.of("Projector", "Audio System")),
-                buildSpace("Colosium 2", "AUD-F1303", "Auditorium", "SPACE", "New Building - F1303", 260, List.of("Projector", "Audio System")),
+                buildAuditorium("Main Building Auditorium", "AUD-MAIN", "Main Building Auditorium", 350, 1, 2),
+                buildAuditorium("Colosium 1", "AUD-G1303", "New Building - G1303", 280, 1, 1),
+                buildAuditorium("Colosium 2", "AUD-F1303", "New Building - F1303", 260, 1, 1),
 
-                buildPhysical("SB-0001", "Smart Board A405", "PHY-SB-A405", "Smart Board", "PHYSICAL_RESOURCE", "Main Building - A405", "PC Lab A405", 1),
-                buildPhysical("PCM-0001", "PC and Monitor Set A405", "PHY-PCM-A405", "PCs and Monitors", "PHYSICAL_RESOURCE", "Main Building - A405", "PC Lab A405", 2),
-                buildPhysical("PRJ-0001", "Projector F303", "PHY-PRJ-F303", "Projector", "PHYSICAL_RESOURCE", "New Building - F303", "Lecture Hall F303", 1),
-                buildPhysical("AUD-0001", "Audio System Main Auditorium", "PHY-AUD-MAIN", "Audio System", "PHYSICAL_RESOURCE", "Main Building Auditorium", "Main Building Auditorium", 1),
-                buildPhysical("SB-0002", "Spare Smart Board", "PHY-SB-LOG-01", "Smart Board", "PHYSICAL_RESOURCE", "Logistic Room - Main Building 3rd Floor", "Storage", 3),
-                buildPhysical("PCM-0002", "Spare PC and Monitor Set", "PHY-PCM-LOG-01", "PCs and Monitors", "PHYSICAL_RESOURCE", "Logistic Room - Main Building 3rd Floor", "Storage", 4),
-                buildPhysical("PRJ-0002", "Portable Projector", "PHY-PRJ-LOG-01", "Projector", "PHYSICAL_RESOURCE", "Logistic Room - Main Building 3rd Floor", "Storage", 2),
-                buildPhysical("AUD-0002", "Portable Audio System", "PHY-AUD-LOG-01", "Audio System", "PHYSICAL_RESOURCE", "Logistic Room - Main Building 3rd Floor", "Storage", 5)
+                buildPhysical("SB-0001", "Smart Board A405", "PHY-SB-A405", "Smart Board", "Main Building - A405", "PC Lab A405", 1, "STANDARD"),
+                buildPhysical("PCM-0001", "PC and Monitor Set A405", "PHY-PCM-A405", "PCs and Monitors", "Main Building - A405", "PC Lab A405", 2, "STANDARD"),
+                buildPhysical("PRJ-0001", "Projector F303", "PHY-PRJ-F303", "Projector", "New Building - F303", "Lecture Hall F303", 1, "STANDARD"),
+                buildPhysical("AUD-0001", "Audio System Main Auditorium", "PHY-AUD-MAIN", "Audio System", "Main Building Auditorium", "Main Building Auditorium", 1, "STANDARD"),
+                buildPhysical("SB-0002", "Spare Smart Board", "PHY-SB-LOG-01", "Smart Board", "Logistic Room - Main Building 3rd Floor", "Storage", 3, "SPARE"),
+                buildPhysical("PCM-0002", "Spare PC and Monitor Set", "PHY-PCM-LOG-01", "PCs and Monitors", "Logistic Room - Main Building 3rd Floor", "Storage", 4, "SPARE"),
+                buildPhysical("PRJ-0002", "Portable Projector", "PHY-PRJ-LOG-01", "Projector", "Logistic Room - Main Building 3rd Floor", "Storage", 2, "SPARE"),
+                buildPhysical("AUD-0002", "Portable Audio System", "PHY-AUD-LOG-01", "Audio System", "Logistic Room - Main Building 3rd Floor", "Storage", 5, "SPARE")
         );
 
         List<Resource> existingResources = resourceRepository.findAll();
         for (Resource resource : resources) {
-            boolean exists = existingResources.stream().anyMatch(existing -> existing.getCode().equalsIgnoreCase(resource.getCode()));
-            if (!exists) {
-                resourceRepository.save(resource);
+            Resource existing = existingResources.stream()
+                    .filter(saved -> saved.getCode() != null && saved.getCode().equalsIgnoreCase(resource.getCode()))
+                    .findFirst()
+                    .orElse(null);
+
+            if (existing != null) {
+                resource.setId(existing.getId());
             }
+
+            resourceRepository.save(resource);
         }
     }
 
@@ -147,43 +151,113 @@ public class DataSeeder {
                 .build();
     }
 
-    private Resource buildSpace(String name, String code, String type, String category, String location, int capacity, List<String> amenities) {
+    private Resource buildPcLab(String name, String code, String location, int totalPcs, int workingPcs, int smartBoards, int projectors, int soundSystems) {
         return Resource.builder()
                 .name(name)
                 .code(code)
-                .type(type)
-                .category(category)
+                .type("PC Lab")
+                .category("SPACE")
                 .location(location)
-                .capacity(capacity)
-                .status("ACTIVE")
+                .capacity(totalPcs)
+                .status("AVAILABLE")
                 .available(true)
-                .description("Seeded " + type + " resource for booking flow validation.")
-                .amenities(amenities)
+                .description("Computer lab with tracked PC readiness and installed teaching equipment.")
+                .amenities(List.of("PCs and Monitors", "Smart Board", "Projector", "Audio System"))
+                .totalPcs(totalPcs)
+                .workingPcs(workingPcs)
+                .smartBoardCount(smartBoards)
+                .workingSmartBoards(smartBoards)
+                .projectorCount(projectors)
+                .workingProjectors(projectors)
+                .screenCount(0)
+                .workingScreens(0)
+                .soundSystemCount(soundSystems)
+                .workingSoundSystems(soundSystems)
                 .build();
     }
 
-    private Resource buildPhysical(String assetId, String name, String code, String type, String category, String location, String assignedTo, int serviceOrder) {
-        boolean spare = "Storage".equalsIgnoreCase(assignedTo);
+    private Resource buildLectureHall(String name, String code, String location, int capacity, int projectors, int screens, int soundSystems) {
+        return Resource.builder()
+                .name(name)
+                .code(code)
+                .type("Lecture Hall")
+                .category("SPACE")
+                .location(location)
+                .capacity(capacity)
+                .status("AVAILABLE")
+                .available(true)
+                .description("Lecture hall with tracked seating, projection, screens, and audio support.")
+                .amenities(List.of("Projector", "Screen", "Audio System"))
+                .totalPcs(0)
+                .workingPcs(0)
+                .smartBoardCount(0)
+                .workingSmartBoards(0)
+                .projectorCount(projectors)
+                .workingProjectors(projectors)
+                .screenCount(screens)
+                .workingScreens(screens)
+                .soundSystemCount(soundSystems)
+                .workingSoundSystems(soundSystems)
+                .build();
+    }
+
+    private Resource buildAuditorium(String name, String code, String location, int capacity, int projectors, int soundSystems) {
+        return Resource.builder()
+                .name(name)
+                .code(code)
+                .type("Auditorium")
+                .category("SPACE")
+                .location(location)
+                .capacity(capacity)
+                .status("AVAILABLE")
+                .available(true)
+                .description("Large event venue with tracked capacity and presentation equipment.")
+                .amenities(List.of("Projector", "Audio System"))
+                .totalPcs(0)
+                .workingPcs(0)
+                .smartBoardCount(0)
+                .workingSmartBoards(0)
+                .projectorCount(projectors)
+                .workingProjectors(projectors)
+                .screenCount(0)
+                .workingScreens(0)
+                .soundSystemCount(soundSystems)
+                .workingSoundSystems(soundSystems)
+                .build();
+    }
+
+    private Resource buildPhysical(String assetId, String name, String code, String type, String location, String assignedTo, int serviceOrder, String stockType) {
         return Resource.builder()
                 .assetId(assetId)
                 .name(name)
                 .code(code)
                 .type(type)
-                .category(category)
-                .stockType(spare ? "SPARE" : "STANDARD")
+                .category("PHYSICAL_RESOURCE")
+                .stockType(stockType)
                 .location(location)
                 .capacity(0)
-                .status("ACTIVE")
+                .status("WORKING")
                 .available(true)
                 .assignedTo(assignedTo)
                 .serviceOrder(serviceOrder)
-                .description("Tracked physical resource with generated asset ID.")
+                .description("Tracked physical equipment with generated asset ID and service order.")
+                .totalPcs(null)
+                .workingPcs(null)
+                .smartBoardCount(null)
+                .workingSmartBoards(null)
+                .projectorCount(null)
+                .workingProjectors(null)
+                .screenCount(null)
+                .workingScreens(null)
+                .soundSystemCount(null)
+                .workingSoundSystems(null)
                 .build();
     }
 
     private Ticket buildTicket(String title, String description, String category, String priority, String status, User user, User technician, String location) {
         LocalDateTime createdAt = LocalDateTime.now().minusDays(2);
         return Ticket.builder()
+                .ticketCode(generateSeedTicketCode())
                 .title(title)
                 .description(description)
                 .category(category)
@@ -199,5 +273,10 @@ public class DataSeeder {
                 .resolutionNotes("RESOLVED".equals(status) ? "Replaced faulty display cable and verified output." : null)
                 .comments(new ArrayList<>())
                 .build();
+    }
+
+    private String generateSeedTicketCode() {
+        long next = ticketRepository.count() + 16001;
+        return "TKT" + next;
     }
 }

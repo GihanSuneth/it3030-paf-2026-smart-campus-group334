@@ -32,4 +32,14 @@ public class Resource {
     private String description;
     private List<String> amenities;
     private String image;
+    private Integer totalPcs;
+    private Integer workingPcs;
+    private Integer smartBoardCount;
+    private Integer workingSmartBoards;
+    private Integer projectorCount;
+    private Integer workingProjectors;
+    private Integer screenCount;
+    private Integer workingScreens;
+    private Integer soundSystemCount;
+    private Integer workingSoundSystems;
 }
