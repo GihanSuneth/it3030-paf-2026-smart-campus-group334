@@ -8,18 +8,20 @@ export function TicketCard({ ticket, href = `/tickets/${ticket.id}` }) {
         <div className="flex flex-wrap items-center gap-3">
           <TicketStatusBadge status={ticket.status} />
           <h3 className="text-lg font-bold text-slate-950 truncate">{ticket.title}</h3>
-          <span className="text-[10px] font-black text-slate-300 uppercase tracking-widest hidden sm:inline">#{ticket.id.slice(0, 8)}</span>
+          <span className="rounded-full bg-slate-900 px-3 py-1 text-[11px] font-black text-white tracking-widest">
+            {ticket.ticketCode || ticket.id}
+          </span>
         </div>
         
         <p className="text-sm font-medium text-slate-500">
-          <span className="text-indigo-500 font-bold">{ticket.resourceName}</span> · {ticket.location}
+          {ticket.location}
         </p>
 
         <div className="flex flex-wrap gap-x-6 gap-y-2 pt-1 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
           <span>Priority: <span className={ticket.priority === 'HIGH' ? 'text-rose-500' : 'text-slate-600'}>{ticket.priority}</span></span>
           <span>Category: <span className="text-slate-600">{ticket.category}</span></span>
-          {ticket.assignedTechnicianName && (
-             <span className="text-indigo-400">Assigned: <span className="text-indigo-600">{ticket.assignedTechnicianName}</span></span>
+          {ticket.technicianName && (
+             <span className="text-indigo-400">Assigned: <span className="text-indigo-600">{ticket.technicianName}</span></span>
           )}
         </div>
       </div>
