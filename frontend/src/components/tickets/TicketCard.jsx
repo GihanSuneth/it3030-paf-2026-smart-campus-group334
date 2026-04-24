@@ -22,6 +22,7 @@ export function TicketCard({ ticket, href = `/tickets/${ticket.id}` }) {
         </div>
       </div>
 
+      // View Ticket Button
       <Link className="btn-ghost text-center" to={href}>
         View Ticket
       </Link>
