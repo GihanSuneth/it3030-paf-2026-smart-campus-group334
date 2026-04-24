@@ -4,6 +4,7 @@ import { useGoogleLogin } from '@react-oauth/google'
 import { motion, AnimatePresence } from 'framer-motion'
 import { User, Shield, Wrench, ArrowRight, Code, Globe } from 'lucide-react'
 import axios from 'axios'
+import { authApi } from '../../api/authApi'
 import { ROLE_HOME_PATHS, ROLES } from '../../constants/roles'
 import { useAuth } from '../../hooks/useAuth'
 
@@ -70,6 +71,16 @@ export function LoginPage() {
     password: roleCredentials[ROLES.USER].password,
     role: ROLES.USER,
   })
+  const [signupState, setSignupState] = useState({
+    userType: 'STAFF',
+    name: '',
+    email: '',
+    password: '',
+    regNo: '',
+    academicYear: '',
+    faculty: '',
+    purpose: '',
+  })
   const [error, setError] = useState('')
 
   const googleLogin = useGoogleLogin({
@@ -115,6 +126,40 @@ export function LoginPage() {
       navigate(ROLE_HOME_PATHS[user.role], { replace: true })
     } catch (err) {
       setError(err.message)
+    }
+  }
+
+  async function handleSignupSubmit(event) {
+    event.preventDefault()
+    setError('')
+
+    try {
+      await authApi.register({
+        name: signupState.name,
+        email: signupState.email,
+        password: signupState.password,
+        role: ROLES.USER,
+        faculty: signupState.faculty,
+        regNo: signupState.userType === 'STUDENT' ? signupState.regNo : '',
+        academicYear: signupState.userType === 'STUDENT' ? signupState.academicYear : '',
+        purpose: signupState.purpose,
+      })
+
+      setShowSignupModal(false)
+      setSignupState({
+        userType: 'STAFF',
+        name: '',
+        email: '',
+        password: '',
+        regNo: '',
+        academicYear: '',
+        faculty: '',
+        purpose: '',
+      })
+      setError('Application submitted! Admin will verify your student or staff registration.')
+      setTimeout(() => setError(''), 4000)
+    } catch (signupError) {
+      setError(signupError.message)
     }
   }
 
@@ -258,28 +303,32 @@ export function LoginPage() {
               </button>
             </form>
 
-            <div className="mt-10 pt-10 border-t border-slate-100 space-y-6">
-              <p className="text-center text-xs font-bold text-slate-400 uppercase tracking-widest">Single Sign-On</p>
-              <div className="grid grid-cols-1">
-                <button 
-                  onClick={() => googleLogin()}
-                  className="flex items-center justify-center gap-3 bg-white border border-slate-200 hover:border-indigo-200 hover:bg-slate-50 text-slate-600 font-bold py-3.5 rounded-2xl transition-all shadow-sm"
-                >
-                  <Globe size={20} className="text-indigo-600" />
-                  <span className="text-sm">Continue with University Google Account</span>
-                </button>
-              </div>
-            </div>
+            {formState.role === ROLES.USER && (
+              <>
+                <div className="mt-10 pt-10 border-t border-slate-100 space-y-6">
+                  <p className="text-center text-xs font-bold text-slate-400 uppercase tracking-widest">Single Sign-On</p>
+                  <div className="grid grid-cols-1">
+                    <button 
+                      onClick={() => googleLogin()}
+                      className="flex items-center justify-center gap-3 bg-white border border-slate-200 hover:border-indigo-200 hover:bg-slate-50 text-slate-600 font-bold py-3.5 rounded-2xl transition-all shadow-sm"
+                    >
+                      <Globe size={20} className="text-indigo-600" />
+                      <span className="text-sm">Continue with University Google Account</span>
+                    </button>
+                  </div>
+                </div>
 
-            <p className="mt-8 text-center text-sm text-slate-500">
-              New to the campus?{' '}
-              <button 
-                onClick={() => setShowSignupModal(true)}
-                className="text-indigo-600 font-bold hover:text-indigo-700 transition-colors"
-              >
-                Request Access
-              </button>
-            </p>
+                <p className="mt-8 text-center text-sm text-slate-500">
+                  New to the campus?{' '}
+                  <button 
+                    onClick={() => setShowSignupModal(true)}
+                    className="text-indigo-600 font-bold hover:text-indigo-700 transition-colors"
+                  >
+                    Request Access
+                  </button>
+                </p>
+              </>
+            )}
           </div>
         </motion.div>
       </div>
@@ -308,39 +357,66 @@ export function LoginPage() {
                 </div>
                 
                 <form 
-                  onSubmit={(e) => {
-                    e.preventDefault()
-                    setError('Application submitted! IT will verify your registration.')
-                    setShowSignupModal(false)
-                    setTimeout(() => setError(''), 4000)
-                  }} 
+                  onSubmit={handleSignupSubmit}
                   className="space-y-4"
                 >
                   <div className="flex bg-slate-100 p-1 rounded-xl">
                     <button 
                       type="button" 
-                      onClick={() => setFormState(s => ({ ...s, userType: 'LECTURER' }))}
-                      className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all ${formState.userType !== 'STUDENT' ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                      onClick={() => setSignupState(s => ({ ...s, userType: 'STAFF' }))}
+                      className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all ${signupState.userType !== 'STUDENT' ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
                     >
-                      Lecturer
+                      Staff
                     </button>
                     <button 
                       type="button" 
-                      onClick={() => setFormState(s => ({ ...s, userType: 'STUDENT' }))}
-                      className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all ${formState.userType === 'STUDENT' ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                      onClick={() => setSignupState(s => ({ ...s, userType: 'STUDENT' }))}
+                      className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all ${signupState.userType === 'STUDENT' ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
                     >
                       Student
                     </button>
                   </div>
 
                   <div className="grid gap-3">
-                    <input className="input" placeholder="Full Name" required />
-                    <input className="input" placeholder="University Email" type="email" required />
+                    <input
+                      className="input"
+                      placeholder="Full Name"
+                      required
+                      value={signupState.name}
+                      onChange={(e) => setSignupState((s) => ({ ...s, name: e.target.value }))}
+                    />
+                    <input
+                      className="input"
+                      placeholder="University Email"
+                      type="email"
+                      required
+                      value={signupState.email}
+                      onChange={(e) => setSignupState((s) => ({ ...s, email: e.target.value }))}
+                    />
+                    <input
+                      className="input"
+                      placeholder="Create Password"
+                      type="password"
+                      required
+                      value={signupState.password}
+                      onChange={(e) => setSignupState((s) => ({ ...s, password: e.target.value }))}
+                    />
                     
-                    {formState.userType === 'STUDENT' && (
+                    {signupState.userType === 'STUDENT' && (
                       <div className="grid grid-cols-2 gap-3 animate-in fade-in slide-in-from-top-1">
-                        <input className="input" placeholder="Reg No (e.g. IT21...)" required />
-                        <select className="input" required>
+                        <input
+                          className="input"
+                          placeholder="Reg No (e.g. IT21...)"
+                          required
+                          value={signupState.regNo}
+                          onChange={(e) => setSignupState((s) => ({ ...s, regNo: e.target.value }))}
+                        />
+                        <select
+                          className="input"
+                          required
+                          value={signupState.academicYear}
+                          onChange={(e) => setSignupState((s) => ({ ...s, academicYear: e.target.value }))}
+                        >
                           <option value="">Academic Year</option>
                           <option>1st Year</option>
                           <option>2nd Year</option>
@@ -350,7 +426,12 @@ export function LoginPage() {
                       </div>
                     )}
 
-                    <select className="input" required>
+                    <select
+                      className="input"
+                      required
+                      value={signupState.faculty}
+                      onChange={(e) => setSignupState((s) => ({ ...s, faculty: e.target.value }))}
+                    >
                       <option value="">Select Faculty</option>
                       <option>Computing & Technology</option>
                       <option>Engineering</option>
@@ -359,7 +440,9 @@ export function LoginPage() {
                     <textarea 
                       className="textarea min-h-[80px]" 
                       placeholder="Purpose of access (e.g. Lab Reservation, Technical Triage)" 
-                      required 
+                      required
+                      value={signupState.purpose}
+                      onChange={(e) => setSignupState((s) => ({ ...s, purpose: e.target.value }))}
                     />
                   </div>
 

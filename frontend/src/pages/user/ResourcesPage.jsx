@@ -7,11 +7,17 @@ import { PageHeader } from '../../components/common/PageHeader'
 import { PageContainer } from '../../components/layout/PageContainer'
 import { ResourceCard } from '../../components/resources/ResourceCard'
 import { ResourceFilterBar } from '../../components/resources/ResourceFilterBar'
-import { RESOURCE_STATUSES } from '../../constants/statuses'
 import { useMockQuery } from '../../hooks/useMockQuery'
 import { useState } from 'react'
 
-import { RESOURCE_CATEGORIES, EQUIPMENT_TYPES, SPACE_TYPES, getResourceCategory } from '../../constants/resources'
+import {
+  RESOURCE_CATEGORIES,
+  EQUIPMENT_TYPES,
+  SPACE_TYPES,
+  EQUIPMENT_RESOURCE_STATUSES,
+  SPACE_RESOURCE_STATUSES,
+  getResourceCategory,
+} from '../../constants/resources'
 
 export function ResourcesPage() {
   const [activeTab, setActiveTab] = useState(RESOURCE_CATEGORIES.EQUIPMENT)
@@ -46,7 +52,8 @@ export function ResourcesPage() {
       !filters.query ||
       resource.name.toLowerCase().includes(filters.query.toLowerCase()) ||
       resource.location.toLowerCase().includes(filters.query.toLowerCase()) ||
-      resource.code.toLowerCase().includes(filters.query.toLowerCase())
+      (resource.code || '').toLowerCase().includes(filters.query.toLowerCase()) ||
+      (resource.assetId || '').toLowerCase().includes(filters.query.toLowerCase())
 
     const matchesType = filters.type === 'ALL' || resource.type === filters.type
     const matchesLocation = filters.location === 'ALL' || resource.location === filters.location
@@ -89,7 +96,7 @@ export function ResourcesPage() {
         filters={filters}
         locations={locations}
         onChange={updateFilter}
-        statuses={Object.values(RESOURCE_STATUSES)}
+        statuses={activeTab === RESOURCE_CATEGORIES.EQUIPMENT ? EQUIPMENT_RESOURCE_STATUSES : SPACE_RESOURCE_STATUSES}
         types={activeTab === RESOURCE_CATEGORIES.EQUIPMENT ? EQUIPMENT_TYPES : SPACE_TYPES}
       />
 

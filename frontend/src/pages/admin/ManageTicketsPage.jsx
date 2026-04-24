@@ -34,13 +34,15 @@ export function ManageTicketsPage() {
 
   const technicians = usersQuery.data.filter(u => u.role === ROLES.TECHNICIAN)
   const tickets = ticketsQuery.data
-  const pendingTriage = tickets.filter(t => !t.assignedTechnicianId && t.status === 'OPEN').length
+  const pendingTriage = tickets.filter(t => !t.technicianId && ['CREATED', 'UNDER_REVIEW', 'APPROVED'].includes(t.status)).length
   
   const targetTicket = targetTicketId ? tickets.find(t => t.id === targetTicketId) : null
 
   async function handleAssign(technicianId) {
     if (!targetTicketId) return
-    await ticketApi.assignTechnician(targetTicketId, technicianId, currentUser)
+    const technician = technicians.find((item) => item.id === technicianId)
+    if (!technician) return
+    await ticketApi.assignTechnician(targetTicketId, technicianId, technician.name)
     await ticketsQuery.refetch()
     setTargetTicketId(null)
     setSearchId('')
@@ -75,7 +77,7 @@ export function ManageTicketsPage() {
           <section className="grid gap-4 md:grid-cols-3">
             <StatCard label="Total Tickets" value={tickets.length} hint="Total system throughput." />
             <StatCard label="Pending Triage" value={pendingTriage} hint="Awaiting initial ownership." />
-            <StatCard label="Active Jobs" value={tickets.filter(t => t.status === 'IN_PROGRESS').length} hint="Assigned work in progress." />
+            <StatCard label="Active Jobs" value={tickets.filter(t => ['TECHNICIAN_ASSIGNED', 'UNDER_REVIEW'].includes(t.status)).length} hint="Assigned work in progress." />
           </section>
 
           <div className="flex flex-col gap-4 pt-4 border-t border-slate-100">
@@ -88,20 +90,20 @@ export function ManageTicketsPage() {
         <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2">
            <article className="glass-card max-w-2xl">
               <h2 className="text-lg font-bold text-slate-950 mb-1">Direct Assignment</h2>
-              <p className="text-xs text-slate-500 mb-6 font-medium">Input a Ticket ID to quickly route it to an available technician.</p>
+              <p className="text-xs text-slate-500 mb-6 font-medium">Input a Ticket Code to quickly route it to an available technician.</p>
               
               <div className="flex items-center gap-3">
                 <div className="relative flex-1">
                   <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
                   <input 
                     className="input pl-10" 
-                    placeholder="Enter Ticket ID (e.g. tick_...)" 
+                    placeholder="Enter Ticket Code (e.g. TKT16001)" 
                     value={searchId}
                     onChange={e => setSearchId(e.target.value)}
                   />
                 </div>
                 <button 
-                  onClick={() => setTargetTicketId(searchId)}
+                  onClick={() => setTargetTicketId((tickets.find((ticket) => ticket.ticketCode === searchId)?.id) || null)}
                   className="btn-primary !py-2.5"
                 >
                   Find Ticket
@@ -116,6 +118,7 @@ export function ManageTicketsPage() {
                     <Info size={14} /> Found Record
                   </div>
                   <h3 className="text-xl font-bold text-slate-900">{targetTicket.title}</h3>
+                  <p className="text-xs font-black uppercase tracking-widest text-slate-500">{targetTicket.ticketCode || targetTicket.id}</p>
                   <p className="text-sm font-medium text-slate-500 italic">"{targetTicket.description}"</p>
                   <div className="pt-4 border-t border-slate-100 grid grid-cols-2 gap-4">
                     <div>

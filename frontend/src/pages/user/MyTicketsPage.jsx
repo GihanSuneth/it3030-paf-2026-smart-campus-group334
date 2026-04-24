@@ -24,8 +24,8 @@ export function MyTicketsPage() {
     return <ErrorState message={error} />
   }
 
-  const openCount = data.filter((ticket) => ticket.status === 'OPEN').length
-  const processingCount = data.filter((ticket) => ['IN_PROGRESS', 'RESOLVED'].includes(ticket.status)).length
+  const openCount = data.filter((ticket) => ['CREATED', 'UNDER_REVIEW', 'APPROVED'].includes(ticket.status)).length
+  const processingCount = data.filter((ticket) => ['TECHNICIAN_ASSIGNED', 'RESOLVED'].includes(ticket.status)).length
 
   return (
     <PageContainer>

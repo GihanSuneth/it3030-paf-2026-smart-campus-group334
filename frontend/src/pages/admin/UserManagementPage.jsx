@@ -6,14 +6,23 @@ import { PageHeader } from '../../components/common/PageHeader'
 import { PageContainer } from '../../components/layout/PageContainer'
 import { formatRole } from '../../utils/formatters'
 import { ROLES } from '../../constants/roles'
+import { useAuth } from '../../hooks/useAuth'
 
 export function UserManagementPage() {
+  const { currentUser } = useAuth()
   const [activeTab, setActiveTab] = useState('USERS') // USERS, REQUESTS
   const [roleFilter, setRoleFilter] = useState('ALL')
   const [users, setUsers] = useState([])
   const [requests, setRequests] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [technicianForm, setTechnicianForm] = useState({
+    name: '',
+    email: '',
+    password: '',
+    department: '',
+  })
+  const [submittingTechnician, setSubmittingTechnician] = useState(false)
 
   const fetchData = async () => {
     setLoading(true)
@@ -55,6 +64,43 @@ export function UserManagementPage() {
     }
   }
 
+  const handleRemoveUser = async (id, name) => {
+    if (id === currentUser?.id) {
+      alert('You cannot remove the account you are currently using.')
+      return
+    }
+
+    if (!confirm(`Remove user "${name}" from the system?`)) return
+
+    try {
+      await authApi.rejectRequest(id)
+      fetchData()
+    } catch (err) {
+      alert('Removal failed: ' + err.message)
+    }
+  }
+
+  const handleTechnicianCreate = async (event) => {
+    event.preventDefault()
+    setSubmittingTechnician(true)
+
+    try {
+      await authApi.createTechnician(technicianForm)
+      setTechnicianForm({
+        name: '',
+        email: '',
+        password: '',
+        department: '',
+      })
+      await fetchData()
+      alert('Technician account created successfully.')
+    } catch (err) {
+      alert('Technician creation failed: ' + err.message)
+    } finally {
+      setSubmittingTechnician(false)
+    }
+  }
+
   if (loading) return <LoadingState label="Loading directory..." />
   if (error) return <ErrorState message={error} />
 
@@ -85,6 +131,58 @@ export function UserManagementPage() {
 
       {activeTab === 'USERS' ? (
         <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2">
+          <section className="glass-card">
+            <div className="mb-5">
+              <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Technician Access</p>
+              <h2 className="mt-2 text-xl font-bold text-slate-900">Create Technician Account</h2>
+              <p className="mt-1 text-sm text-slate-500">
+                Admin can manually create technician credentials for portal access. Signup remains only for students and staff.
+              </p>
+            </div>
+
+            <form onSubmit={handleTechnicianCreate} className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+              <input
+                className="input"
+                placeholder="Technician Name"
+                required
+                value={technicianForm.name}
+                onChange={(event) => setTechnicianForm((state) => ({ ...state, name: event.target.value }))}
+              />
+              <input
+                className="input"
+                placeholder="Technician Email"
+                type="email"
+                required
+                value={technicianForm.email}
+                onChange={(event) => setTechnicianForm((state) => ({ ...state, email: event.target.value }))}
+              />
+              <input
+                className="input"
+                placeholder="Manual Password"
+                type="text"
+                required
+                value={technicianForm.password}
+                onChange={(event) => setTechnicianForm((state) => ({ ...state, password: event.target.value }))}
+              />
+              <input
+                className="input"
+                placeholder="Department"
+                required
+                value={technicianForm.department}
+                onChange={(event) => setTechnicianForm((state) => ({ ...state, department: event.target.value }))}
+              />
+              <div className="md:col-span-2 xl:col-span-4 flex justify-end">
+                <button
+                  type="submit"
+                  disabled={submittingTechnician}
+                  className="btn-primary justify-center !py-3 disabled:opacity-60 disabled:cursor-not-allowed"
+                >
+                  {submittingTechnician ? 'Creating Technician...' : 'Add Technician'}
+                </button>
+              </div>
+            </form>
+          </section>
+
           <div className="flex bg-slate-100 p-1.5 rounded-2xl w-fit overflow-x-auto max-w-full">
             {['ALL', ROLES.USER, ROLES.ADMIN, ROLES.TECHNICIAN].map((role) => (
               <button 
@@ -106,6 +204,7 @@ export function UserManagementPage() {
                     <th className="px-6 py-4 text-left text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Email</th>
                     <th className="px-6 py-4 text-left text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Role</th>
                     <th className="px-6 py-4 text-left text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Faculty</th>
+                    <th className="px-6 py-4 text-right text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Actions</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-50">
@@ -126,6 +225,16 @@ export function UserManagementPage() {
                         </span>
                       </td>
                       <td className="px-6 py-4 text-sm font-bold text-slate-600">{user.faculty}</td>
+                      <td className="px-6 py-4 text-right">
+                        <button
+                          className="px-3 py-1 border border-rose-200 text-rose-600 rounded-lg text-[10px] font-bold hover:bg-rose-50 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                          disabled={user.id === currentUser?.id}
+                          onClick={() => handleRemoveUser(user.id, user.name)}
+                          type="button"
+                        >
+                          Remove
+                        </button>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
