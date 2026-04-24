@@ -69,5 +69,9 @@ export const ticketApi = {
       url: `/tickets/${ticketId}/resolve`,
       data: notes
     })
+  },
+
+  addResolutionNotes(ticketId, notes) {
+    return this.resolveTicket(ticketId, notes)
   }
 }

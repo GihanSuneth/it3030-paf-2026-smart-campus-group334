@@ -2,7 +2,7 @@ import axios from 'axios'
 
 const apiClient = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api',
-  timeout: 10000,
+  timeout: 30000,
 })
 
 // Add a request interceptor for JWT
@@ -19,7 +19,7 @@ apiClient.interceptors.response.use(
   (error) => {
     if (error.code === 'ECONNABORTED') {
       return Promise.reject(
-        new Error('Backend request timed out. Make sure the Spring server is running and MongoDB is reachable.')
+        new Error('Backend request timed out after 30 seconds. Make sure the Spring server is running and MongoDB is reachable.')
       )
     }
 

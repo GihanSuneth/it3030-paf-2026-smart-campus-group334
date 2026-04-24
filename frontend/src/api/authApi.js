@@ -69,5 +69,13 @@ export const authApi = {
       method: 'delete',
       url: `/users/${userId}/reject`
     })
+  },
+
+  createTechnician(payload) {
+    return simulateRequest({
+      method: 'post',
+      url: '/users/technicians',
+      data: payload
+    })
   }
 }
