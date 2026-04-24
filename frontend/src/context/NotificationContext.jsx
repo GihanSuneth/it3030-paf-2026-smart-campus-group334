@@ -1,7 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 import { createContext, useCallback, useContext, useEffect, useState } from 'react'
 import { notificationApi } from '../api/notificationApi'
-import { MOCK_DATA_EVENT } from '../constants/events'
 import { useAuth } from './AuthContext'
 
 const NotificationContext = createContext(null)
@@ -29,15 +28,6 @@ export function NotificationProvider({ children }) {
 
   useEffect(() => {
     refreshNotifications()
-  }, [refreshNotifications])
-
-  useEffect(() => {
-    const handler = () => {
-      refreshNotifications()
-    }
-
-    window.addEventListener(MOCK_DATA_EVENT, handler)
-    return () => window.removeEventListener(MOCK_DATA_EVENT, handler)
   }, [refreshNotifications])
 
   async function markAsRead(notificationId) {

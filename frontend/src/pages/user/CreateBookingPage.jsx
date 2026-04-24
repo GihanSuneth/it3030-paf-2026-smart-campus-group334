@@ -33,6 +33,7 @@ export function CreateBookingPage() {
       <section className="page-grid">
         <BookingForm
           resources={activeResources}
+          onCheckAvailability={(payload) => bookingApi.checkAvailability(payload, currentUser)}
           onSubmit={(payload) => bookingApi.createBooking(payload, currentUser)}
         />
         <aside className="space-y-4">

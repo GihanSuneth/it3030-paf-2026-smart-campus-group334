@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { getResourceCategory, RESOURCE_CATEGORIES } from '../../constants/resources'
 
 const initialState = {
+  bookingType: RESOURCE_CATEGORIES.SPACES,
   resourceId: '',
   date: '',
   startTime: '09:00',
@@ -10,14 +11,49 @@ const initialState = {
   expectedAttendees: 10,
 }
 
-export function BookingForm({ resources, onSubmit, submitLabel = 'Submit Booking' }) {
+export function BookingForm({
+  resources,
+  onSubmit,
+  onCheckAvailability,
+  submitLabel = 'Submit Booking',
+}) {
   const [formState, setFormState] = useState(initialState)
   const [submitting, setSubmitting] = useState(false)
+  const [checkingAvailability, setCheckingAvailability] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
+  const [availability, setAvailability] = useState(null)
 
-  const equipment = resources.filter(r => getResourceCategory(r.type) === RESOURCE_CATEGORIES.EQUIPMENT)
-  const spaces = resources.filter(r => getResourceCategory(r.type) === RESOURCE_CATEGORIES.SPACES)
+  const equipment = resources.filter(
+    (resource) => getResourceCategory(resource.type, resource.category) === RESOURCE_CATEGORIES.EQUIPMENT,
+  )
+  const spaces = resources.filter(
+    (resource) => getResourceCategory(resource.type, resource.category) === RESOURCE_CATEGORIES.SPACES,
+  )
+  const visibleResources = formState.bookingType === RESOURCE_CATEGORIES.EQUIPMENT ? equipment : spaces
+
+  async function handleAvailabilityCheck() {
+    setCheckingAvailability(true)
+    setError('')
+    setSuccess('')
+
+    try {
+      const result = await onCheckAvailability({
+        ...formState,
+        expectedAttendees: Number(formState.expectedAttendees),
+      })
+      setAvailability(result)
+      setSuccess(result.available ? result.message : '')
+      if (!result.available) {
+        setError(result.message)
+      }
+    } catch (availabilityError) {
+      setAvailability(null)
+      setError(availabilityError.message)
+    } finally {
+      setCheckingAvailability(false)
+    }
+  }
 
   async function handleSubmit(event) {
     event.preventDefault()
@@ -28,6 +64,7 @@ export function BookingForm({ resources, onSubmit, submitLabel = 'Submit Booking
     try {
       await onSubmit({ ...formState, expectedAttendees: Number(formState.expectedAttendees) })
       setFormState(initialState)
+      setAvailability(null)
       setSuccess('Booking request submitted successfully.')
     } catch (submitError) {
       setError(submitError.message)
@@ -58,6 +95,23 @@ export function BookingForm({ resources, onSubmit, submitLabel = 'Submit Booking
         <div className="field-group space-y-4">
           <div className="grid gap-4 md:grid-cols-2">
             <label className="space-y-2">
+              <span className="text-sm font-semibold text-slate-700">Booking type</span>
+              <select
+                className="input"
+                value={formState.bookingType}
+                onChange={(event) =>
+                  setFormState((current) => ({
+                    ...current,
+                    bookingType: event.target.value,
+                    resourceId: '',
+                  }))
+                }
+              >
+                <option value={RESOURCE_CATEGORIES.SPACES}>Space</option>
+                <option value={RESOURCE_CATEGORIES.EQUIPMENT}>Physical Resource</option>
+              </select>
+            </label>
+            <label className="space-y-2">
               <span className="text-sm font-semibold text-slate-700">Resource</span>
               <select
                 className="input"
@@ -68,24 +122,11 @@ export function BookingForm({ resources, onSubmit, submitLabel = 'Submit Booking
                 }
               >
                 <option value="">Select a resource</option>
-                {equipment.length > 0 && (
-                  <optgroup label="Equipment">
-                    {equipment.map((resource) => (
-                      <option key={resource.id} value={resource.id}>
-                        {resource.name}
-                      </option>
-                    ))}
-                  </optgroup>
-                )}
-                {spaces.length > 0 && (
-                  <optgroup label="Spaces">
-                    {spaces.map((resource) => (
-                      <option key={resource.id} value={resource.id}>
-                        {resource.name}
-                      </option>
-                    ))}
-                  </optgroup>
-                )}
+                {visibleResources.map((resource) => (
+                  <option key={resource.id} value={resource.id}>
+                    {resource.name} ({resource.code})
+                  </option>
+                ))}
               </select>
             </label>
             <label className="space-y-2">
@@ -156,6 +197,51 @@ export function BookingForm({ resources, onSubmit, submitLabel = 'Submit Booking
               }
             />
           </label>
+        </div>
+
+        <div className="field-group space-y-4">
+          <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-slate-50 p-4">
+            <div>
+              <p className="text-sm font-semibold text-slate-800">Availability check</p>
+              <p className="text-sm text-slate-500">
+                Validate conflicts and get alternative suggestions before submitting for admin review.
+              </p>
+            </div>
+            <button
+              className="btn-secondary min-w-48 justify-center"
+              disabled={checkingAvailability || !formState.resourceId || !formState.date}
+              onClick={handleAvailabilityCheck}
+              type="button"
+            >
+              {checkingAvailability ? 'Checking...' : 'Check Availability'}
+            </button>
+          </div>
+
+          {availability && !availability.available && availability.suggestedResources?.length > 0 ? (
+            <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4">
+              <p className="text-sm font-semibold text-amber-900">Suggested alternatives</p>
+              <div className="mt-3 grid gap-3">
+                {availability.suggestedResources.map((resource) => (
+                  <button
+                    key={resource.resourceId}
+                    className="rounded-xl border border-amber-200 bg-white px-4 py-3 text-left transition hover:border-amber-400"
+                    onClick={() =>
+                      setFormState((current) => ({
+                        ...current,
+                        resourceId: resource.resourceId,
+                      }))
+                    }
+                    type="button"
+                  >
+                    <p className="text-sm font-semibold text-slate-900">{resource.resourceName}</p>
+                    <p className="text-xs text-slate-500">
+                      {resource.resourceCode} • {resource.location} • capacity {resource.capacity}
+                    </p>
+                  </button>
+                ))}
+              </div>
+            </div>
+          ) : null}
         </div>
 
         {error ? <p className="text-sm text-red-600">{error}</p> : null}

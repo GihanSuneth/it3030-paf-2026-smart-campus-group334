@@ -1,34 +1,64 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { authApi } from '../../api/authApi'
 import { ErrorState } from '../../components/common/ErrorState'
 import { LoadingState } from '../../components/common/LoadingState'
 import { PageHeader } from '../../components/common/PageHeader'
 import { PageContainer } from '../../components/layout/PageContainer'
 import { formatRole } from '../../utils/formatters'
-import { useMockQuery } from '../../hooks/useMockQuery'
 import { ROLES } from '../../constants/roles'
 
 export function UserManagementPage() {
   const [activeTab, setActiveTab] = useState('USERS') // USERS, REQUESTS
   const [roleFilter, setRoleFilter] = useState('ALL')
-  const { data, loading, error } = useMockQuery(() => authApi.getUsers(), [])
+  const [users, setUsers] = useState([])
+  const [requests, setRequests] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
 
-  if (loading) {
-    return <LoadingState label="Loading users..." />
+  const fetchData = async () => {
+    setLoading(true)
+    try {
+      const [allUsers, pendingReqs] = await Promise.all([
+        authApi.getUsers(),
+        authApi.getPendingRequests()
+      ])
+      setUsers(allUsers)
+      setRequests(pendingReqs)
+      setError(null)
+    } catch (err) {
+      setError(err.message)
+    } finally {
+      setLoading(false)
+    }
   }
 
-  if (error) {
-    return <ErrorState message={error} />
+  useEffect(() => {
+    fetchData()
+  }, [])
+
+  const handleApprove = async (id) => {
+    try {
+      await authApi.approveRequest(id)
+      fetchData()
+    } catch (err) {
+      alert('Approval failed: ' + err.message)
+    }
   }
 
-  const filteredUsers = data.filter(u => roleFilter === 'ALL' || u.role === roleFilter)
-  
-  // Mock requests
-  const pendingRequests = [
-    { id: 'req_1', name: 'Gihan Suneth', email: 'gihan@student.uni.ac.lk', faculty: 'Computing', type: 'STUDENT', regNo: 'IT2100445', year: '3rd Year', purpose: 'Research Lab access' },
-    { id: 'req_2', name: 'Arun Kumara', email: 'arun@eng.uni.ac.lk', faculty: 'Engineering', type: 'STUDENT', regNo: 'EN2245001', year: '2nd Year', purpose: 'Support ticket tracking' },
-    { id: 'req_3', name: 'Dr. Jane Smith', email: 'jane.s@uni.ac.lk', faculty: 'Computing', type: 'LECTURER', purpose: 'Manage lab inventories and technician assignments.' }
-  ]
+  const handleReject = async (id) => {
+    if (!confirm('Are you sure you want to decline this request?')) return
+    try {
+      await authApi.rejectRequest(id)
+      fetchData()
+    } catch (err) {
+      alert('Rejection failed: ' + err.message)
+    }
+  }
+
+  if (loading) return <LoadingState label="Loading directory..." />
+  if (error) return <ErrorState message={error} />
+
+  const filteredUsers = users.filter(u => roleFilter === 'ALL' || u.role === roleFilter)
 
   return (
     <PageContainer>
@@ -48,7 +78,7 @@ export function UserManagementPage() {
             onClick={() => setActiveTab(tab.id)}
             className={`px-6 py-2 rounded-[14px] text-xs font-bold transition-all ${activeTab === tab.id ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
           >
-            {tab.label} {tab.id === 'REQUESTS' && <span className="ml-2 px-1.5 py-0.5 bg-rose-100 text-rose-600 rounded-md text-[10px]">{pendingRequests.length}</span>}
+            {tab.label} {tab.id === 'REQUESTS' && <span className="ml-2 px-1.5 py-0.5 bg-rose-100 text-rose-600 rounded-md text-[10px]">{requests.length}</span>}
           </button>
         ))}
       </div>
@@ -112,12 +142,12 @@ export function UserManagementPage() {
                     <th className="px-6 py-4 text-left text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Applicant</th>
                     <th className="px-6 py-4 text-left text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Credentials</th>
                     <th className="px-6 py-4 text-left text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Type</th>
-                    <th className="px-6 py-4 text-left text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Context</th>
+                    <th className="px-6 py-4 text-left text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Faculty</th>
                     <th className="px-6 py-4 text-right text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Actions</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-50">
-                  {pendingRequests.map((req) => (
+                  {requests.map((req) => (
                     <tr key={req.id} className="group hover:bg-slate-50/50 transition-colors">
                       <td className="px-6 py-4">
                         <p className="text-sm font-bold text-slate-900">{req.name}</p>
@@ -127,27 +157,43 @@ export function UserManagementPage() {
                         {req.regNo ? (
                           <div className="space-y-0.5">
                             <p className="text-xs font-bold text-slate-700">{req.regNo}</p>
-                            <p className="text-[10px] text-slate-400 font-black uppercase tracking-widest">{req.year}</p>
+                            <p className="text-[10px] text-slate-400 font-black uppercase tracking-widest">{req.academicYear}</p>
                           </div>
-                        ) : <span className="text-xs text-slate-400">N/A</span>}
+                        ) : <span className="text-xs text-slate-400">Lecturer</span>}
                       </td>
                       <td className="px-6 py-4">
-                         <span className={`inline-flex px-2 py-0.5 rounded-md text-[10px] font-black uppercase tracking-wider ${req.type === 'STUDENT' ? 'bg-amber-50 text-amber-600 border-amber-100' : 'bg-indigo-50 text-indigo-600 border-indigo-100'} border`}>
-                           {req.type}
+                         <span className={`inline-flex px-2 py-0.5 rounded-md text-[10px] font-black uppercase tracking-wider ${req.regNo ? 'bg-amber-50 text-amber-600 border-amber-100' : 'bg-indigo-50 text-indigo-600 border-indigo-100'} border`}>
+                           {req.regNo ? 'STUDENT' : 'LECTURER'}
                          </span>
                       </td>
                       <td className="px-6 py-4">
                         <p className="text-xs font-bold text-slate-700">{req.faculty}</p>
-                        <p className="text-[10px] text-slate-400 italic line-clamp-1">"{req.purpose}"</p>
                       </td>
                       <td className="px-6 py-4 text-right">
                         <div className="flex justify-end gap-2">
-                           <button className="px-3 py-1 bg-indigo-600 text-white rounded-lg text-[10px] font-bold hover:bg-indigo-700 transition-all">Provision</button>
-                           <button className="px-3 py-1 border border-slate-200 text-slate-400 rounded-lg text-[10px] font-bold hover:bg-rose-50 hover:text-rose-600 hover:border-rose-100 transition-all">Decline</button>
+                           <button 
+                            onClick={() => handleApprove(req.id)}
+                            className="px-3 py-1 bg-indigo-600 text-white rounded-lg text-[10px] font-bold hover:bg-indigo-700 transition-all shadow-sm"
+                           >
+                             Provision
+                           </button>
+                           <button 
+                            onClick={() => handleReject(req.id)}
+                            className="px-3 py-1 border border-slate-200 text-slate-400 rounded-lg text-[10px] font-bold hover:bg-rose-50 hover:text-rose-600 hover:border-rose-100 transition-all"
+                           >
+                              Decline
+                           </button>
                         </div>
                       </td>
                     </tr>
                   ))}
+                  {requests.length === 0 && (
+                    <tr>
+                      <td colSpan="5" className="px-6 py-12 text-center text-slate-400 text-xs font-medium italic">
+                        No pending access requests
+                      </td>
+                    </tr>
+                  )}
                 </tbody>
               </table>
            </div>

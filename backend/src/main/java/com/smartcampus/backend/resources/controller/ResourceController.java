@@ -1,1 +1,42 @@
+package com.smartcampus.backend.resources.controller;
 
+import com.smartcampus.backend.common.response.ApiResponse;
+import com.smartcampus.backend.resources.model.Resource;
+import com.smartcampus.backend.resources.service.ResourceService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/resources")
+@RequiredArgsConstructor
+public class ResourceController {
+    private final ResourceService resourceService;
+
+    @GetMapping
+    public ApiResponse<List<Resource>> getAllResources() {
+        return ApiResponse.success("Resources retrieved successfully", resourceService.getAllResources());
+    }
+
+    @GetMapping("/{id}")
+    public ApiResponse<Resource> getResourceById(@PathVariable String id) {
+        return ApiResponse.success("Resource retrieved successfully", resourceService.getResourceById(id));
+    }
+
+    @PostMapping
+    public ApiResponse<Resource> createResource(@RequestBody Resource resource) {
+        return ApiResponse.success("Resource created successfully", resourceService.createResource(resource));
+    }
+
+    @PutMapping("/{id}")
+    public ApiResponse<Resource> updateResource(@PathVariable String id, @RequestBody Resource resource) {
+        return ApiResponse.success("Resource updated successfully", resourceService.updateResource(id, resource));
+    }
+
+    @DeleteMapping("/{id}")
+    public ApiResponse<String> deleteResource(@PathVariable String id) {
+        resourceService.deleteResource(id);
+        return ApiResponse.success("Resource deleted successfully", null);
+    }
+}

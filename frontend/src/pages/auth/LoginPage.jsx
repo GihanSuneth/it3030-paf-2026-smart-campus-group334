@@ -7,6 +7,21 @@ import axios from 'axios'
 import { ROLE_HOME_PATHS, ROLES } from '../../constants/roles'
 import { useAuth } from '../../hooks/useAuth'
 
+const roleCredentials = {
+  [ROLES.USER]: {
+    username: 'user',
+    password: 'user',
+  },
+  [ROLES.ADMIN]: {
+    username: 'admin',
+    password: 'admin',
+  },
+  [ROLES.TECHNICIAN]: {
+    username: 'technician',
+    password: 'technician',
+  },
+}
+
 const roleOptions = [
   {
     role: ROLES.USER,
@@ -51,8 +66,8 @@ export function LoginPage() {
   const { currentUser, login, oauthLogin, authLoading } = useAuth()
   const [showSignupModal, setShowSignupModal] = useState(false)
   const [formState, setFormState] = useState({
-    username: 'user',
-    password: 'user',
+    username: roleCredentials[ROLES.USER].username,
+    password: roleCredentials[ROLES.USER].password,
     role: ROLES.USER,
   })
   const [error, setError] = useState('')
@@ -81,6 +96,12 @@ export function LoginPage() {
     setError('')
     try {
       const user = await login(formState)
+
+      if (user.role !== formState.role) {
+        setError(`These credentials belong to ${user.role.toLowerCase()}, not the selected role.`)
+        return
+      }
+
       navigate(ROLE_HOME_PATHS[user.role], { replace: true })
     } catch (submitError) {
       setError(submitError.message)
@@ -145,7 +166,11 @@ export function LoginPage() {
                 transition={{ delay: 0.4 + idx * 0.1 }}
                 whileHover={{ y: -5 }}
                 whileTap={{ scale: 0.98 }}
-                onClick={() => setFormState(s => ({ ...s, role: option.role }))}
+                onClick={() => setFormState({
+                  role: option.role,
+                  username: roleCredentials[option.role].username,
+                  password: roleCredentials[option.role].password,
+                })}
                 className={`text-left p-6 rounded-3xl border transition-all duration-500 overflow-hidden relative group ${
                   formState.role === option.role 
                     ? 'bg-indigo-50 border-indigo-500/50 ring-1 ring-indigo-500/50' 
@@ -197,6 +222,9 @@ export function LoginPage() {
                     onChange={e => setFormState(s => ({ ...s, username: e.target.value }))}
                   />
                 </div>
+                <p className="text-xs text-slate-400 ml-1">
+                  Demo login for selected role: {roleCredentials[formState.role].username} / {roleCredentials[formState.role].password}
+                </p>
               </div>
 
               <div className="space-y-2">

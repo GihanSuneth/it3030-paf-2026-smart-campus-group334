@@ -18,8 +18,10 @@ export function BookingCard({ booking, resourceName, actions }) {
         
         <div className="flex flex-wrap gap-x-6 gap-y-2 pt-1 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
           <span>Attendees: <span className="text-slate-600">{booking.expectedAttendees}</span></span>
-          {booking.rejectionReason && (
-             <span className="text-rose-500 font-black">REJECTED: {booking.rejectionReason}</span>
+          {booking.reviewComment && (
+             <span className={booking.status === 'REJECTED' ? 'text-rose-500 font-black' : 'text-slate-500 font-black'}>
+               {booking.status === 'REJECTED' ? 'REJECTED' : 'NOTE'}: {booking.reviewComment}
+             </span>
           )}
         </div>
       </div>
