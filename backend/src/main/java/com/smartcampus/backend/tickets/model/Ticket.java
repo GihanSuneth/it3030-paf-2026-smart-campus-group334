@@ -34,7 +34,7 @@ public class Ticket {
     private LocalDateTime updatedAt;
     private String resolutionNotes;
     private Integer rating;
-    private List<Comment> comments;
+    private List<Comment> comments; // A list of comments associated with the ticket, allowing users and technicians to communicate and provide updates on the issue. Each comment includes the user ID, user name, message, and timestamp to track the conversation history related to the ticket.
 
     @Data
     @Builder
