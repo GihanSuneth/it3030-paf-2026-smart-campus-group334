@@ -11,7 +11,7 @@ const statusClasses = {
   OPEN: 'status-amber',
   IN_PROGRESS: 'status-blue',
 }
-
+// The TicketStatusBadge component takes a 'status' prop and renders a span element with the appropriate CSS class based on the status value. This allows us to visually differentiate between different ticket statuses in the UI, making it easier for users to quickly identify the current state of a ticket at a glance.
 /// A badge component that displays the status of a ticket with appropriate styling. The status is passed as a prop, and we use a mapping to determine the CSS class to apply based on the status value. This allows us to easily maintain consistent styling for different ticket statuses across the application.
 export function TicketStatusBadge({ status }) {
   return <span className={`status-chip ${statusClasses[status]}`}>{status}</span>
