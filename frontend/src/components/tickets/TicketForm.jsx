@@ -40,6 +40,7 @@ export function TicketForm({ resources, onSubmit, submitLabel = 'Create Ticket' 
     }
   }
 
+  // When the user selects a resource, we automatically populate the location field based on that resource's data. This helps ensure accurate location info without relying on the user to input it manually.
   function handleResourceChange(resourceId) {
     const selectedResource = resources.find((resource) => resource.id === resourceId)
 
