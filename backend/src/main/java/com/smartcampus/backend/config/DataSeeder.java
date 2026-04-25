@@ -122,10 +122,10 @@ public class DataSeeder {
         }
 
         List<Ticket> tickets = List.of(
-                buildTicket("Projector flickering in Lecture Hall F303", "The ceiling projector intermittently cuts out during lectures.", "TECHNICAL", "HIGH", "TECHNICIAN_ASSIGNED", defaultUser, firstTechnician, "New Building - F303"),
-                buildTicket("Audio system not working in Main Auditorium", "No audio output from the main mixer during rehearsal.", "FACILITY", "URGENT", "UNDER_REVIEW", studentUser, null, "Main Building Auditorium"),
-                buildTicket("PC Lab A404 monitor issue", "Several monitors in row 3 are not powering on.", "TECHNICAL", "MEDIUM", "RESOLVED", defaultUser, secondTechnician, "Main Building - A404"),
-                buildTicket("Smart board alignment issue in B405", "Touch calibration is off by a few centimeters.", "TECHNICAL", "LOW", "CREATED", studentUser, null, "Main Building - B405")
+                buildTicket("TK1001", "Projector flickering in Lecture Hall F303", "The ceiling projector intermittently cuts out during lectures.", "EQUIPMENT", "HIGH", "TECHNICIAN_ASSIGNED", defaultUser, firstTechnician, "New Building - F303"),
+                buildTicket("TK1002", "Audio system not working in Main Auditorium", "No audio output from the main mixer during rehearsal.", "FACILITY", "URGENT", "UNDER_REVIEW", studentUser, null, "Main Building Auditorium"),
+                buildTicket("TK1003", "PC Lab A404 monitor issue", "Several monitors in row 3 are not powering on.", "EQUIPMENT", "MEDIUM", "RESOLVED", defaultUser, secondTechnician, "Main Building - A404"),
+                buildTicket("TK1004", "Smart board alignment issue in B405", "Touch calibration is off by a few centimeters.", "EQUIPMENT", "LOW", "CREATED", studentUser, null, "Main Building - B405")
         );
 
         for (Ticket ticket : tickets) {
@@ -254,10 +254,12 @@ public class DataSeeder {
                 .build();
     }
 
-    private Ticket buildTicket(String title, String description, String category, String priority, String status, User user, User technician, String location) {
+    private Ticket buildTicket(String ticketCode, String title, String description, String category, String priority, String status, User user, User technician, String location) {
         LocalDateTime createdAt = LocalDateTime.now().minusDays(2);
         return Ticket.builder()
-                .ticketCode(generateSeedTicketCode())
+                .ticketCode(ticketCode)
+                .resourceId("seed-resource")
+                .resourceName(title)
                 .title(title)
                 .description(description)
                 .category(category)
@@ -265,18 +267,23 @@ public class DataSeeder {
                 .status(status)
                 .userId(user.getId())
                 .userName(user.getName())
+                .contactEmail(user.getEmail())
+                .contactPhone("0770000000")
                 .technicianId(technician == null ? null : technician.getId())
                 .technicianName(technician == null ? null : technician.getName())
                 .location(location)
                 .createdAt(createdAt)
                 .updatedAt(createdAt.plusHours(5))
+                .assignedAt(technician == null ? null : createdAt.plusHours(1))
+                .resolvedAt("RESOLVED".equals(status) ? createdAt.plusHours(4) : null)
                 .resolutionNotes("RESOLVED".equals(status) ? "Replaced faulty display cable and verified output." : null)
+                .configurationDone("RESOLVED".equals(status) ? "Display output reconfigured and tested." : null)
+                .suggestions("RESOLVED".equals(status) ? "Run a quick AV check before the next lecture." : null)
+                .acceptedByUser(false)
                 .comments(new ArrayList<>())
+                .worklog(new ArrayList<>())
+                .attachments(new ArrayList<>())
                 .build();
     }
 
-    private String generateSeedTicketCode() {
-        long next = ticketRepository.count() + 16001;
-        return "TKT" + next;
-    }
 }

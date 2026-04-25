@@ -16,4 +16,5 @@ public class BookingAvailabilityResponse {
     private String message;
     private String conflictDetails;
     private List<BookingAlternativeResponse> suggestedResources;
+    private List<BookingOccupiedSlotResponse> occupiedSlots;
 }

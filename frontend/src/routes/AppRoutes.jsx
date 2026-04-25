@@ -22,10 +22,10 @@ import { MyTicketsPage } from '../pages/user/MyTicketsPage'
 import { ResourceDetailsPage } from '../pages/user/ResourceDetailsPage'
 import { ResourcesPage } from '../pages/user/ResourcesPage'
 import { TicketDetailsPage } from '../pages/user/TicketDetailsPage'
+import { TicketRatingPage } from '../pages/shared/TicketRatingPage'
 import { AssignedTicketsPage } from '../pages/technician/AssignedTicketsPage'
 import { ResolutionNotesPage } from '../pages/technician/ResolutionNotesPage'
 import { TechnicianDashboardPage } from '../pages/technician/TechnicianDashboardPage'
-import { UpdateTicketStatusPage } from '../pages/technician/UpdateTicketStatusPage'
 import { ProtectedRoute } from './ProtectedRoute'
 import { RoleRoute } from './RoleRoute'
 
@@ -45,6 +45,7 @@ export function AppRoutes() {
     <Routes>
       <Route path="/" element={<HomeRoute />} />
       <Route path="/login" element={<LoginPage />} />
+      <Route path="/ticket-rating/:id" element={<TicketRatingPage />} />
       <Route path="/unauthorized" element={<UnauthorizedPage />} />
 
       <Route element={<ProtectedRoute />}>
@@ -85,10 +86,6 @@ export function AppRoutes() {
             <Route path="/technician" element={<TechnicianDashboardPage />} />
             <Route path="/technician/tickets" element={<AssignedTicketsPage />} />
             <Route path="/technician/tickets/:id" element={<ResolutionNotesPage />} />
-            <Route
-              path="/technician/tickets/:id/update"
-              element={<UpdateTicketStatusPage />}
-            />
           </Route>
         </Route>
       </Route>

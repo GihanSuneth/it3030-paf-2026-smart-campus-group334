@@ -1,4 +1,5 @@
 import { Link, useParams } from 'react-router-dom'
+import { bookingApi } from '../../api/bookingApi'
 import { resourceApi } from '../../api/resourceApi'
 import { ErrorState } from '../../components/common/ErrorState'
 import { LoadingState } from '../../components/common/LoadingState'
@@ -9,14 +10,16 @@ import { getResourceCategory, RESOURCE_CATEGORIES } from '../../constants/resour
 
 export function ResourceDetailsPage() {
   const { id } = useParams()
+  const today = new Date().toISOString().split('T')[0]
   const { data, loading, error } = useMockQuery(() => resourceApi.getResourceById(id), [id])
+  const occupiedSlotsQuery = useMockQuery(() => bookingApi.getResourceOccupiedSlots(id, today), [id, today])
 
   if (loading) {
     return <LoadingState label="Loading resource details..." />
   }
 
-  if (error) {
-    return <ErrorState message={error} />
+  if (error || occupiedSlotsQuery.error) {
+    return <ErrorState message={error || occupiedSlotsQuery.error} />
   }
 
   const resource = data
@@ -104,6 +107,25 @@ export function ResourceDetailsPage() {
           <p className="text-sm text-slate-500">
             Resource code: {resource.code}
           </p>
+          <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+            <p className="text-sm font-semibold text-slate-900">Occupied time windows today</p>
+            {occupiedSlotsQuery.loading ? (
+              <p className="mt-2 text-sm text-slate-500">Loading occupied slots...</p>
+            ) : occupiedSlotsQuery.data?.length ? (
+              <div className="mt-3 space-y-2">
+                {occupiedSlotsQuery.data.map((slot) => (
+                  <div key={slot.bookingId} className="rounded-xl border border-slate-200 bg-white px-3 py-2">
+                    <p className="text-sm font-semibold text-slate-900">
+                      {slot.bookingCode || slot.bookingId} • {slot.startTime} - {slot.endTime}
+                    </p>
+                    <p className="text-xs text-slate-500">{slot.status}</p>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="mt-2 text-sm text-slate-500">No occupied windows for today.</p>
+            )}
+          </div>
           <Link className="btn-ghost w-full justify-center" to="/resources">
             Back to Resources
           </Link>

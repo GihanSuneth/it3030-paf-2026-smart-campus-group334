@@ -3,6 +3,7 @@ package com.smartcampus.backend.bookings.service;
 import com.smartcampus.backend.bookings.dto.BookingAlternativeResponse;
 import com.smartcampus.backend.bookings.dto.BookingAvailabilityResponse;
 import com.smartcampus.backend.bookings.dto.BookingCreateRequest;
+import com.smartcampus.backend.bookings.dto.BookingOccupiedSlotResponse;
 import com.smartcampus.backend.bookings.model.Booking;
 import com.smartcampus.backend.bookings.repository.BookingRepository;
 import com.smartcampus.backend.notifications.service.NotificationService;
@@ -41,6 +42,19 @@ public class BookingService {
         return bookingRepository.findByUserIdOrderByCreatedAtDesc(userId);
     }
 
+    public List<BookingOccupiedSlotResponse> getOccupiedSlots(String resourceId, String date) {
+        if (resourceId == null || resourceId.isBlank()) {
+            throw new RuntimeException("Resource or equipment is required.");
+        }
+
+        if (date == null || date.isBlank()) {
+            throw new RuntimeException("Date is required.");
+        }
+
+        getActiveResource(resourceId);
+        return getOccupiedSlotsForDate(resourceId, date);
+    }
+
     public BookingAvailabilityResponse checkAvailability(BookingCreateRequest request) {
         validateBookingRequest(request);
         Resource resource = getActiveResource(request.getResourceId());
@@ -54,6 +68,7 @@ public class BookingService {
                     .message("Expected attendance exceeds the selected resource capacity.")
                     .conflictDetails("Requested attendance: " + request.getExpectedAttendance() + ", capacity: " + resource.getCapacity() + ".")
                     .suggestedResources(findSuggestedResources(resource, request.getBookingType(), request.getExpectedAttendance(), startDateTime, endDateTime))
+                    .occupiedSlots(getOccupiedSlotsForDate(resource.getId(), request.getDate()))
                     .build();
         }
 
@@ -64,6 +79,7 @@ public class BookingService {
                     .message("No conflicts found. You can proceed with the booking request.")
                     .conflictDetails("")
                     .suggestedResources(List.of())
+                    .occupiedSlots(getOccupiedSlotsForDate(resource.getId(), request.getDate()))
                     .build();
         }
 
@@ -72,6 +88,7 @@ public class BookingService {
                 .message("This resource is already booked or awaiting review for the selected time.")
                 .conflictDetails("Conflict: " + conflictingBooking.getDate() + " from " + conflictingBooking.getStartTime() + " to " + conflictingBooking.getEndTime() + " (" + conflictingBooking.getStatus() + ").")
                 .suggestedResources(findSuggestedResources(resource, request.getBookingType(), request.getExpectedAttendance(), startDateTime, endDateTime))
+                .occupiedSlots(getOccupiedSlotsForDate(resource.getId(), request.getDate()))
                 .build();
     }
 
@@ -225,6 +242,21 @@ public class BookingService {
         return existingBookings.stream().filter(booking ->
                 startDateTime.isBefore(booking.getEndDateTime()) && booking.getStartDateTime().isBefore(endDateTime)
         ).min(Comparator.comparing(Booking::getStartDateTime)).orElse(null);
+    }
+
+    private List<BookingOccupiedSlotResponse> getOccupiedSlotsForDate(String resourceId, String date) {
+        return bookingRepository.findByResourceIdAndDateAndStatusInOrderByStartDateTimeAsc(resourceId, date, BLOCKING_STATUSES).stream()
+                .map(booking -> BookingOccupiedSlotResponse.builder()
+                        .bookingId(booking.getId())
+                        .bookingCode(booking.getBookingCode())
+                        .date(booking.getDate())
+                        .startTime(booking.getStartTime())
+                        .endTime(booking.getEndTime())
+                        .status(booking.getStatus())
+                        .resourceName(booking.getResourceName())
+                        .purpose(booking.getPurpose())
+                        .build())
+                .toList();
     }
 
     private List<BookingAlternativeResponse> findSuggestedResources(

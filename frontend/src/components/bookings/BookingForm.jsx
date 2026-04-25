@@ -363,6 +363,24 @@ export function BookingForm({
             </div>
           ) : null}
 
+          {availability?.occupiedSlots?.length > 0 ? (
+            <div className="rounded-2xl border border-slate-200 bg-white p-4">
+              <p className="text-sm font-semibold text-slate-900">Occupied time windows on selected date</p>
+              <div className="mt-3 grid gap-3">
+                {availability.occupiedSlots.map((slot) => (
+                  <div key={slot.bookingId} className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
+                    <p className="text-sm font-semibold text-slate-900">
+                      {slot.bookingCode || slot.bookingId} • {slot.startTime} - {slot.endTime}
+                    </p>
+                    <p className="text-xs text-slate-500">
+                      {slot.status} {slot.purpose ? `• ${slot.purpose}` : ''}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : null}
+
           {availability?.available ? (
             <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-4">
               <p className="text-sm font-semibold text-emerald-900">Availability confirmed</p>
@@ -387,45 +405,6 @@ export function BookingForm({
           </button>
         </div>
       </div>
-      <label className="space-y-2">
-        <span className="text-sm font-semibold text-slate-700">Purpose</span>
-        <textarea
-          className="textarea"
-          required
-          rows="4"
-          value={formState.purpose}
-          onChange={(event) =>
-            setFormState((current) => ({ ...current, purpose: event.target.value }))
-          }
-        />
-      </label>
-      
-      <label className="space-y-2">
-        <span className="text-sm font-semibold text-slate-700">Expected attendees</span>
-        <input
-          className="input"
-          min="1"
-          required
-          type="number"
-          value={formState.expectedAttendees}
-          onChange={(event) =>
-            setFormState((current) => ({
-              ...current,
-              expectedAttendees: event.target.value,
-            }))
-          }
-        />
-      </label>
-
-      {error ? <p className="text-sm text-red-600">{error}</p> : null}
-      {success ? <p className="text-sm text-emerald-600">{success}</p> : null}
-
-
-      <button className="btn-primary w-full justify-center" disabled={submitting} type="submit">
-        {submitting ? 'Saving...' : submitLabel}
-      </button>
     </form>
-   
-   
   )
 }

@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { authApi } from '../../api/authApi'
 import { ticketApi } from '../../api/ticketApi'
 import { ErrorState } from '../../components/common/ErrorState'
@@ -10,16 +9,14 @@ import { TicketCard } from '../../components/tickets/TicketCard'
 import { StatCard } from '../../components/common/StatCard'
 import { TechnicianAssignmentPanel } from '../../components/technician/TechnicianAssignmentPanel'
 import { useMockQuery } from '../../hooks/useMockQuery'
-import { useAuth } from '../../hooks/useAuth'
 import { Search, Info } from 'lucide-react'
 import { ROLES } from '../../constants/roles'
 
 export function ManageTicketsPage() {
-  const { currentUser } = useAuth()
-  const navigate = useNavigate()
   const [activeTab, setActiveTab] = useState('MANAGE') // MANAGE, ASSIGN
   const [searchId, setSearchId] = useState('')
   const [targetTicketId, setTargetTicketId] = useState(null)
+  const [priorityFilter, setPriorityFilter] = useState('ALL')
   
   const ticketsQuery = useMockQuery(() => ticketApi.getAllTickets(), [])
   const usersQuery = useMockQuery(() => authApi.getUsers(), [])
@@ -33,8 +30,13 @@ export function ManageTicketsPage() {
   }
 
   const technicians = usersQuery.data.filter(u => u.role === ROLES.TECHNICIAN)
-  const tickets = ticketsQuery.data
-  const pendingTriage = tickets.filter(t => !t.technicianId && ['CREATED', 'UNDER_REVIEW', 'APPROVED'].includes(t.status)).length
+  const tickets = [...ticketsQuery.data].sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0))
+  const pendingTriage = tickets.filter(t => !t.technicianId && ['CREATED', 'UNDER_REVIEW'].includes(t.status)).length
+  const filteredTickets = tickets.filter((ticket) => {
+    const matchesPriority = priorityFilter === 'ALL' || ticket.priority === priorityFilter
+    const matchesTicketId = !searchId.trim() || (ticket.ticketCode || ticket.id).toLowerCase().includes(searchId.trim().toLowerCase())
+    return matchesPriority && matchesTicketId
+  })
   
   const targetTicket = targetTicketId ? tickets.find(t => t.id === targetTicketId) : null
 
@@ -77,11 +79,34 @@ export function ManageTicketsPage() {
           <section className="grid gap-4 md:grid-cols-3">
             <StatCard label="Total Tickets" value={tickets.length} hint="Total system throughput." />
             <StatCard label="Pending Triage" value={pendingTriage} hint="Awaiting initial ownership." />
-            <StatCard label="Active Jobs" value={tickets.filter(t => ['TECHNICIAN_ASSIGNED', 'UNDER_REVIEW'].includes(t.status)).length} hint="Assigned work in progress." />
+            <StatCard label="Active Jobs" value={tickets.filter(t => ['TECHNICIAN_ASSIGNED', 'ACKNOWLEDGED', 'IN_PROGRESS', 'UNDER_REVIEW'].includes(t.status)).length} hint="Assigned work in progress." />
+          </section>
+
+          <section className="grid gap-4 md:grid-cols-[14rem_minmax(0,1fr)]">
+            <label className="space-y-2">
+              <span className="text-xs font-black uppercase tracking-widest text-slate-400">Priority Filter</span>
+              <select className="input" value={priorityFilter} onChange={(event) => setPriorityFilter(event.target.value)}>
+                <option value="ALL">All priorities</option>
+                <option value="LOW">LOW</option>
+                <option value="MEDIUM">MEDIUM</option>
+                <option value="HIGH">HIGH</option>
+                <option value="URGENT">URGENT</option>
+              </select>
+            </label>
+
+            <label className="space-y-2">
+              <span className="text-xs font-black uppercase tracking-widest text-slate-400">Ticket ID Search</span>
+              <input
+                className="input"
+                placeholder="Search by ticket ID"
+                value={searchId}
+                onChange={(event) => setSearchId(event.target.value)}
+              />
+            </label>
           </section>
 
           <div className="flex flex-col gap-4 pt-4 border-t border-slate-100">
-            {tickets.map((ticket) => (
+            {filteredTickets.map((ticket) => (
               <TicketCard key={ticket.id} ticket={ticket} href={`/tickets/${ticket.id}`} />
             ))}
           </div>
@@ -97,7 +122,7 @@ export function ManageTicketsPage() {
                   <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
                   <input 
                     className="input pl-10" 
-                    placeholder="Enter Ticket Code (e.g. TKT16001)" 
+                    placeholder="Enter Ticket Code (e.g. TK1001)" 
                     value={searchId}
                     onChange={e => setSearchId(e.target.value)}
                   />

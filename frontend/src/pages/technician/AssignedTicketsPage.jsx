@@ -26,18 +26,23 @@ export function AssignedTicketsPage() {
     return <ErrorState message={error} />
   }
 
-  const filteredTickets = data.filter(t => filter === 'ALL' || t.status === filter)
+  const filteredTickets = data.filter((ticket) => {
+    if (filter === 'ALL') return true
+    if (filter === 'ACTIVE') return ['TECHNICIAN_ASSIGNED', 'ACKNOWLEDGED', 'IN_PROGRESS'].includes(ticket.status)
+    if (filter === 'CLOSED') return ['RESOLVED', 'CLOSED'].includes(ticket.status)
+    return ticket.status === filter
+  })
 
   return (
     <PageContainer>
       <PageHeader
         eyebrow="Assigned Work"
         title="Assigned Tickets"
-        description="Open the update flow or add resolution notes for any assigned job."
+        description="Open any assigned ticket, fill the resolution notes, and save the resolution."
       />
 
       <div className="flex bg-slate-100 p-1.5 rounded-2xl w-fit mb-8 overflow-x-auto max-w-full">
-        {['ALL', 'TECHNICIAN_ASSIGNED', 'RESOLVED'].map((status) => (
+        {['ALL', 'ACTIVE', 'RESOLVED', 'CLOSED'].map((status) => (
           <button 
             key={status}
             onClick={() => setFilter(status)}

@@ -9,6 +9,7 @@ import { PageContainer } from '../../components/layout/PageContainer'
 import { BOOKING_STATUSES } from '../../constants/statuses'
 import { useAuth } from '../../hooks/useAuth'
 import { useMockQuery } from '../../hooks/useMockQuery'
+import { downloadBookingPdf } from '../../utils/bookingPdf'
 
 import { StatCard } from '../../components/common/StatCard'
 
@@ -71,11 +72,20 @@ export function MyBookingsPage() {
             <div key={booking.id} className="p-0.5">
               <BookingCard
                 actions={
-                  [BOOKING_STATUSES.PENDING, BOOKING_STATUSES.APPROVED].includes(booking.status) ? (
-                    <button className="btn-secondary !text-rose-600 !border-rose-100 hover:!bg-rose-50" type="button" onClick={() => cancelBooking(booking.id)}>
-                      Cancel Slot
+                  <>
+                    <button
+                      className="btn-ghost"
+                      type="button"
+                      onClick={() => downloadBookingPdf(booking, resourceMap.get(booking.resourceId) ?? 'Resource')}
+                    >
+                      Download PDF
                     </button>
-                  ) : null
+                    {[BOOKING_STATUSES.PENDING, BOOKING_STATUSES.APPROVED].includes(booking.status) ? (
+                      <button className="btn-secondary !text-rose-600 !border-rose-100 hover:!bg-rose-50" type="button" onClick={() => cancelBooking(booking.id)}>
+                        Cancel Slot
+                      </button>
+                    ) : null}
+                  </>
                 }
                 booking={booking}
                 resourceName={resourceMap.get(booking.resourceId) ?? 'Resource'}

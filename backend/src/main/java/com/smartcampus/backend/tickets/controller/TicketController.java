@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/tickets")
@@ -40,18 +41,65 @@ public class TicketController {
     }
 
     @PatchMapping("/{id}/status")
-    public ApiResponse<Ticket> updateStatus(@PathVariable String id, @RequestParam String status) {
-        return ApiResponse.success("Ticket status updated", ticketService.updateStatus(id, status));
+    public ApiResponse<Ticket> updateStatus(@PathVariable String id, @RequestBody Map<String, String> request) {
+        return ApiResponse.success(
+                "Ticket status updated",
+                ticketService.updateStatus(
+                        id,
+                        request.get("status"),
+                        request.get("note"),
+                        request.get("actorId"),
+                        request.get("actorName")
+                )
+        );
     }
 
     @PostMapping("/{id}/assign")
-    public ApiResponse<Ticket> assignTechnician(@PathVariable String id, @RequestParam String techId, @RequestParam String techName) {
-        return ApiResponse.success("Technician assigned to ticket", ticketService.assignTechnician(id, techId, techName));
+    public ApiResponse<Ticket> assignTechnician(@PathVariable String id, @RequestBody Map<String, String> request) {
+        return ApiResponse.success(
+                "Technician assigned to ticket",
+                ticketService.assignTechnician(id, request.get("technicianId"), request.get("technicianName"))
+        );
     }
 
     @PostMapping("/{id}/resolve")
-    public ApiResponse<Ticket> resolveTicket(@PathVariable String id, @RequestBody String notes) {
-        return ApiResponse.success("Ticket resolved", ticketService.resolveTicket(id, notes));
+    public ApiResponse<Ticket> resolveTicket(@PathVariable String id, @RequestBody Map<String, String> request) {
+        return ApiResponse.success(
+                "Ticket resolved",
+                ticketService.resolveTicket(
+                        id,
+                        request.get("resolutionNotes"),
+                        request.get("configurationDone"),
+                        request.get("suggestions"),
+                        request.get("actorId"),
+                        request.get("actorName")
+                )
+        );
+    }
+
+    @PostMapping("/{id}/accept")
+    public ApiResponse<Ticket> acceptResolution(@PathVariable String id, @RequestBody Map<String, String> request) {
+        return ApiResponse.success(
+                "Ticket closed successfully",
+                ticketService.acceptResolution(id, request.get("actorId"), request.get("actorName"))
+        );
+    }
+
+    @PostMapping("/{id}/rate")
+    public ApiResponse<Ticket> submitRating(@PathVariable String id, @RequestBody Map<String, Object> request) {
+        Integer rating = request.get("rating") instanceof Number number ? number.intValue() : null;
+        return ApiResponse.success(
+                "Ticket rating submitted",
+                ticketService.submitRating(id, (String) request.get("token"), rating, (String) request.get("feedback"))
+        );
+    }
+
+    @PostMapping("/{id}/rating-token")
+    public ApiResponse<Ticket> generateRatingToken(@PathVariable String id, @RequestBody Map<String, String> request) {
+        return ApiResponse.success(
+                "Rating token generated",
+                ticketService.generateRatingToken(id, request.get("actorId"), request.get("actorName"))
+        );
     }
 
     @PostMapping("/{id}/comments")

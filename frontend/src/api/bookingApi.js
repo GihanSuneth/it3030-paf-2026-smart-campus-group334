@@ -37,6 +37,13 @@ export const bookingApi = {
     })
   },
 
+  getResourceOccupiedSlots(resourceId, date) {
+    return simulateRequest({
+      method: 'get',
+      url: `/bookings/resource/${resourceId}?date=${date}`,
+    })
+  },
+
   checkAvailability(payload, currentUser) {
     return simulateRequest({
       method: 'post',
