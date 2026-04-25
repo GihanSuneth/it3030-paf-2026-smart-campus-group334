@@ -24,7 +24,7 @@ public class TicketService {
     public List<Ticket> getUserTickets(String userId) {
         return ticketRepository.findByUserId(userId);
     }
-
+// The getTechnicianTickets method retrieves a list of maintenance tickets that are assigned to a specific technician. It takes the technician's ID as a parameter and uses the TicketRepository to query the database for tickets that match the given technician ID. This allows technicians to view and manage the tickets they are responsible for resolving within the smart campus system.
     public List<Ticket> getTechnicianTickets(String technicianId) {
         return ticketRepository.findByTechnicianId(technicianId);
     }
