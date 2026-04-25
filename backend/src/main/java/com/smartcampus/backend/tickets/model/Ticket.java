@@ -36,6 +36,7 @@ public class Ticket {
     private Integer rating;
     private List<Comment> comments; // A list of comments associated with the ticket, allowing users and technicians to communicate and provide updates on the issue. Each comment includes the user ID, user name, message, and timestamp to track the conversation history related to the ticket.
 
+    // The Comment class represents a comment made on a maintenance ticket. It includes fields for the user ID and name of the commenter, the message content of the comment, and a timestamp indicating when the comment was made. This allows for effective communication and tracking of updates related to a ticket, enabling both users and technicians to collaborate on resolving maintenance issues.
     @Data
     @Builder
     @NoArgsConstructor
