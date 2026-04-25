@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
+// Service class for managing maintenance tickets. Contains business logic for creating, retrieving, updating, and resolving tickets. The service interacts with the TicketRepository to perform database operations and includes methods for generating unique ticket codes, adding comments to tickets, and handling ticket status updates and technician assignments.
 @Service
 @RequiredArgsConstructor
 public class TicketService {
