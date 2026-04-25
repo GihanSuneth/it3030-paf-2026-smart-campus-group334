@@ -33,7 +33,7 @@ public class TicketService {
         return ticketRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Ticket not found"));
     }
-
+//
     public Ticket createTicket(Ticket ticket) {
         ticket.setTicketCode(generateTicketCode());
         ticket.setStatus("CREATED");
