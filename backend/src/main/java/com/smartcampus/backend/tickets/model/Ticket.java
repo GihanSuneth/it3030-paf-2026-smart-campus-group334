@@ -10,6 +10,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.time.LocalDateTime;
 import java.util.List;
 
+// The Ticket class represents a maintenance ticket in the smart campus system. It includes fields for ticket details such as title, description, category, priority, status, user and technician information, location, timestamps, resolution notes, rating, and comments. The class is annotated with Lombok annotations for boilerplate code generation and is mapped to a MongoDB collection named "tickets". The nested Comment class represents individual comments on a ticket, including the user who made the comment, the message, and the timestamp.
 @Data
 @Builder
 @NoArgsConstructor
