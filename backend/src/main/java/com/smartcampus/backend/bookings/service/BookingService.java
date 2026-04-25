@@ -42,6 +42,7 @@ public class BookingService {
     }
 
     public BookingAvailabilityResponse checkAvailability(BookingCreateRequest request) {
+        validateBookingRequest(request);
         Resource resource = getActiveResource(request.getResourceId());
         LocalDateTime startDateTime = parseDateTime(request.getDate(), request.getStartTime());
         LocalDateTime endDateTime = parseDateTime(request.getDate(), request.getEndTime());
@@ -155,14 +156,50 @@ public class BookingService {
     }
 
     private Resource getActiveResource(String resourceId) {
-        Resource resource = resourceRepository.findById(resourceId)
-                .orElseThrow(() -> new RuntimeException("Resource not found"));
-
-        if (!"ACTIVE".equalsIgnoreCase(resource.getStatus())) {
-            throw new RuntimeException("Selected resource is not available for booking.");
+        if (resourceId == null || resourceId.isBlank()) {
+            throw new RuntimeException("Select a resource or equipment before checking availability.");
         }
 
-        return resource;
+        return resourceRepository.findById(resourceId)
+                .orElseThrow(() -> new RuntimeException("Resource not found"));
+    }
+
+    private void validateBookingRequest(BookingCreateRequest request) {
+        if (request.getUserId() == null || request.getUserId().isBlank()) {
+            throw new RuntimeException("Booking user is required.");
+        }
+
+        if (request.getUserName() == null || request.getUserName().isBlank()) {
+            throw new RuntimeException("Booking user name is required.");
+        }
+
+        if (request.getBookingType() == null || request.getBookingType().isBlank()) {
+            throw new RuntimeException("Booking type is required.");
+        }
+
+        if (request.getResourceId() == null || request.getResourceId().isBlank()) {
+            throw new RuntimeException("Resource or equipment is required.");
+        }
+
+        if (request.getDate() == null || request.getDate().isBlank()) {
+            throw new RuntimeException("Booking date is required.");
+        }
+
+        if (request.getStartTime() == null || request.getStartTime().isBlank()) {
+            throw new RuntimeException("Start time is required.");
+        }
+
+        if (request.getEndTime() == null || request.getEndTime().isBlank()) {
+            throw new RuntimeException("End time is required.");
+        }
+
+        if (request.getPurpose() == null || request.getPurpose().isBlank()) {
+            throw new RuntimeException("Booking purpose is required.");
+        }
+
+        if (request.getExpectedAttendance() <= 0) {
+            throw new RuntimeException("Expected attendees must be greater than zero.");
+        }
     }
 
     private void validateBookingWindow(LocalDateTime startDateTime, LocalDateTime endDateTime) {
@@ -197,7 +234,7 @@ public class BookingService {
             LocalDateTime startDateTime,
             LocalDateTime endDateTime
     ) {
-        return resourceRepository.findByStatus("ACTIVE").stream()
+        return resourceRepository.findAll().stream()
                 .filter(resource -> !resource.getId().equals(selectedResource.getId()))
                 .filter(resource -> resource.getCategory() != null && resource.getCategory().equalsIgnoreCase(bookingType))
                 .filter(resource -> resource.getCapacity() <= 0 || resource.getCapacity() >= expectedAttendance)

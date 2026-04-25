@@ -77,6 +77,7 @@ export function BookingForm({
     setSuccess('')
 
     try {
+      validateFormState()
       const result = await onCheckAvailability({
         ...formState,
         expectedAttendees: Number(formState.expectedAttendees),
@@ -107,6 +108,8 @@ export function BookingForm({
     setSuccess('')
 
     try {
+      validateFormState()
+
       if (!hasCheckedAvailability) {
         throw new Error('Check availability before submitting the booking request.')
       }
@@ -129,6 +132,36 @@ export function BookingForm({
       setError(submitError.message)
     } finally {
       setSubmitting(false)
+    }
+  }
+
+  function validateFormState() {
+    if (!formState.bookingType) {
+      throw new Error('Booking type is required.')
+    }
+
+    if (!formState.resourceId) {
+      throw new Error('Select a resource or equipment.')
+    }
+
+    if (!formState.date) {
+      throw new Error('Booking date is required.')
+    }
+
+    if (!formState.startTime) {
+      throw new Error('Start time is required.')
+    }
+
+    if (!formState.endTime) {
+      throw new Error('End time is required.')
+    }
+
+    if (!formState.purpose.trim()) {
+      throw new Error('Booking purpose is required.')
+    }
+
+    if (!Number(formState.expectedAttendees) || Number(formState.expectedAttendees) <= 0) {
+      throw new Error('Expected attendees must be greater than zero.')
     }
   }
 

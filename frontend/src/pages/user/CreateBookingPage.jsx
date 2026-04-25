@@ -16,12 +16,7 @@ export function CreateBookingPage() {
   const [searchParams] = useSearchParams()
   const { data, loading, error } = useMockQuery(() => resourceApi.getResources(), [])
   const resources = data ?? []
-  const activeResources = resources.filter(
-    (resource) =>
-      resource.status === 'AVAILABLE' ||
-      resource.status === 'WORKING' ||
-      resource.status === 'ACTIVE',
-  )
+  const activeResources = resources
   const initialResourceId = searchParams.get('resourceId') || ''
   const initialBookingType = useMemo(() => {
     const requestedType = searchParams.get('bookingType')
@@ -62,7 +57,7 @@ export function CreateBookingPage() {
           <article className="info-band">
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Available Resources</p>
             <p className="mt-2 text-3xl font-semibold tracking-tight text-slate-950">{activeResources.length}</p>
-            <p className="mt-2 text-sm leading-6 text-slate-600">Only active resources are shown for a smoother booking experience.</p>
+            <p className="mt-2 text-sm leading-6 text-slate-600">Choose any listed resource or equipment, then check the selected date and time for conflicts.</p>
           </article>
           <article className="section-panel">
             <h2 className="section-title">Before you submit</h2>
