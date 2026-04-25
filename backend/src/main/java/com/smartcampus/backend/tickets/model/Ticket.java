@@ -21,7 +21,7 @@ public class Ticket {
     private String id;
     private String ticketCode;
     private String title;
-    private String description;
+    private String description; // Detailed description of the issue, including any relevant information that can help technicians understand and resolve the problem effectively.
     private String category; // TECHNICAL, FACILITY, OTHER
     private String priority; // LOW, MEDIUM, HIGH, URGENT
     private String status; // CREATED, UNDER_REVIEW, APPROVED, TECHNICIAN_ASSIGNED, RESOLVED, REJECTED
