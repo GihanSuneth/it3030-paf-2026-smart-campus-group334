@@ -1,5 +1,6 @@
 import { formatDateTime, formatRole } from '../../utils/formatters'
 
+// Component to display a list of comments for a ticket
 export function TicketCommentList({ comments }) {
   return (
     <div className="space-y-3">
