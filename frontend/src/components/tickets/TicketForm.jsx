@@ -212,6 +212,7 @@ export function TicketForm({ resources, onSubmit, submitLabel = 'Create Ticket' 
           </div>
         </div>
 
+        {/* Error and success messages */}
         {error ? <p className="text-sm text-red-600">{error}</p> : null}
         {success ? <p className="text-sm text-emerald-600">{success}</p> : null}
 
