@@ -14,3 +14,4 @@ public interface TicketRepository extends MongoRepository<Ticket, String> {
     List<Ticket> findByStatus(String status);
     boolean existsByTicketCode(String ticketCode);
 }
+// The TicketRepository interface extends MongoRepository to provide CRUD operations for Ticket entities in the MongoDB database. It includes custom query methods to find tickets by user ID, technician ID, status, and to check for the existence of a ticket by its unique ticket code. This repository serves as the data access layer for managing maintenance tickets in the smart campus system.
