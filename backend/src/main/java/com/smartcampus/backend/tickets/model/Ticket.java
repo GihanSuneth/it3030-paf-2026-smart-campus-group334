@@ -1,5 +1,6 @@
 package com.smartcampus.backend.tickets.model;
 
+// The Ticket class represents a maintenance ticket in the smart campus system. It includes fields for ticket details such as title, description, category, priority, status, user and technician information, location, timestamps, resolution notes, rating, and comments. The class is annotated with Lombok annotations for boilerplate code generation and is mapped to a MongoDB collection named "tickets". The nested Comment class represents individual comments on a ticket, including the user who made the comment, the message, and the timestamp.
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
