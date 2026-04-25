@@ -33,6 +33,7 @@ public class TicketController {
         return ApiResponse.success("Technician tickets retrieved", ticketService.getTechnicianTickets(techId));
     }
 
+    //
     @GetMapping("/{id}")
     public ApiResponse<Ticket> getTicketById(@PathVariable String id) {
         return ApiResponse.success("Ticket details retrieved", ticketService.getTicketById(id));
