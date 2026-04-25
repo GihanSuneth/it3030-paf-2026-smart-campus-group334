@@ -21,6 +21,7 @@ public class TicketController {
         return ApiResponse.success("Tickets retrieved successfully", ticketService.getAllTickets());
     }
 
+    // Get all tickets submitted by a specific user. This endpoint allows users to view their own maintenance requests and track their status. It takes the user ID as a path variable and returns a list of Ticket objects associated with that user.
     @GetMapping("/user/{userId}")
     public ApiResponse<List<Ticket>> getUserTickets(@PathVariable String userId) {
         return ApiResponse.success("User tickets retrieved", ticketService.getUserTickets(userId));
