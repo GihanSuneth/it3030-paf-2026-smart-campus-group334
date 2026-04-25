@@ -27,6 +27,7 @@ public class TicketController {
         return ApiResponse.success("User tickets retrieved", ticketService.getUserTickets(userId));
     }
 
+    // Get all tickets assigned to a specific technician. This endpoint is used by technicians to view the maintenance requests they are responsible for. It takes the technician ID as a path variable and returns a list of Ticket objects assigned to that technician.
     @GetMapping("/technician/{techId}")
     public ApiResponse<List<Ticket>> getTechnicianTickets(@PathVariable String techId) {
         return ApiResponse.success("Technician tickets retrieved", ticketService.getTechnicianTickets(techId));
