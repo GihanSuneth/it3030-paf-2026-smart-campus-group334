@@ -3,42 +3,40 @@ import { formatDateTime } from '../../utils/formatters'
 
 export function NotificationList({ notifications, onRead, compact = false }) {
   return (
-    <div className={compact ? 'space-y-2' : 'space-y-3'}>
+    <div className={compact ? 'space-y-3' : 'space-y-4'}>
       {notifications.map((notification) => {
         const content = (
-          <>
-            <div className="space-y-1">
-              <h3 className="text-base font-semibold text-slate-950">{notification.title}</h3>
-              <p className="text-base leading-7 text-slate-600">{notification.message}</p>
-            </div>
-            <div className="flex items-center justify-between gap-3">
-              <span className="text-sm text-slate-400">{formatDateTime(notification.createdAt)}</span>
-              {onRead ? (
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center justify-between gap-4 mb-1">
+              <h3 className="text-sm font-extrabold text-slate-900 group-hover:text-indigo-600 transition-colors">{notification.title}</h3>
+              {onRead && (
                 <button
-                  className="text-sm font-semibold text-[#775b35]"
+                  className="text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-indigo-600 px-2 py-1 rounded-md hover:bg-indigo-50 transition-all"
                   type="button"
-                  onClick={() => onRead(notification.id)}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    onRead(notification.id);
+                  }}
                 >
-                  Mark read
+                  Clear Alert
                 </button>
-              ) : null}
+              )}
             </div>
-          </>
+            <p className="text-sm leading-relaxed text-slate-500 font-medium">{notification.message}</p>
+            <p className="mt-3 text-[10px] font-black uppercase tracking-widest text-slate-300">
+              Synced: {formatDateTime(notification.createdAt)}
+            </p>
+          </div>
         )
 
+        const styles = "block rounded-2xl bg-white border border-slate-100 p-5 transition-all shadow-sm hover:shadow-md hover:border-indigo-100 group cursor-pointer"
+        
         return notification.link ? (
-          <Link
-            key={notification.id}
-            className="block rounded-3xl border border-[#e4ddcf] bg-[#fbf8f1] p-4 transition duration-300 hover:-translate-y-0.5 hover:border-[#d3c099] hover:bg-[#fffdf8]"
-            to={notification.link}
-          >
+          <Link key={notification.id} className={styles} to={notification.link}>
             {content}
           </Link>
         ) : (
-          <article
-            key={notification.id}
-            className="rounded-3xl border border-slate-200 bg-slate-50 p-4"
-          >
+          <article key={notification.id} className={styles}>
             {content}
           </article>
         )

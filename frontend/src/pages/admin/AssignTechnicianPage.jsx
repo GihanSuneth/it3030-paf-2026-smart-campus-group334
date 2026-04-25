@@ -52,6 +52,7 @@ export function AssignTechnicianPage() {
                 </p>
                 <p className="text-sm text-slate-600">{ticket.description}</p>
               </article>
+
               <TechnicianAssignmentPanel
                 onAssign={(technicianId) => handleAssign(ticket.id, technicianId)}
                 technicians={technicians}
@@ -62,9 +63,10 @@ export function AssignTechnicianPage() {
       ) : (
         <EmptyState
           title="No tickets need assignment"
-          message="All current tickets already have technician ownership."
+          message="All current tickets already have Technician Ownership."
         />
       )}
     </PageContainer>
   )
+
 }

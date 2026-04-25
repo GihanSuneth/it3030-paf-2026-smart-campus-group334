@@ -12,6 +12,7 @@ export function ResolutionNotesPage() {
   const { id } = useParams()
   const { currentUser } = useAuth()
   const ticketQuery = useMockQuery(() => ticketApi.getTicketById(id), [id])
+  
 
   if (ticketQuery.loading) {
     return <LoadingState label="Loading resolution notes..." />

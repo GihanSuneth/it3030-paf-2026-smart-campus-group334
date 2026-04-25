@@ -8,6 +8,8 @@ import { TicketCard } from '../../components/tickets/TicketCard'
 import { useAuth } from '../../hooks/useAuth'
 import { useMockQuery } from '../../hooks/useMockQuery'
 
+import { StatCard } from '../../components/common/StatCard'
+
 export function MyTicketsPage() {
   const { currentUser } = useAuth()
   const { data, loading, error } = useMockQuery(() => ticketApi.getMyTickets(currentUser.id), [
@@ -22,6 +24,9 @@ export function MyTicketsPage() {
     return <ErrorState message={error} />
   }
 
+  const openCount = data.filter((ticket) => ['CREATED', 'UNDER_REVIEW', 'APPROVED'].includes(ticket.status)).length
+  const processingCount = data.filter((ticket) => ['TECHNICIAN_ASSIGNED', 'RESOLVED'].includes(ticket.status)).length
+
   return (
     <PageContainer>
       <PageHeader
@@ -30,10 +35,30 @@ export function MyTicketsPage() {
         description="Follow the current status of every issue you reported."
       />
 
+      <section className="grid gap-4 md:grid-cols-3 mb-8">
+        <StatCard 
+          label="Reported Issues" 
+          value={data.length} 
+          hint="Total tickets submitted in this workflow."
+        />
+        <StatCard 
+          label="Open Tickets" 
+          value={openCount} 
+          hint="Waiting for assignment or initial triage."
+        />
+        <StatCard 
+          label="In Progress / Resolved" 
+          value={processingCount} 
+          hint="Technicians are currently working on these."
+        />
+      </section>
+
       {data.length > 0 ? (
-        <div className="space-y-4">
+        <div className="flex flex-col gap-5">
           {data.map((ticket) => (
-            <TicketCard key={ticket.id} ticket={ticket} />
+            <div key={ticket.id} className="p-1">
+              <TicketCard ticket={ticket} />
+            </div>
           ))}
         </div>
       ) : (
