@@ -15,6 +15,7 @@ import java.util.List;
 public class TicketController {
     private final TicketService ticketService;
 
+    // Get all tickets in the system. This endpoint is typically used by administrators to view and manage all maintenance requests across the campus. It returns a list of Ticket objects wrapped in a standardized API response format.
     @GetMapping
     public ApiResponse<List<Ticket>> getAllTickets() {
         return ApiResponse.success("Tickets retrieved successfully", ticketService.getAllTickets());
