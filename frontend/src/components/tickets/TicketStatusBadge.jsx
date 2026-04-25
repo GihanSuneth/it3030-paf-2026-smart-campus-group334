@@ -1,9 +1,13 @@
 const statusClasses = {
+  CREATED: 'status-amber',
+  UNDER_REVIEW: 'status-blue',
+  APPROVED: 'status-blue',
+  TECHNICIAN_ASSIGNED: 'status-blue',
+  RESOLVED: 'status-green',
+  REJECTED: 'status-red',
+  CLOSED: 'status-slate',
   OPEN: 'status-amber',
   IN_PROGRESS: 'status-blue',
-  RESOLVED: 'status-green',
-  CLOSED: 'status-slate',
-  REJECTED: 'status-red',
 }
 
 export function TicketStatusBadge({ status }) {

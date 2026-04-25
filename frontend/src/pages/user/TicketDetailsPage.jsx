@@ -1,8 +1,7 @@
 import { useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { authApi } from '../../api/authApi'
 import { ticketApi } from '../../api/ticketApi'
-import { EmptyState } from '../../components/common/EmptyState'
 import { ErrorState } from '../../components/common/ErrorState'
 import { LoadingState } from '../../components/common/LoadingState'
 import { PageHeader } from '../../components/common/PageHeader'
@@ -12,12 +11,13 @@ import { TechnicianAssignmentPanel } from '../../components/technician/Technicia
 import { TicketCommentList } from '../../components/tickets/TicketCommentList'
 import { TicketStatusBadge } from '../../components/tickets/TicketStatusBadge'
 import { ROLES } from '../../constants/roles'
-import { TICKET_STATUSES } from '../../constants/statuses'
 import { useAuth } from '../../hooks/useAuth'
 import { useMockQuery } from '../../hooks/useMockQuery'
+import { ChevronLeft } from 'lucide-react'
 
 export function TicketDetailsPage() {
   const { id } = useParams()
+  const navigate = useNavigate()
   const { currentUser } = useAuth()
   const [comment, setComment] = useState('')
   const ticketQuery = useMockQuery(() => ticketApi.getTicketById(id), [id])
@@ -43,27 +43,38 @@ export function TicketDetailsPage() {
   }
 
   async function handleAssign(technicianId) {
-    if (!technicianId) return
-    await ticketApi.assignTechnician(ticket.id, technicianId, currentUser)
+    const technician = technicians.find((item) => item.id === technicianId)
+    if (!technician) return
+    await ticketApi.assignTechnician(ticket.id, technicianId, technician.name)
     await ticketQuery.refetch()
   }
 
   async function handleStatusChange(status) {
-    await ticketApi.updateTicketStatus(ticket.id, { status }, currentUser)
+    await ticketApi.updateTicketStatus(ticket.id, status)
     await ticketQuery.refetch()
   }
 
   async function handleSaveResolution(note) {
-    await ticketApi.addResolutionNotes(ticket.id, note, currentUser)
+    await ticketApi.addResolutionNotes(ticket.id, note)
     await ticketQuery.refetch()
   }
 
   return (
     <PageContainer>
+      <div className="mb-6">
+        <button
+          onClick={() => navigate(-1)}
+          className="flex items-center gap-2 text-sm font-bold text-slate-500 hover:text-indigo-600 transition-colors"
+        >
+          <ChevronLeft size={16} />
+          Back to Tickets
+        </button>
+      </div>
+
       <PageHeader
-        eyebrow="Ticket Details"
+        eyebrow="Ticket Tracking"
         title={ticket.title}
-        description="Review status, comments, attachments, and role-specific actions."
+        description="Review status, technician assignment, and discussion updates."
         actions={
           currentUser.role === ROLES.TECHNICIAN ? (
             <Link className="btn-primary" to={`/technician/tickets/${ticket.id}/update`}>
@@ -75,70 +86,75 @@ export function TicketDetailsPage() {
 
       <section className="grid gap-6 xl:grid-cols-[minmax(0,1.35fr)_22rem]">
         <div className="space-y-6">
-          <article className="panel space-y-4">
-            <div className="flex flex-wrap items-center gap-3">
-              <TicketStatusBadge status={ticket.status} />
-              <span className="text-sm text-slate-500">Priority: {ticket.priority}</span>
-              <span className="text-sm text-slate-500">Category: {ticket.category}</span>
-            </div>
-            <p className="text-sm text-slate-500">
-              {ticket.resourceName} · {ticket.location}
-            </p>
-            <p className="text-base text-slate-600">{ticket.description}</p>
-            <div className="grid gap-4 md:grid-cols-2">
-              <div>
-                <p className="text-sm font-semibold text-slate-700">Contact</p>
-                <p className="mt-1 text-sm text-slate-500">{ticket.preferredContact}</p>
+          <article className="glass-card space-y-6">
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <TicketStatusBadge status={ticket.status} />
+                <span className="rounded-full bg-slate-900 px-3 py-1 text-[11px] font-black text-white tracking-widest">
+                  Ticket ID {ticket.ticketCode || ticket.id}
+                </span>
               </div>
-              <div>
-                <p className="text-sm font-semibold text-slate-700">Assigned Technician</p>
-                <p className="mt-1 text-sm text-slate-500">
-                  {ticket.assignedTechnicianName || 'Not assigned'}
+              <div className="flex items-center gap-4 text-xs font-bold uppercase tracking-widest text-slate-500">
+                <span>Priority: <span className={ticket.priority === 'HIGH' || ticket.priority === 'URGENT' ? 'text-rose-500' : 'text-indigo-500'}>{ticket.priority}</span></span>
+                <span>Category: <span className="text-slate-900">{ticket.category}</span></span>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <p className="text-sm font-bold text-slate-500">
+                Reported by <span className="text-slate-900">{ticket.userName}</span>
+              </p>
+              <p className="text-sm font-bold text-slate-500">
+                Location: <span className="text-slate-900">{ticket.location}</span>
+              </p>
+              <p className="text-base text-slate-700 leading-relaxed">{ticket.description}</p>
+            </div>
+
+            <div className="grid gap-6 md:grid-cols-2 pt-4 border-t border-slate-100">
+              <div className="space-y-1">
+                <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Assigned Technician</p>
+                <p className="text-sm font-bold text-indigo-600">
+                  {ticket.technicianName || 'Pending assignment'}
+                </p>
+              </div>
+              <div className="space-y-1">
+                <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Resolution Notes</p>
+                <p className="text-sm font-medium text-slate-700">
+                  {ticket.resolutionNotes || 'No resolution notes yet.'}
                 </p>
               </div>
             </div>
-
-            <div>
-              <p className="text-sm font-semibold text-slate-700">Attachments</p>
-              {ticket.attachments.length > 0 ? (
-                <ul className="mt-2 space-y-2 text-sm text-slate-500">
-                  {ticket.attachments.map((attachment) => (
-                    <li key={attachment.name}>{attachment.name}</li>
-                  ))}
-                </ul>
-              ) : (
-                <p className="mt-2 text-sm text-slate-500">No attachments uploaded.</p>
-              )}
-            </div>
           </article>
 
-          <article className="panel space-y-4">
+          <article className="glass-card space-y-6">
             <div>
-              <h2 className="text-xl font-semibold text-slate-950">Comments</h2>
-              <p className="mt-2 text-sm text-slate-500">
-                Comment ownership is shown clearly for support tracking.
-              </p>
+              <h2 className="text-lg font-bold text-slate-950">Support Discussion</h2>
+              <p className="text-xs font-medium text-slate-400 mt-1 uppercase tracking-widest italic leading-none">Latest updates</p>
             </div>
-            {ticket.comments.length > 0 ? (
+
+            {(ticket.comments || []).length > 0 ? (
               <TicketCommentList comments={ticket.comments} />
             ) : (
-              <EmptyState
-                title="No comments yet"
-                message="Add the first update to keep the ticket conversation moving."
-              />
+              <div className="py-8 text-center bg-slate-50 rounded-2xl border border-dashed border-slate-200">
+                <p className="text-sm font-medium text-slate-500">No discussion updates yet.</p>
+              </div>
             )}
 
-            <form className="space-y-3" onSubmit={handleCommentSubmit}>
-              <textarea
-                className="textarea"
-                placeholder="Add a comment"
-                rows="4"
-                value={comment}
-                onChange={(event) => setComment(event.target.value)}
-              />
-              <button className="btn-primary" type="submit">
-                Add Comment
-              </button>
+            <form className="space-y-4" onSubmit={handleCommentSubmit}>
+              <div className="space-y-2">
+                <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">Post an update</span>
+                <textarea
+                  className="textarea !min-h-[160px]"
+                  placeholder="Type your message here..."
+                  value={comment}
+                  onChange={(event) => setComment(event.target.value)}
+                />
+              </div>
+              <div className="flex justify-end">
+                <button className="btn-primary !min-w-[200px]" type="submit">
+                  Send Message
+                </button>
+              </div>
             </form>
           </article>
         </div>
@@ -147,20 +163,20 @@ export function TicketDetailsPage() {
           {currentUser.role === ROLES.ADMIN ? (
             <>
               <TechnicianAssignmentPanel technicians={technicians} onAssign={handleAssign} />
-              <article className="panel space-y-4">
-                <h2 className="text-lg font-semibold text-slate-950">Admin Actions</h2>
+              <article className="glass-card space-y-4">
+                <h2 className="text-lg font-bold text-slate-950">Administrative Control</h2>
                 <div className="flex flex-col gap-3">
                   <button
-                    className="btn-ghost justify-center"
+                    className="btn-ghost justify-center font-bold"
                     type="button"
-                    onClick={() => handleStatusChange(TICKET_STATUSES.CLOSED)}
+                    onClick={() => handleStatusChange('UNDER_REVIEW')}
                   >
-                    Close Ticket
+                    Mark Under Review
                   </button>
                   <button
-                    className="btn-ghost justify-center"
+                    className="btn-ghost !border-rose-100 !text-rose-600 hover:!bg-rose-50 justify-center font-bold"
                     type="button"
-                    onClick={() => handleStatusChange(TICKET_STATUSES.REJECTED)}
+                    onClick={() => handleStatusChange('REJECTED')}
                   >
                     Reject Ticket
                   </button>
@@ -175,13 +191,6 @@ export function TicketDetailsPage() {
               onSave={handleSaveResolution}
             />
           ) : null}
-
-          <article className="panel space-y-3">
-            <h2 className="text-lg font-semibold text-slate-950">Resolution Notes</h2>
-            <p className="text-sm text-slate-500">
-              {ticket.resolutionNotes || 'No resolution notes added yet.'}
-            </p>
-          </article>
         </div>
       </section>
     </PageContainer>

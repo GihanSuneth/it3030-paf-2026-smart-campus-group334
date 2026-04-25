@@ -10,7 +10,7 @@ export function NotificationBell() {
   return (
     <div className="relative">
       <button
-        className="relative rounded-full border border-stone-200 bg-[#fffdf8] p-3.5 text-[#243551] shadow-sm transition hover:border-[#c2ad86] hover:text-[#775b35]"
+        className="relative rounded-full border border-slate-200 bg-white p-3 text-slate-700 shadow-sm transition hover:border-[#b9cadc] hover:text-slate-950"
         type="button"
         onClick={() => setOpen((current) => !current)}
       >
@@ -30,20 +30,20 @@ export function NotificationBell() {
           />
         </svg>
         {unreadCount > 0 ? (
-          <span className="absolute -right-1 -top-1 inline-flex min-h-6 min-w-6 items-center justify-center rounded-full bg-[#c8b08a] px-1 text-sm font-bold text-[#1f2d45]">
+          <span className="absolute -right-1 -top-1 inline-flex min-h-6 min-w-6 items-center justify-center rounded-full bg-[#f2e3cf] px-1 text-xs font-bold text-[#7f5530]">
             {unreadCount}
           </span>
         ) : null}
       </button>
 
       {open ? (
-        <div className="absolute right-0 z-30 mt-3 w-[26rem] rounded-3xl border border-[#e3ddcf] bg-[#fffdf8] p-4 shadow-2xl">
+        <div className="absolute right-0 z-30 mt-3 w-[24rem] rounded-[24px] border border-slate-200 bg-white p-4 shadow-2xl">
           <div className="mb-3 flex items-center justify-between">
             <div>
               <h3 className="text-base font-semibold text-slate-950">Notifications</h3>
               <p className="text-sm text-slate-600">Recent activity across the system</p>
             </div>
-            <Link className="text-sm font-semibold text-[#775b35]" to="/notifications">
+            <Link className="text-sm font-semibold text-[#365f8b]" to="/notifications">
               View all
             </Link>
           </div>

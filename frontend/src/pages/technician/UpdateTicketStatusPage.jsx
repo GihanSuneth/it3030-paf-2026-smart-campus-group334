@@ -8,6 +8,7 @@ import { useAuth } from '../../hooks/useAuth'
 import { useMockQuery } from '../../hooks/useMockQuery'
 import { useState } from 'react'
 
+
 export function UpdateTicketStatusPage() {
   const { id } = useParams()
   const navigate = useNavigate()

@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { MOCK_DATA_EVENT } from '../constants/events'
 
 export function useMockQuery(queryFn, dependencies = []) {
   const [data, setData] = useState(null)
@@ -29,13 +28,6 @@ export function useMockQuery(queryFn, dependencies = []) {
 
   useEffect(() => {
     runQuery()
-
-    const handler = () => {
-      runQuery()
-    }
-
-    window.addEventListener(MOCK_DATA_EVENT, handler)
-    return () => window.removeEventListener(MOCK_DATA_EVENT, handler)
   }, [dependencyKey, runQuery])
 
   return {
