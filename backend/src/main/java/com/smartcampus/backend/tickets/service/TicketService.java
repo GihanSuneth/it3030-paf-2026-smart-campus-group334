@@ -14,6 +14,7 @@ import java.util.concurrent.ThreadLocalRandom;
 @Service
 @RequiredArgsConstructor
 public class TicketService {
+    // The TicketService class is responsible for managing maintenance tickets in the smart campus system. It provides methods to create new tickets, retrieve existing tickets by various criteria (such as user ID or technician ID), update ticket status, assign technicians to tickets, resolve tickets with resolution notes, and add comments to tickets. The service uses the TicketRepository to interact with the MongoDB database and perform CRUD operations on Ticket entities. Additionally, it includes a method to generate unique ticket codes to ensure that each ticket can be easily identified and tracked within the system.
     private final TicketRepository ticketRepository;
 
     public List<Ticket> getAllTickets() {
