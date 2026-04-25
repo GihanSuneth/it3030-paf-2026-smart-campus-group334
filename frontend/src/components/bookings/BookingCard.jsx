@@ -18,7 +18,6 @@ export function BookingCard({ booking, resourceName, actions }) {
             Reason: {booking.rejectionReason}
           </p>
         ) : null}
-        
       </div>
       {actions ? <div className="flex flex-wrap gap-3">{actions}</div> : null}
     </article>
