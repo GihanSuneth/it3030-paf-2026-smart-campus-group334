@@ -63,6 +63,7 @@ export function TicketForm({ resources, onSubmit, submitLabel = 'Create Ticket' 
     setFormState((current) => ({ ...current, attachments: files }))
   }
 
+  // The form is organized into sections with clear labels and helper text to guide the user in providing all necessary information for the ticket. We use a combination of input fields, select dropdowns, and a textarea to capture different types of data. The submit button is disabled while the form is submitting to prevent duplicate submissions, and we display success or error messages based on the outcome of the submission.
   return (
     <form className="form-shell" onSubmit={handleSubmit}>
       <div className="form-content">
