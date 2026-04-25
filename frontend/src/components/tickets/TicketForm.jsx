@@ -13,6 +13,7 @@ const initialState = {
   attachments: [],
 }
 
+/// A form for creating or editing a maintenance ticket. Can be used in different contexts (e.g. new ticket, edit existing ticket) by passing different onSubmit handlers and initial form state.
 export function TicketForm({ resources, onSubmit, submitLabel = 'Create Ticket' }) {
   const [formState, setFormState] = useState(initialState)
   const [submitting, setSubmitting] = useState(false)
