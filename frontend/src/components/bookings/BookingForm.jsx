@@ -305,6 +305,45 @@ export function BookingForm({
           </button>
         </div>
       </div>
+      <label className="space-y-2">
+        <span className="text-sm font-semibold text-slate-700">Purpose</span>
+        <textarea
+          className="textarea"
+          required
+          rows="4"
+          value={formState.purpose}
+          onChange={(event) =>
+            setFormState((current) => ({ ...current, purpose: event.target.value }))
+          }
+        />
+      </label>
+      
+      <label className="space-y-2">
+        <span className="text-sm font-semibold text-slate-700">Expected attendees</span>
+        <input
+          className="input"
+          min="1"
+          required
+          type="number"
+          value={formState.expectedAttendees}
+          onChange={(event) =>
+            setFormState((current) => ({
+              ...current,
+              expectedAttendees: event.target.value,
+            }))
+          }
+        />
+      </label>
+
+      {error ? <p className="text-sm text-red-600">{error}</p> : null}
+      {success ? <p className="text-sm text-emerald-600">{success}</p> : null}
+
+
+      <button className="btn-primary w-full justify-center" disabled={submitting} type="submit">
+        {submitting ? 'Saving...' : submitLabel}
+      </button>
     </form>
+   
+   
   )
 }
