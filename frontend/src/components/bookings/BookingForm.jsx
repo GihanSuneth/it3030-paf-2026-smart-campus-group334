@@ -128,6 +128,7 @@ export function BookingForm({ resources, onSubmit, submitLabel = 'Submit Booking
         {submitting ? 'Saving...' : submitLabel}
       </button>
     </form>
-    
+   
+   
   )
 }
