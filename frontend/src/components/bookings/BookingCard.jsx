@@ -7,7 +7,15 @@ export function BookingCard({ booking, resourceName, actions }) {
         <div className="flex flex-wrap items-center gap-3">
           <BookingStatusBadge status={booking.status} />
           <h3 className="text-lg font-bold text-slate-950 truncate">{resourceName}</h3>
-          <span className="text-[10px] font-black text-slate-300 uppercase tracking-widest hidden sm:inline">#{booking.id.slice(0, 8)}</span>
+          {booking.bookingCode ? (
+            <span className="text-[10px] font-black text-slate-300 uppercase tracking-widest hidden sm:inline">
+              {booking.bookingCode}
+            </span>
+          ) : (
+            <span className="text-[10px] font-black text-slate-300 uppercase tracking-widest hidden sm:inline">
+              #{booking.id.slice(0, 8)}
+            </span>
+          )}
         </div>
         
         <p className="text-sm font-bold text-indigo-600 flex items-center gap-2">

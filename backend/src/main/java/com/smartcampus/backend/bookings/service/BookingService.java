@@ -8,6 +8,8 @@ import com.smartcampus.backend.bookings.repository.BookingRepository;
 import com.smartcampus.backend.notifications.service.NotificationService;
 import com.smartcampus.backend.resources.model.Resource;
 import com.smartcampus.backend.resources.repository.ResourceRepository;
+import com.smartcampus.backend.users.model.User;
+import com.smartcampus.backend.users.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +27,7 @@ public class BookingService {
     private final BookingRepository bookingRepository;
     private final ResourceRepository resourceRepository;
     private final NotificationService notificationService;
+    private final UserRepository userRepository;
 
     public List<Booking> getAllBookings() {
         return bookingRepository.findAllByOrderByCreatedAtDesc();
@@ -48,15 +51,17 @@ public class BookingService {
             return BookingAvailabilityResponse.builder()
                     .available(false)
                     .message("Expected attendance exceeds the selected resource capacity.")
+                    .conflictDetails("Requested attendance: " + request.getExpectedAttendance() + ", capacity: " + resource.getCapacity() + ".")
                     .suggestedResources(findSuggestedResources(resource, request.getBookingType(), request.getExpectedAttendance(), startDateTime, endDateTime))
                     .build();
         }
 
-        boolean available = isResourceAvailable(resource.getId(), startDateTime, endDateTime);
-        if (available) {
+        Booking conflictingBooking = findConflictingBooking(resource.getId(), startDateTime, endDateTime);
+        if (conflictingBooking == null) {
             return BookingAvailabilityResponse.builder()
                     .available(true)
-                    .message("The selected slot is available and ready for admin review.")
+                    .message("No conflicts found. You can proceed with the booking request.")
+                    .conflictDetails("")
                     .suggestedResources(List.of())
                     .build();
         }
@@ -64,6 +69,7 @@ public class BookingService {
         return BookingAvailabilityResponse.builder()
                 .available(false)
                 .message("This resource is already booked or awaiting review for the selected time.")
+                .conflictDetails("Conflict: " + conflictingBooking.getDate() + " from " + conflictingBooking.getStartTime() + " to " + conflictingBooking.getEndTime() + " (" + conflictingBooking.getStatus() + ").")
                 .suggestedResources(findSuggestedResources(resource, request.getBookingType(), request.getExpectedAttendance(), startDateTime, endDateTime))
                 .build();
     }
@@ -82,6 +88,7 @@ public class BookingService {
         Booking booking = Booking.builder()
                 .userId(request.getUserId())
                 .userName(request.getUserName())
+                .bookingCode(generateBookingCode())
                 .bookingType(request.getBookingType())
                 .resourceId(resource.getId())
                 .resourceName(resource.getName())
@@ -99,7 +106,9 @@ public class BookingService {
                 .updatedAt(now)
                 .build();
 
-        return bookingRepository.save(booking);
+        Booking savedBooking = bookingRepository.save(booking);
+        notifyAdminsAboutPendingBooking(savedBooking);
+        return savedBooking;
     }
 
     public Booking approveBooking(String id) {
@@ -157,6 +166,10 @@ public class BookingService {
     }
 
     private void validateBookingWindow(LocalDateTime startDateTime, LocalDateTime endDateTime) {
+        if (startDateTime.isBefore(LocalDateTime.now())) {
+            throw new RuntimeException("You cannot book a resource or equipment for a past date or time.");
+        }
+
         if (!endDateTime.isAfter(startDateTime)) {
             throw new RuntimeException("End time must be after start time.");
         }
@@ -167,10 +180,14 @@ public class BookingService {
     }
 
     private boolean isResourceAvailable(String resourceId, LocalDateTime startDateTime, LocalDateTime endDateTime) {
+        return findConflictingBooking(resourceId, startDateTime, endDateTime) == null;
+    }
+
+    private Booking findConflictingBooking(String resourceId, LocalDateTime startDateTime, LocalDateTime endDateTime) {
         List<Booking> existingBookings = bookingRepository.findByResourceIdAndStatusIn(resourceId, BLOCKING_STATUSES);
-        return existingBookings.stream().noneMatch(booking ->
+        return existingBookings.stream().filter(booking ->
                 startDateTime.isBefore(booking.getEndDateTime()) && booking.getStartDateTime().isBefore(endDateTime)
-        );
+        ).min(Comparator.comparing(Booking::getStartDateTime)).orElse(null);
     }
 
     private List<BookingAlternativeResponse> findSuggestedResources(
@@ -197,5 +214,28 @@ public class BookingService {
                         .capacity(resource.getCapacity())
                         .build())
                 .toList();
+    }
+
+    private void notifyAdminsAboutPendingBooking(Booking booking) {
+        for (User admin : userRepository.findByRoleIgnoreCase("ADMIN")) {
+            notificationService.createNotification(
+                    admin.getId(),
+                    "New booking request",
+                    booking.getBookingCode() + " - " + booking.getUserName() + " requested " + booking.getResourceName() + " for " + booking.getDate() + " at " + booking.getStartTime() + ".",
+                    "/admin/bookings/pending"
+            );
+        }
+    }
+
+    private String generateBookingCode() {
+        return bookingRepository.findAllByOrderByBookingCodeDesc().stream()
+                .map(Booking::getBookingCode)
+                .filter(code -> code != null && code.startsWith("BK"))
+                .findFirst()
+                .map(code -> {
+                    int next = Integer.parseInt(code.substring(2)) + 1;
+                    return "BK" + next;
+                })
+                .orElse("BK1001");
     }
 }

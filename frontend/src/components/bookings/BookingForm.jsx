@@ -29,6 +29,7 @@ export function BookingForm({
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
   const [availability, setAvailability] = useState(null)
+  const [hasCheckedAvailability, setHasCheckedAvailability] = useState(false)
 
   const equipment = resources.filter(
     (resource) => getResourceCategory(resource.type, resource.category) === RESOURCE_CATEGORIES.EQUIPMENT,
@@ -49,9 +50,26 @@ export function BookingForm({
       resourceId: initialResourceId,
     }))
     setAvailability(null)
+    setHasCheckedAvailability(false)
     setError('')
     setSuccess('')
   }, [initialBookingType, initialResourceId])
+
+  useEffect(() => {
+    setAvailability(null)
+    setHasCheckedAvailability(false)
+    setError('')
+    setSuccess('')
+  }, [
+    formState.bookingType,
+    formState.resourceId,
+    formState.date,
+    formState.startTime,
+    formState.endTime,
+    formState.expectedAttendees,
+  ])
+
+  const today = new Date().toISOString().split('T')[0]
 
   async function handleAvailabilityCheck() {
     setCheckingAvailability(true)
@@ -64,13 +82,19 @@ export function BookingForm({
         expectedAttendees: Number(formState.expectedAttendees),
       })
       setAvailability(result)
+      setHasCheckedAvailability(true)
       setSuccess(result.available ? result.message : '')
       if (!result.available) {
-        setError(result.message)
+        setError(result.conflictDetails ? `${result.message} ${result.conflictDetails}` : result.message)
+        window.alert(result.conflictDetails ? `${result.message}\n${result.conflictDetails}` : result.message)
+      } else {
+        window.alert(result.message)
       }
     } catch (availabilityError) {
       setAvailability(null)
+      setHasCheckedAvailability(false)
       setError(availabilityError.message)
+      window.alert(availabilityError.message)
     } finally {
       setCheckingAvailability(false)
     }
@@ -83,6 +107,14 @@ export function BookingForm({
     setSuccess('')
 
     try {
+      if (!hasCheckedAvailability) {
+        throw new Error('Check availability before submitting the booking request.')
+      }
+
+      if (!availability?.available) {
+        throw new Error('Resolve the booking conflict or choose an alternative resource before submitting.')
+      }
+
       await onSubmit({ ...formState, expectedAttendees: Number(formState.expectedAttendees) })
       setFormState({
         ...initialState,
@@ -90,7 +122,9 @@ export function BookingForm({
         resourceId: '',
       })
       setAvailability(null)
+      setHasCheckedAvailability(false)
       setSuccess('Booking request submitted successfully.')
+      window.alert('Booking request submitted successfully. Admin will review it next.')
     } catch (submitError) {
       setError(submitError.message)
     } finally {
@@ -161,6 +195,7 @@ export function BookingForm({
                 className="input"
                 required
                 type="date"
+                min={today}
                 value={formState.date}
                 onChange={(event) =>
                   setFormState((current) => ({ ...current, date: event.target.value }))
@@ -292,6 +327,20 @@ export function BookingForm({
                   </button>
                 ))}
               </div>
+            </div>
+          ) : null}
+
+          {availability?.available ? (
+            <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-4">
+              <p className="text-sm font-semibold text-emerald-900">Availability confirmed</p>
+              <p className="mt-1 text-sm text-emerald-800">{availability.message}</p>
+            </div>
+          ) : null}
+
+          {availability?.conflictDetails ? (
+            <div className="rounded-2xl border border-rose-200 bg-rose-50 p-4">
+              <p className="text-sm font-semibold text-rose-900">Conflict details</p>
+              <p className="mt-1 text-sm text-rose-800">{availability.conflictDetails}</p>
             </div>
           ) : null}
         </div>

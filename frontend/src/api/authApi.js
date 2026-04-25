@@ -39,8 +39,22 @@ export const authApi = {
     return storedUser ? JSON.parse(storedUser) : null
   },
 
-  oauthLogin() {
-    return Promise.reject(new Error('Google login is not configured for this MVP.'))
+  oauthLogin(provider, role, accessToken) {
+    return simulateRequest({
+      method: 'post',
+      url: '/auth/oauth',
+      data: {
+        provider,
+        role,
+        accessToken,
+      }
+    }).then(res => {
+      if (res.token) {
+        localStorage.setItem('token', res.token)
+        localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(res.user))
+      }
+      return res.user
+    })
   },
 
   getUsers() {

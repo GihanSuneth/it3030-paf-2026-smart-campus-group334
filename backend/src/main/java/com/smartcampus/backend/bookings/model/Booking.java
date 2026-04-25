@@ -19,6 +19,7 @@ public class Booking {
     private String id;
     private String userId;
     private String userName;
+    private String bookingCode;
     private String bookingType;
     private String resourceId;
     private String resourceName;
