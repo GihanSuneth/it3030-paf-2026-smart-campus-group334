@@ -58,7 +58,7 @@ public class TicketService {
         ticket.setUpdatedAt(LocalDateTime.now());
         return ticketRepository.save(ticket);
     }
-
+// The resolveTicket method is responsible for marking a maintenance ticket as resolved. It takes the ticket ID and resolution notes as parameters, retrieves the corresponding ticket from the database, updates its status to "RESOLVED", adds the provided resolution notes, and saves the updated ticket back to the database. This allows technicians to indicate that a maintenance issue has been addressed and provide details about the resolution for future reference.
     public Ticket resolveTicket(String id, String notes) {
         Ticket ticket = getTicketById(id);
         ticket.setResolutionNotes(notes);
