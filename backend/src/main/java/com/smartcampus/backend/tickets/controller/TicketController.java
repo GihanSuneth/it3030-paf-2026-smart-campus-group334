@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/// REST controller for managing maintenance tickets. Provides endpoints for creating, retrieving, updating, and resolving tickets. The controller delegates business logic to the TicketService and returns standardized API responses using the ApiResponse wrapper class. Endpoints include:
 @RestController
 @RequestMapping("/api/tickets")
 @RequiredArgsConstructor
