@@ -51,6 +51,7 @@ export function TicketForm({ resources, onSubmit, submitLabel = 'Create Ticket' 
     }))
   }
 
+  // For simplicity, we're not actually uploading files in this example. Instead, we just capture the file names and sizes to show how attachments could be handled in the form state. In a real implementation, you would need to handle file uploads to your server or a cloud storage service.
   function handleFiles(event) {
     const files = Array.from(event.target.files ?? [])
       .slice(0, 3)
