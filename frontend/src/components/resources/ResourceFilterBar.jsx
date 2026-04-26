@@ -38,7 +38,7 @@ export function ResourceFilterBar({
           className="input"
           value={filters.location}
           onChange={(event) => onChange('location', event.target.value)}
-        >
+        >//The dropdown for location is similarly constructed by combining the default "All" option with the list of locations provided as props. This allows users to filter resources based on their physical location within the campus. When a location is selected, the onChange function updates the filters, enabling the parent component to display only resources that match the selected location criteria.
           {defaultOptions
             .concat(locations.map((location) => ({ label: location, value: location })))
             .map((location) => (
