@@ -28,7 +28,7 @@ export function ResourceFilterBar({
           {defaultOptions.concat(types.map((type) => ({ label: type, value: type }))).map((type) => (
             <option key={type.value} value={type.value}>
               {type.label}
-            </option>
+            </option>// The dropdown for resource type is populated by concatenating the default "All" option with the list of types passed as props. Each type is mapped to an option element, allowing users to filter resources based on their type. When a user selects a type from the dropdown, the onChange function is called with the updated filter value, enabling the parent component to adjust the displayed resources accordingly.
           ))}
         </select>
       </label>
