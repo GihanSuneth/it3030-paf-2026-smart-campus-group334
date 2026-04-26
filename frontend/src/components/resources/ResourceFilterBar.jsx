@@ -46,7 +46,7 @@ export function ResourceFilterBar({
                 {location.label}
               </option>
             ))}
-        </select>
+        </select>// The dropdown for status is constructed in the same way as the type and location dropdowns, allowing users to filter resources based on their current status (e.g., Available, Under Maintenance, etc.). By selecting a status from the dropdown, users can narrow down the displayed resources to those that match the chosen status, and the onChange function will update the filters accordingly to reflect this selection in the parent component's resource display logic.
       </label>
       <label className="space-y-2">
         <span className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Status</span>
