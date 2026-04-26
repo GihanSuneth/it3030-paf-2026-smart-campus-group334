@@ -65,7 +65,7 @@ export function ResourceDetailsPage() {
             Book Resource
           </Link>
         }
-      />
+      />// The PageHeader component is used to display the header section of the Resource Details page, which includes an eyebrow text indicating that this is a resource details page, the title of the resource being viewed, a description providing context for the user, and an action button that allows the user to book the resource. The action button is a Link component that navigates to the booking creation page with query parameters for the resource ID and booking type, enabling users to easily initiate a booking for the specific resource they are viewing.
 
       <section className="grid gap-6 xl:grid-cols-[minmax(0,1.3fr)_22rem]">
         <article className="panel space-y-4">
