@@ -15,7 +15,7 @@ import java.util.List;
 public class ResourceController {// The ResourceController class is responsible for handling HTTP requests related to resource management in the smart campus system. It provides endpoints for creating new resources, retrieving existing resources by ID or as a list, updating resource details, and deleting resources. The controller uses the ResourceService to perform business logic and interacts with the database through the service layer. Each endpoint returns a standardized API response using the ApiResponse wrapper class to ensure consistent response formatting across the application.
     private final ResourceService resourceService;
 
-    @GetMapping
+    @GetMapping// Get all resources in the system. This endpoint allows users to view a list of all available resources within the smart campus, such as study rooms, equipment, or facilities. It returns a list of Resource objects wrapped in a standardized API response format.
     public ApiResponse<List<Resource>> getAllResources() {
         return ApiResponse.success("Resources retrieved successfully", resourceService.getAllResources());
     }
