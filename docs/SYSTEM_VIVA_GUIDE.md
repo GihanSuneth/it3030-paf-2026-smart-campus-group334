@@ -751,3 +751,4 @@ If asked to explain the whole system, use this order:
 ## 17. Fast 60-Second Project Summary
 
 This is a Smart Campus full-stack system built with React, Vite, Spring Boot, and MongoDB. Users can request access, browse resources, create bookings, raise issue tickets, and track everything through notifications. Admins manage resources, approve bookings, assign technicians, and monitor resource/equipment usage through the dashboard. Technicians resolve assigned tickets and generate a QR-based rating handoff. The frontend communicates with backend REST APIs through Axios, while backend business logic is organized into controllers, services, repositories, and MongoDB models.
+
