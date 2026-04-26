@@ -38,7 +38,7 @@ public class ResourceService {
         if (hasText(resourceDetails.getType())) {
             resource.setType(resourceDetails.getType());
         }
-        if (hasText(resourceDetails.getCategory())) {
+        if (hasText(resourceDetails.getCategory())) {// The updateResource method includes a conditional check for the category field of the resource. If the resourceDetails object contains valid text for the category, it updates the resource's category with the new value. This allows for changing the classification of a resource (e.g., from "PHYSICAL_RESOURCE" to "SPACE") while ensuring that only meaningful updates are applied to the resource's data.
             resource.setCategory(resourceDetails.getCategory());
         }
         if (hasText(resourceDetails.getStockType())) {
