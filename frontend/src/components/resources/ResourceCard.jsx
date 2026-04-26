@@ -25,7 +25,7 @@ function buildSummary(resource) {// The buildSummary function generates a summar
   }
 
   if (resource.type === 'PC Lab') {
-    return [
+    return [// For a resource of type "PC Lab", the buildSummary function constructs a summary array that includes the lab's capacity, the number of working PCs out of the total PCs, the number of working smart boards out of the total smart boards, the number of working projectors out of the total projectors, and the number of working sound systems out of the total sound systems. This detailed summary provides users with a clear overview of the available resources and their functionality within the PC Lab, helping them make informed decisions about using or reserving the lab for their needs.
       `Capacity ${resource.capacity ?? 0}`,
       `PCs ${resource.workingPcs ?? 0}/${resource.totalPcs ?? 0} working`,
       `Smart Boards ${resource.workingSmartBoards ?? 0}/${resource.smartBoardCount ?? 0}`,
