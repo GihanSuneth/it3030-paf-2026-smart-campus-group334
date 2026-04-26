@@ -19,7 +19,7 @@ public class ResourceService {
         return resourceRepository.findAll();
     }
 
-    public Resource getResourceById(String id) {
+    public Resource getResourceById(String id) {// The getResourceById method retrieves a specific resource from the smart campus system based on its unique identifier (ID). It uses the ResourceRepository to query the MongoDB database for a Resource entity that matches the provided ID. If a resource with the given ID is found, it is returned; otherwise, a RuntimeException is thrown indicating that the resource was not found. This method is commonly used to view or manage details of a specific resource within the application.
         return resourceRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Resource not found"));
     }
