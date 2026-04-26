@@ -12,22 +12,4 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
-public class AuthController {
-    private final AuthService authService;
 
-    @PostMapping("/login")
-    public ApiResponse<LoginResponse> login(@RequestBody LoginRequest request) {
-        return ApiResponse.success("Login ", authService.login(request));
-    }
-
-    @PostMapping("/oauth")
-    public ApiResponse<LoginResponse> oauthLogin(@RequestBody OAuthLoginRequest request) {
-        return ApiResponse.success("Login successful", authService.oauthLogin(request));
-    }
-
-    @PostMapping("/register")
-    public ApiResponse<String> register(@RequestBody RegisterRequest request) {
-        authService.register(request);
-        return ApiResponse.success("Access request submitted successfully", null);
-    }
-}
