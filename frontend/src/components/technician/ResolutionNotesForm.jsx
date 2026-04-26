@@ -23,7 +23,7 @@ export function ResolutionNotesForm({ initialValue = '', onSave, submitLabel = '
         rows="6"
         value={value}
         onChange={(event) => setValue(event.target.value)}
-      />
+      />// The textarea element is a controlled component that displays the current value of the resolution notes and updates the value state whenever the user types in the textarea. This allows for real-time updates to the resolution notes as the user edits them, and ensures that the latest value is available when the form is submitted and the onSave function is called.
       <button className="btn-primary w-full justify-center" disabled={saving} type="submit">
         {saving ? 'Saving...' : submitLabel}
       </button>
