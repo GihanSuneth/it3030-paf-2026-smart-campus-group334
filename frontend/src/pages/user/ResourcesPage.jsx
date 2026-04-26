@@ -33,7 +33,7 @@ export function ResourcesPage() {
   function updateFilter(key, value) {
     setFilters((current) => ({ ...current, [key]: value }))
   }
-
+// The updateFilter function is a helper function used to update the filters state when the user interacts with the filter inputs in the ResourceFilterBar component. It takes a key (representing the filter type, such as 'query', 'type', 'location', or 'status') and a value (the new filter value selected by the user) and updates the filters state by merging the current filters with the new key-value pair. This allows for dynamic filtering of resources based on user input, and ensures that the component re-renders with the updated list of resources that match the selected filter criteria.
   if (loading) {
     return <LoadingState label="Loading resources..." />
   }
