@@ -37,7 +37,7 @@ public class Resource {
     private Integer smartBoardCount;
     private Integer workingSmartBoards;
     private Integer projectorCount;
-    private Integer workingProjectors;
+    private Integer workingProjectors;// The projectorCount field represents the total number of projectors available for a resource, such as a classroom or lab, while the workingProjectors field indicates how many of those projectors are currently functional and available for use. This information is crucial for resource management and helps users determine the suitability of a resource for their needs based on the availability of essential equipment.
     private Integer screenCount;
     private Integer workingScreens;
     private Integer soundSystemCount;
