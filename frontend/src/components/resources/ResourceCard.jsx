@@ -21,7 +21,7 @@ function buildSummary(resource) {// The buildSummary function generates a summar
       resource.stockType ? `Stock: ${resource.stockType}` : null,
       resource.location,
       resource.serviceOrder ? `Service order ${resource.serviceOrder}` : null,
-    ].filter(Boolean)
+    ].filter(Boolean)// The filter(Boolean) method is used to remove any null or undefined values from the summary array, ensuring that only valid and meaningful information is included in the final summary for equipment resources. This allows the buildSummary function to return a clean and concise array of attributes that can be easily displayed in the ResourceCard component without showing empty or irrelevant entries.
   }
 
   if (resource.type === 'PC Lab') {
