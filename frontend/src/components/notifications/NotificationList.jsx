@@ -18,7 +18,7 @@ export function NotificationList({ notifications, onRead, compact = false }) {
                   className="text-xs font-bold text-slate-600 hover:text-slate-900"
                   type="button"
                   onClick={(e) => {
-                    e.preventDefault(); // Prevent link navigation if inside one
+                    e.preventDefault();
                     onRead(notification.id);
                   }}
                 >
@@ -28,6 +28,7 @@ export function NotificationList({ notifications, onRead, compact = false }) {
             </div>
           </>
         )
+        
 
         
         return notification.link ? (
