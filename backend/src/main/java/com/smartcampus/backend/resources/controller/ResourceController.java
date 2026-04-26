@@ -20,7 +20,7 @@ public class ResourceController {// The ResourceController class is responsible 
         return ApiResponse.success("Resources retrieved successfully", resourceService.getAllResources());
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{id}")// Get a specific resource by its ID. This endpoint allows users to retrieve detailed information about a particular resource by providing its unique identifier. It returns the Resource object corresponding to the given ID wrapped in a standardized API response format.
     public ApiResponse<Resource> getResourceById(@PathVariable String id) {
         return ApiResponse.success("Resource retrieved successfully", resourceService.getResourceById(id));
     }
