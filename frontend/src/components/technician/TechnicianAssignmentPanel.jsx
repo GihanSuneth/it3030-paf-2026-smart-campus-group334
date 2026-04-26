@@ -25,6 +25,6 @@ export function TechnicianAssignmentPanel({ technicians, onAssign }) {
       >
         Assign Technician
       </button>
-    </div>
+    </div>// The "Assign Technician" button is a clickable element that triggers the onAssign function when clicked. The onAssign function is expected to be passed as a prop to the TechnicianAssignmentPanel component and should handle the logic for assigning the selected technician to a ticket or task. When the button is clicked, it calls the onAssign function with the current value of technicianId, which represents the ID of the technician selected from the dropdown. This allows the parent component to perform the necessary actions to assign the technician based on their ID, such as making an API call to update the ticket's assigned technician in the backend.
   )
 }
