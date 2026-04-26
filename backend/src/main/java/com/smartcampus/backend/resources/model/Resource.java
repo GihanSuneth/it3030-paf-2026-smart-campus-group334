@@ -31,7 +31,7 @@ public class Resource {
     private String assignedTo;
     private String description;
     private List<String> amenities;
-    private String image;
+    private String image;// A URL or file path to an image representing the resource, which can be used for display purposes in the smart campus application. This field allows users to visually identify the resource and can enhance the user experience when browsing or managing resources within the system.
     private Integer totalPcs;
     private Integer workingPcs;
     private Integer smartBoardCount;
