@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/// REST controller for managing resources in the smart campus system. Provides endpoints for creating, retrieving, updating, and deleting resources. The controller delegates business logic to the ResourceService and returns standardized API responses using the ApiResponse wrapper class. Endpoints include:
 @RestController
 @RequestMapping("/api/resources")
 @RequiredArgsConstructor
