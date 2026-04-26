@@ -1,58 +1,123 @@
 import { useState } from 'react'
 import { Navigate, useNavigate } from 'react-router-dom'
 import { useGoogleLogin } from '@react-oauth/google'
+import { motion, AnimatePresence } from 'framer-motion'
+import { User, Shield, Wrench, ArrowRight, Globe } from 'lucide-react'
 import axios from 'axios'
+import { authApi } from '../../api/authApi'
 import { ROLE_HOME_PATHS, ROLES } from '../../constants/roles'
 import { useAuth } from '../../hooks/useAuth'
+
+const studentEmailDomain = import.meta.env.VITE_STUDENT_EMAIL_DOMAIN || 'my.sliit.lk'
+const staffEmailDomain = import.meta.env.VITE_STAFF_EMAIL_DOMAIN || 'sliit.lk'
+const studentEmailSuffix = `@${studentEmailDomain}`
+const staffEmailSuffix = `@${staffEmailDomain}`
+
+const roleCredentials = {
+  [ROLES.USER]: {
+    username: `it12345678${studentEmailSuffix}`,
+    password: 'user',
+  },
+  [ROLES.ADMIN]: {
+    username: 'admin',
+    password: 'admin',
+  },
+  [ROLES.TECHNICIAN]: {
+    username: 'technician',
+    password: 'technician',
+  },
+}
 
 const roleOptions = [
   {
     role: ROLES.USER,
-    title: 'User',
-    description: 'Browse resources, request bookings, and track tickets.',
+    title: 'Student/Staff',
+    description: 'Access resources and campus support.',
+    icon: User,
+    color: 'indigo',
+    tasks: [
+      'Search campus facilities',
+      'Request room bookings',
+      'Track support tickets',
+    ],
   },
   {
     role: ROLES.ADMIN,
-    title: 'Admin',
-    description: 'Manage resources, review bookings, and coordinate tickets.',
+    title: 'Administrator',
+    description: 'Manage campus ecosystem and logic.',
+    icon: Shield,
+    color: 'violet',
+    tasks: [
+      'Inventory control',
+      'Approve booking flows',
+      'Team orchestration',
+    ],
   },
   {
     role: ROLES.TECHNICIAN,
-    title: 'Technician',
-    description: 'Work assigned tickets, add updates, and close repairs.',
+    title: 'Service Tech',
+    description: 'Resolve incidents and maintain assets.',
+    icon: Wrench,
+    color: 'rose',
+    tasks: [
+      'Asset maintenance',
+      'Incident resolution',
+      'Performance reporting',
+    ],
   },
 ]
 
-export function LoginPage() {
-  const navigate = useNavigate()
-  const { currentUser, login, oauthLogin, authLoading } = useAuth()
-  const [showSignupModal, setShowSignupModal] = useState(false)
-  const [formState, setFormState] = useState({
-    username: 'user',
-    password: 'user',
-    role: ROLES.USER,
-  })
-  const [error, setError] = useState('')
-
+function UniversityGoogleButton({ disabled, onError, onSuccess }) {
   const googleLogin = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
       try {
-        const userInfo = await axios.get(
-          'https://www.googleapis.com/oauth2/v3/userinfo',
-          { headers: { Authorization: `Bearer ${tokenResponse.access_token}` } }
-        )
-        // Here you would typically send userInfo.data to your backend
-        console.log('Google User Info:', userInfo.data)
-        
-        // Falling back to our mock oauth handler
-        await handleOAuth('google')
+        const userInfo = await axios.get('https://www.googleapis.com/oauth2/v3/userinfo', {
+          headers: {
+            Authorization: `Bearer ${tokenResponse.access_token}`,
+          },
+        })
+        await onSuccess(userInfo.data)
       } catch (err) {
-        console.error(err)
-        setError('Failed to fetch Google profile.')
+        onError(err.message)
       }
     },
-    onError: () => setError('Google Login Failed'),
+    onError: () => onError('Google Login Failed'),
   })
+
+  return (
+    <button
+      type="button"
+      disabled={disabled}
+      onClick={() => googleLogin()}
+      className="flex items-center justify-center gap-3 bg-white border border-slate-200 hover:border-indigo-200 hover:bg-slate-50 text-slate-600 font-bold py-3.5 rounded-2xl transition-all shadow-sm disabled:cursor-not-allowed disabled:opacity-60"
+    >
+      <Globe size={20} className="text-indigo-600" />
+      <span className="text-sm">Continue with Google</span>
+    </button>
+  )
+}
+
+export function LoginPage() {
+  const navigate = useNavigate()
+  const { currentUser, login, authLoading } = useAuth()
+  const googleClientConfigured = Boolean(import.meta.env.VITE_GOOGLE_CLIENT_ID)
+  const [showSignupModal, setShowSignupModal] = useState(false)
+  const [formState, setFormState] = useState({
+    username: roleCredentials[ROLES.USER].username,
+    password: roleCredentials[ROLES.USER].password,
+    role: ROLES.USER,
+  })
+  const [signupState, setSignupState] = useState({
+    userType: 'STAFF',
+    name: '',
+    email: '',
+    password: '',
+    regNo: '',
+    academicYear: '',
+    faculty: '',
+    purpose: '',
+  })
+  const [error, setError] = useState('')
 
   if (currentUser) {
     return <Navigate replace to={ROLE_HOME_PATHS[currentUser.role]} />
@@ -64,245 +129,408 @@ export function LoginPage() {
 
     try {
       const user = await login(formState)
+
+      if (user.role !== formState.role) {
+        setError(`These credentials belong to ${user.role.toLowerCase()}, not the selected role.`)
+        return
+      }
+
       navigate(ROLE_HOME_PATHS[user.role], { replace: true })
     } catch (submitError) {
       setError(submitError.message)
     }
   }
 
-  async function handleOAuth(provider) {
+  async function handleGoogleSignupPrefill(googleUser) {
     setError('')
+    const email = googleUser?.email?.trim() || ''
+
+    if (!email) {
+      setError('Unable to fetch the selected Google email.')
+      return
+    }
+
+    setSignupState((state) => ({
+      ...state,
+      name: googleUser?.name || state.name,
+      email,
+      userType: 'STAFF',
+    }))
+    setShowSignupModal(true)
+  }
+
+  async function handleSignupSubmit(event) {
+    event.preventDefault()
+    setError('')
+
     try {
-      const user = await oauthLogin(provider, formState.role)
-      // Since it's a simulated signup/signin, we just navigate
-      navigate(ROLE_HOME_PATHS[user.role], { replace: true })
-    } catch (err) {
-      setError(err.message)
+      await authApi.register({
+        name: signupState.name,
+        email: signupState.email,
+        password: signupState.password,
+        role: ROLES.USER,
+        faculty: signupState.faculty,
+        regNo: signupState.userType === 'STUDENT' ? signupState.regNo : '',
+        academicYear: signupState.userType === 'STUDENT' ? signupState.academicYear : '',
+        purpose: signupState.purpose,
+      })
+
+      setShowSignupModal(false)
+      setSignupState({
+        userType: 'STAFF',
+        name: '',
+        email: '',
+        password: '',
+        regNo: '',
+        academicYear: '',
+        faculty: '',
+        purpose: '',
+      })
+      setError('Application submitted! Admin will verify your student or staff registration.')
+      setTimeout(() => setError(''), 4000)
+    } catch (signupError) {
+      setError(signupError.message)
     }
   }
 
+  function isStudentOrStaffEmail(value) {
+    const normalizedValue = value.trim().toLowerCase()
+    return (
+      normalizedValue.endsWith(studentEmailSuffix.toLowerCase()) ||
+      normalizedValue.endsWith(staffEmailSuffix.toLowerCase())
+    )
+  }
+
   return (
-    <main className="min-h-screen bg-transparent px-4 py-5 md:px-8 lg:px-10">
-      <div className="mx-auto grid min-h-[calc(100vh-2.5rem)] max-w-[1320px] gap-5 lg:grid-cols-[minmax(0,1.25fr)_28rem]">
-        <section className="hero-panel relative overflow-hidden flex flex-col justify-between border-0 shadow-none">
-          <div className="absolute inset-y-0 right-0 hidden w-1/3 bg-[radial-gradient(circle_at_top,rgba(30,58,95,0.04),transparent_58%)] lg:block" />
-          <div className="relative space-y-8">
-            <div>
-              <p className="text-sm font-bold uppercase tracking-[0.2em] text-[#1e3a5f]">
-                NEXORA
-              </p>
-              <h1 className="mt-4 max-w-4xl text-5xl font-bold tracking-tight text-[#1a2533] md:text-6xl">
-                University Management<br/>Suite
-              </h1>
-              <p className="mt-6 max-w-3xl text-lg leading-8 text-slate-500">
-                A polished university operations workspace for resources, bookings,
-                incidents, notifications, and role-based management.
-              </p>
-            </div>
-
-            <div className="grid gap-4 md:grid-cols-3">
-              {roleOptions.map((option) => (
-                <button
-                  key={option.role}
-                  className={`soft-grid-card text-left flex flex-col items-start ${
-                    formState.role === option.role
-                      ? 'border-[#1e3a5f] bg-white ring-1 ring-[#1e3a5f] shadow-md'
-                      : 'border-slate-100 bg-white hover:border-slate-200'
-                  }`}
-                  type="button"
-                  onClick={() =>
-                    setFormState((current) => ({ ...current, role: option.role }))
-                  }
-                >
-                  <div className={`mb-5 flex h-10 w-10 items-center justify-center rounded-full text-sm font-bold ${
-                    formState.role === option.role
-                      ? 'bg-[#1e3a5f] text-white'
-                      : 'bg-slate-100 text-slate-600'
-                  }`}>
-                    {option.title[0]}
-                  </div>
-                  <h2 className="text-xl font-bold text-slate-900">{option.title}</h2>
-                  <p className="mt-2 text-sm leading-6 text-slate-500">{option.description}</p>
-                </button>
-              ))}
-            </div>
-
-            <div className="grid gap-4 md:grid-cols-3 pt-4 border-t border-slate-100">
-              <div>
-                <p className="text-sm font-bold text-slate-900">Booking Flow</p>
-                <p className="mt-1 text-sm leading-6 text-slate-500">
-                  Search resources, submit requests, and follow approvals.
-                </p>
-              </div>
-              <div>
-                <p className="text-sm font-bold text-slate-900">Incident Support</p>
-                <p className="mt-1 text-sm leading-6 text-slate-500">
-                  Raise campus issues with attachments, notes, and updates.
-                </p>
-              </div>
-              <div>
-                <p className="text-sm font-bold text-slate-900">Role Security</p>
-                <p className="mt-1 text-sm leading-6 text-slate-500">
-                  Clear workspaces for users, admins, and technicians.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-8 rounded-2xl bg-slate-50 p-5">
-            <p className="text-xs font-bold uppercase tracking-[0.1em] text-slate-500">
-              Development Access
-            </p>
-            <p className="mt-2 text-sm leading-6 text-slate-600">
-              Use the same credentials for every role: username <span className="bg-slate-200 px-1 rounded">user</span> and password <span className="bg-slate-200 px-1 rounded">user</span>.
-            </p>
-          </div>
-        </section>
-
-        <section className="panel flex flex-col justify-center border-slate-100 bg-white">
-          <div>
-            <p className="text-xs font-bold uppercase tracking-[0.15em] text-[#1e3a5f]">
-              Sign In
-            </p>
-            <h2 className="mt-3 text-3xl font-bold tracking-tight text-slate-900">
-              Open Your<br/>Workspace
-            </h2>
-            <p className="mt-4 text-sm leading-6 text-slate-500">
-              Choose a role and enter the matching workspace.
-            </p>
-          </div>
-
-          <form className="mt-7 space-y-4" onSubmit={handleSubmit}>
-            <label className="space-y-2">
-              <span className="text-base font-semibold text-slate-800">Username</span>
-              <input
-                className="input"
-                value={formState.username}
-                onChange={(event) =>
-                  setFormState((current) => ({ ...current, username: event.target.value }))
-                }
-              />
-            </label>
-            <label className="space-y-2">
-              <span className="text-base font-semibold text-slate-800">Password</span>
-              <input
-                className="input"
-                type="password"
-                value={formState.password}
-                onChange={(event) =>
-                  setFormState((current) => ({ ...current, password: event.target.value }))
-                }
-              />
-            </label>
-            <label className="space-y-2">
-              <span className="text-base font-semibold text-slate-800">Role</span>
-              <select
-                className="input"
-                value={formState.role}
-                onChange={(event) =>
-                  setFormState((current) => ({ ...current, role: event.target.value }))
-                }
-              >
-                {roleOptions.map((option) => (
-                  <option key={option.role} value={option.role}>
-                    {option.title}
-                  </option>
-                ))}
-              </select>
-            </label>
-
-            {error ? <p className="text-base text-rose-700">{error}</p> : null}
-
-            <button className="btn-primary w-full justify-center mt-2 bg-[#1a2b4b] hover:bg-[#152845] py-3 rounded-lg" disabled={authLoading} type="submit">
-              {authLoading ? 'Signing in...' : 'Continue'}
-            </button>
-
-            <div className="flex items-center gap-4 py-2">
-              <div className="h-px flex-1 bg-slate-200"></div>
-              <span className="text-sm font-medium text-slate-400">or continue with</span>
-              <div className="h-px flex-1 bg-slate-200"></div>
-            </div>
-
-            <div className="flex flex-col gap-3">
-              <button
-                type="button"
-                onClick={() => window.location.href = 'http://localhost:8080/oauth2/authorization/google'}
-                className="btn-ghost flex justify-center w-full !rounded-lg !py-2.5 !text-sm border-slate-200 hover:border-slate-300"
-              >
-                Google
-              </button>
-            </div>
-
-            <p className="text-center text-sm text-slate-600 mt-2">
-              Don't have an account?{' '}
-              <button type="button" onClick={() => setShowSignupModal(true)} className="font-semibold text-[#1e3a5f] hover:underline">
-                Sign up
-              </button>
-            </p>
-          </form>
-
-          <div className="mt-8 rounded-xl bg-slate-50 p-5">
-            <p className="text-sm font-bold text-slate-900">Why this layout works</p>
-            <p className="mt-2 text-sm leading-6 text-slate-500">
-              Clear role selection, large readable text, strong contrast, and direct actions reduce cognitive load and make the first screen easier to use.
-            </p>
-          </div>
-        </section>
+    <main className="relative min-h-screen bg-[#f8fafc] overflow-hidden flex flex-col justify-center px-4 py-8 md:py-12 md:px-8">
+      {/* Background Decor */}
+      <div className="absolute inset-0 z-0">
+        <motion.div 
+          animate={{ scale: [1, 1.1, 1], opacity: [0.3, 0.5, 0.3] }}
+          transition={{ duration: 10, repeat: Infinity }}
+          className="absolute -top-[10%] -left-[10%] w-[50%] h-[50%] bg-indigo-500/10 rounded-full blur-[120px]" 
+        />
+        <motion.div 
+          animate={{ scale: [1, 1.2, 1], opacity: [0.2, 0.4, 0.2] }}
+          transition={{ duration: 15, repeat: Infinity, delay: 2 }}
+          className="absolute -bottom-[10%] -right-[10%] w-[50%] h-[50%] bg-indigo-500/5 rounded-full blur-[120px]" 
+        />
       </div>
 
-      {showSignupModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm">
-          <div className="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in duration-200">
-            <div className="p-6">
-              <div className="flex justify-between items-center mb-6">
-                <h3 className="text-xl font-bold text-slate-900">Create an account</h3>
-                <button onClick={() => setShowSignupModal(false)} className="text-slate-400 hover:text-slate-600">
-                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
-              </div>
-              
-              <div className="space-y-5">
-                <div className="space-y-2">
-                  <span className="text-base font-semibold text-slate-800">Select Role</span>
-                  <select
-                    className="input !py-3"
-                    value={formState.role}
-                    onChange={(event) =>
-                      setFormState((current) => ({ ...current, role: event.target.value }))
-                    }
-                  >
-                    {roleOptions.map((option) => (
-                      <option key={option.role} value={option.role}>
-                        {option.title}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                
-                <button
-                  type="button"
-                  onClick={() => window.location.href = 'http://localhost:8080/oauth2/authorization/google'}
-                  className="btn-ghost flex justify-center w-full !rounded-xl !py-3 border-slate-200 hover:border-slate-300 items-center gap-2"
-                >
-                  <svg className="w-5 h-5" viewBox="0 0 24 24">
-                    <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
-                    <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-                    <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
-                    <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
-                  </svg>
-                  Sign up with Google
-                </button>
-              </div>
-              
-              <p className="mt-6 text-center text-sm text-slate-500">
-                By signing up, you agree to our Terms of Service and Privacy Policy.
-              </p>
+      <div className="relative z-10 w-full max-w-[1400px] mx-auto grid gap-12 lg:grid-cols-2 items-center">
+        {/* Left: Branding & Role Selection */}
+        <div className="space-y-12">
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            <div className="inline-flex items-center gap-2 bg-indigo-50 border border-indigo-100 rounded-full px-4 py-1.5 mb-6">
+              <span className="h-2 w-2 rounded-full bg-indigo-500 animate-pulse" />
+              <span className="text-[10px] font-bold text-indigo-600 uppercase tracking-widest">v2.0 Smart Campus</span>
             </div>
+            <h1 className="text-6xl md:text-8xl font-bold tracking-tighter text-slate-900 leading-[0.9]">
+              Nexora<br/>
+              <span className="text-indigo-600">Workspace.</span>
+            </h1>
+            <p className="mt-8 max-w-lg text-lg leading-relaxed text-slate-500">
+              The next generation of university management. Immersive, efficient, and designed for modern campus operations.
+            </p>
+          </motion.div>
+
+          <div className="grid gap-4 md:grid-cols-3">
+            {roleOptions.map((option, idx) => (
+              <motion.button
+                key={option.role}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4 + idx * 0.1 }}
+                whileHover={{ y: -5 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => setFormState({
+                  role: option.role,
+                  username: roleCredentials[option.role].username,
+                  password: roleCredentials[option.role].password,
+                })}
+                className={`text-left p-6 rounded-3xl border transition-all duration-500 overflow-hidden relative group ${
+                  formState.role === option.role 
+                    ? 'bg-indigo-50 border-indigo-500/50 ring-1 ring-indigo-500/50' 
+                    : 'bg-white border-slate-200 hover:border-indigo-200 hover:shadow-lg hover:shadow-indigo-500/5'
+                }`}
+              >
+                <div className={`mb-4 inline-flex h-12 w-12 items-center justify-center rounded-2xl transition-colors duration-500 ${
+                  formState.role === option.role ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-400 group-hover:bg-indigo-50 group-hover:text-indigo-600'
+                }`}>
+                  <option.icon size={24} />
+                </div>
+                <h3 className={`font-bold transition-colors ${formState.role === option.role ? 'text-slate-900' : 'text-slate-600 group-hover:text-slate-900'}`}>
+                  {option.title}
+                </h3>
+                <p className="mt-2 text-xs text-slate-500 leading-relaxed font-medium">
+                  {option.description}
+                </p>
+                {formState.role === option.role && (
+                  <motion.div 
+                    layoutId="role-indicator"
+                    className="absolute bottom-0 left-0 right-0 h-1 bg-indigo-500" 
+                  />
+                )}
+              </motion.button>
+            ))}
           </div>
         </div>
-      )}
+
+        {/* Right: Sign In Panel */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+        >
+          <div className="glass-card border-slate-200 backdrop-blur-3xl rounded-[2.5rem] p-8 md:p-12 shadow-2xl">
+            <div className="text-center mb-10">
+              <h2 className="text-3xl font-bold text-slate-900 tracking-tight">Access Control</h2>
+              <p className="mt-2 text-slate-500 font-medium">
+                {formState.role === ROLES.USER
+                  ? 'Sign in with your email or continue with Google for direct access'
+                  : 'Enter your credentials to proceed'}
+              </p>
+            </div>
+
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div className="space-y-2">
+                <label className="text-xs font-bold text-slate-500 uppercase tracking-widest ml-1">
+                  {formState.role === ROLES.USER ? 'Email' : 'Identifier'}
+                </label>
+                <div className="relative">
+                  <input
+                    type={formState.role === ROLES.USER ? 'email' : 'text'}
+                    className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-5 py-4 text-slate-900 outline-none focus:border-indigo-500/50 focus:bg-white transition-all placeholder:text-slate-400"
+                    placeholder={formState.role === ROLES.USER ? 'Enter your email' : 'Username or email'}
+                    value={formState.username}
+                    onChange={e => setFormState(s => ({ ...s, username: e.target.value }))}
+                  />
+                </div>
+                {formState.role !== ROLES.USER && (
+                  <p className="text-xs text-slate-400 ml-1">
+                    {`Demo login for selected role: ${roleCredentials[formState.role].username} / ${roleCredentials[formState.role].password}`}
+                  </p>
+                )}
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-xs font-bold text-slate-500 uppercase tracking-widest ml-1">Security Key</label>
+                <input
+                  type="password"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-5 py-4 text-slate-900 outline-none focus:border-indigo-500/50 focus:bg-white transition-all placeholder:text-slate-400"
+                  placeholder="••••••••"
+                  value={formState.password}
+                  onChange={e => setFormState(s => ({ ...s, password: e.target.value }))}
+                />
+              </div>
+
+              {error && (
+                <motion.p 
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="text-xs font-bold text-rose-400 bg-rose-500/10 p-3 rounded-xl border border-rose-500/20 text-center"
+                >
+                  {error}
+                </motion.p>
+              )}
+
+              <button 
+                type="submit"
+                disabled={authLoading}
+                className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-4 rounded-2xl shadow-lg shadow-indigo-600/20 transition-all active:scale-[0.98] flex items-center justify-center gap-2 group"
+              >
+                <span>{authLoading ? 'Authorizing...' : 'Enter Workspace'}</span>
+                <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+              </button>
+            </form>
+
+            {formState.role === ROLES.USER && (
+              <>
+                <div className="mt-10 pt-10 border-t border-slate-100 space-y-6">
+                  <p className="text-center text-xs font-bold text-slate-400 uppercase tracking-widest">Single Sign-On</p>
+                  <div className="grid grid-cols-1">
+                    {googleClientConfigured ? (
+                      <UniversityGoogleButton
+                        disabled={authLoading}
+                        onError={setError}
+                        onSuccess={handleGoogleSignupPrefill}
+                      />
+                    ) : (
+                      <button
+                        type="button"
+                        disabled
+                        className="flex items-center justify-center gap-3 bg-white border border-slate-200 text-slate-600 font-bold py-3.5 rounded-2xl transition-all shadow-sm disabled:cursor-not-allowed disabled:opacity-60"
+                      >
+                        <Globe size={20} className="text-indigo-600" />
+                        <span className="text-sm">Continue with Google</span>
+                      </button>
+                    )}
+                  </div>
+                  {!googleClientConfigured && (
+                    <p className="text-center text-xs text-amber-600">
+                      Add <code>VITE_GOOGLE_CLIENT_ID</code> to <code>frontend/.env.local</code> and restart the Vite server to enable Google sign-in.
+                    </p>
+                  )}
+                  {googleClientConfigured && (
+                    <p className="text-center text-xs text-slate-500">
+                      Google will fetch your email and open the signup form so you can continue as Staff or Student.
+                    </p>
+                  )}
+                </div>
+
+                <p className="mt-8 text-center text-sm text-slate-500">
+                  New to the campus?{' '}
+                  <button 
+                    onClick={() => setShowSignupModal(true)}
+                    className="text-indigo-600 font-bold hover:text-indigo-700 transition-colors"
+                  >
+                    Request Access
+                  </button>
+                </p>
+              </>
+            )}
+          </div>
+        </motion.div>
+      </div>
+
+      {/* Access Request Modal */}
+      <AnimatePresence>
+        {showSignupModal && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setShowSignupModal(false)}
+              className="absolute inset-0 bg-slate-900/40 backdrop-blur-md"
+            />
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              className="relative w-full max-w-lg bg-white border border-slate-200 rounded-[2.5rem] overflow-hidden shadow-2xl p-8 md:p-10"
+            >
+              <div className="space-y-6">
+                <div className="text-center">
+                  <h2 className="text-3xl font-bold text-slate-900">Request Access</h2>
+                  <p className="text-slate-500 font-medium mt-1">Submit your academic details for provision.</p>
+                </div>
+                
+                <form 
+                  onSubmit={handleSignupSubmit}
+                  className="space-y-4"
+                >
+                  <div className="flex bg-slate-100 p-1 rounded-xl">
+                    <button 
+                      type="button" 
+                      onClick={() => setSignupState(s => ({ ...s, userType: 'STAFF' }))}
+                      className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all ${signupState.userType !== 'STUDENT' ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                    >
+                      Staff
+                    </button>
+                    <button 
+                      type="button" 
+                      onClick={() => setSignupState(s => ({ ...s, userType: 'STUDENT' }))}
+                      className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all ${signupState.userType === 'STUDENT' ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                    >
+                      Student
+                    </button>
+                  </div>
+
+                  <div className="grid gap-3">
+                    <input
+                      className="input"
+                      placeholder="Full Name"
+                      required
+                      value={signupState.name}
+                      onChange={(e) => setSignupState((s) => ({ ...s, name: e.target.value }))}
+                    />
+                    <input
+                      className="input"
+                      placeholder="Email"
+                      type="email"
+                      required
+                      value={signupState.email}
+                      onChange={(e) => setSignupState((s) => ({ ...s, email: e.target.value }))}
+                    />
+                    <input
+                      className="input"
+                      placeholder="Create Password"
+                      type="password"
+                      required
+                      value={signupState.password}
+                      onChange={(e) => setSignupState((s) => ({ ...s, password: e.target.value }))}
+                    />
+                    
+                    {signupState.userType === 'STUDENT' && (
+                      <div className="grid grid-cols-2 gap-3 animate-in fade-in slide-in-from-top-1">
+                        <input
+                          className="input"
+                          placeholder="Reg No (e.g. IT21...)"
+                          required
+                          value={signupState.regNo}
+                          onChange={(e) => setSignupState((s) => ({ ...s, regNo: e.target.value }))}
+                        />
+                        <select
+                          className="input"
+                          required
+                          value={signupState.academicYear}
+                          onChange={(e) => setSignupState((s) => ({ ...s, academicYear: e.target.value }))}
+                        >
+                          <option value="">Academic Year</option>
+                          <option>1st Year</option>
+                          <option>2nd Year</option>
+                          <option>3rd Year</option>
+                          <option>4th Year</option>
+                        </select>
+                      </div>
+                    )}
+
+                    <select
+                      className="input"
+                      required
+                      value={signupState.faculty}
+                      onChange={(e) => setSignupState((s) => ({ ...s, faculty: e.target.value }))}
+                    >
+                      <option value="">Select Faculty</option>
+                      <option>Computing & Technology</option>
+                      <option>Engineering</option>
+                      <option>Business Management</option>
+                    </select>
+                    <textarea 
+                      className="textarea min-h-[80px]" 
+                      placeholder="Purpose of access (e.g. Lab Reservation, Technical Triage)" 
+                      required
+                      value={signupState.purpose}
+                      onChange={(e) => setSignupState((s) => ({ ...s, purpose: e.target.value }))}
+                    />
+                  </div>
+
+                  <div className="flex gap-3 pt-2">
+                    <button 
+                      type="button"
+                      onClick={() => setShowSignupModal(false)}
+                      className="btn-ghost flex-1 justify-center !py-3"
+                    >
+                      Cancel
+                    </button>
+                    <button 
+                      type="submit"
+                      className="btn-primary flex-1 justify-center !py-3"
+                    >
+                      Submit Application
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </main>
   )
 }

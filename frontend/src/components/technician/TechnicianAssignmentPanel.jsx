@@ -20,6 +20,7 @@ export function TechnicianAssignmentPanel({ technicians, onAssign }) {
       </select>
       <button
         className="btn-primary w-full justify-center"
+        disabled={!technicianId}
         type="button"
         onClick={() => onAssign(technicianId)}
       >

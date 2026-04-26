@@ -23,9 +23,9 @@ export function TechnicianDashboardPage() {
     return <ErrorState message={error} />
   }
 
-  const highPriority = data.filter((ticket) => ticket.priority === 'HIGH').length
-  const inProgress = data.filter((ticket) => ticket.status === 'IN_PROGRESS').length
-  const resolved = data.filter((ticket) => ticket.status === 'RESOLVED').length
+  const highPriority = (data || []).filter((ticket) => ['HIGH', 'URGENT'].includes(ticket.priority)).length
+  const inProgress = (data || []).filter((ticket) => ['ACKNOWLEDGED', 'IN_PROGRESS'].includes(ticket.status)).length
+  const resolved = (data || []).filter((ticket) => ['RESOLVED', 'CLOSED'].includes(ticket.status)).length
 
   return (
     <PageContainer>
@@ -39,9 +39,10 @@ export function TechnicianDashboardPage() {
           </Link>
         }
       />
+      
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        <StatCard label="Assigned Tickets" value={data.length} />
+        <StatCard label="Assigned Tickets" value={data?.length || 0} />
         <StatCard label="High Priority" value={highPriority} />
         <StatCard label="In Progress" value={inProgress} />
         <StatCard label="Resolved" value={resolved} />

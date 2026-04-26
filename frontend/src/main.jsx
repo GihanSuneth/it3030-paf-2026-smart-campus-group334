@@ -7,9 +7,19 @@ import { AuthProvider } from './context/AuthContext.jsx'
 import { NotificationProvider } from './context/NotificationContext.jsx'
 import './index.css'
 
+function Providers({ children }) {
+  const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID
+
+  if (!googleClientId) {
+    return children
+  }
+
+  return <GoogleOAuthProvider clientId={googleClientId}>{children}</GoogleOAuthProvider>
+}
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <GoogleOAuthProvider clientId="YOUR_GOOGLE_CLIENT_ID_HERE">
+    <Providers>
       <BrowserRouter>
         <AuthProvider>
           <NotificationProvider>
@@ -17,6 +27,6 @@ createRoot(document.getElementById('root')).render(
           </NotificationProvider>
         </AuthProvider>
       </BrowserRouter>
-    </GoogleOAuthProvider>
+    </Providers>
   </StrictMode>,
 )
