@@ -54,7 +54,7 @@ export function ResourceFilterBar({
           className="input"
           value={filters.status}
           onChange={(event) => onChange('status', event.target.value)}
-        >
+        >//The status dropdown is populated by concatenating the default "All" option with the list of statuses provided as props. This allows users to filter resources based on their current status, such as "Available", "Under Maintenance", or "Out of Service". When a user selects a status from the dropdown, the onChange function is triggered with the updated filter value, enabling the parent component to adjust the displayed resources to match the selected status criteria.
           {defaultOptions
             .concat(statuses.map((status) => ({ label: status, value: status })))
             .map((status) => (
