@@ -12,7 +12,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/resources")
 @RequiredArgsConstructor
-public class ResourceController {
+public class ResourceController {// The ResourceController class is responsible for handling HTTP requests related to resource management in the smart campus system. It provides endpoints for creating new resources, retrieving existing resources by ID or as a list, updating resource details, and deleting resources. The controller uses the ResourceService to perform business logic and interacts with the database through the service layer. Each endpoint returns a standardized API response using the ApiResponse wrapper class to ensure consistent response formatting across the application.
     private final ResourceService resourceService;
 
     @GetMapping
