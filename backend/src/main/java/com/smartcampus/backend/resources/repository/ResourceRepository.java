@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;// The ResourceRepository interface extends MongoRepository to provide CRUD operations for Resource entities in the MongoDB database. It includes custom query methods to find resources by type and status, allowing for efficient retrieval of resources based on specific criteria. This repository serves as the data access layer for managing resources in the smart campus system.
 
-@Repository
+@Repository// The @Repository annotation indicates that this interface is a Spring Data repository, which will be automatically implemented by Spring Data MongoDB to provide data access functionality for Resource entities.
 public interface ResourceRepository extends MongoRepository<Resource, String> {
     List<Resource> findByType(String type);
     List<Resource> findByStatus(String status);
