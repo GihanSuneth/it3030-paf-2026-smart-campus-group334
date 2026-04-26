@@ -9,7 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;// The Resource class represents a resource within the smart campus system. It includes fields for resource details such as asset ID, name, code, type, category, location, capacity, status, availability, and various attributes related to the resource. The class is annotated with Lombok annotations for boilerplate code generation and is mapped to a MongoDB collection named "resources". This model serves as the data structure for managing resources such as classrooms, labs, equipment, and facilities within the smart campus environment.
 
-@Data
+@Data// Lombok annotation to generate getters, setters, toString, equals, and hashCode methods for the Resource class, simplifying the code and improving readability.
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
