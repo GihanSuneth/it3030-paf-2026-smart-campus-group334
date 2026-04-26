@@ -60,7 +60,7 @@ export function ResourcesPage() {
     const matchesStatus = filters.status === 'ALL' || resource.status === filters.status
 
     return matchesQuery && matchesType && matchesLocation && matchesStatus
-  })
+  })//
 
   const locations = [...new Set(categoryResources.map((resource) => resource.location))].sort()
 
