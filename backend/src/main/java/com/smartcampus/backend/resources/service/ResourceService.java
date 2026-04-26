@@ -32,7 +32,7 @@ public class ResourceService {
     public Resource updateResource(String id, Resource resourceDetails) {
         Resource resource = getResourceById(id);// The updateResource method updates the details of an existing resource in the smart campus system. It first retrieves the current resource using the provided ID, then updates its fields based on the non-null and non-blank values from the resourceDetails object. The method includes logic to ensure that only valid and meaningful updates are applied to the resource, such as checking for text presence and normalizing certain fields. After applying the updates, it calls the enrichResource method to fill in any missing default values and ensure data consistency before saving the updated resource back to the database using the ResourceRepository.
 
-        if (hasText(resourceDetails.getName())) {
+        if (hasText(resourceDetails.getName())) {// The hasText method is a utility function that checks if a given string value is not null and contains non-whitespace characters. In the context of the updateResource method, it is used to determine whether to update specific fields of the resource based on the presence of valid text in the resourceDetails object. This helps prevent overwriting existing resource data with empty or invalid values during an update operation.
             resource.setName(resourceDetails.getName());
         }
         if (hasText(resourceDetails.getType())) {
