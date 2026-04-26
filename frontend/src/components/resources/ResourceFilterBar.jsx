@@ -62,7 +62,7 @@ export function ResourceFilterBar({
                 {status.label}
               </option>
             ))}
-        </select>
+        </select>//
       </label>
     </div>
   )
