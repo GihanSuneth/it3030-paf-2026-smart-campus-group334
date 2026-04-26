@@ -15,7 +15,7 @@ public class ResourceService {
 
     private final ResourceRepository resourceRepository;
 
-    public List<Resource> getAllResources() {
+    public List<Resource> getAllResources() {// The getAllResources method retrieves a list of all resources available in the smart campus system. It interacts with the ResourceRepository to fetch all Resource entities from the MongoDB database and returns them as a list. This method is typically used to display all resources to users or administrators within the application.
         return resourceRepository.findAll();
     }
 
