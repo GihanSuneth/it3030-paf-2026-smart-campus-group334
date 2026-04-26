@@ -25,7 +25,7 @@ public class ResourceController {// The ResourceController class is responsible 
         return ApiResponse.success("Resource retrieved successfully", resourceService.getResourceById(id));
     }
 
-    @PostMapping
+    @PostMapping// Create a new resource. This endpoint allows administrators to add new resources to the smart campus system. It takes a Resource object in the request body, creates the resource using the ResourceService, and returns the created Resource object wrapped in a standardized API response format.
     public ApiResponse<Resource> createResource(@RequestBody Resource resource) {
         return ApiResponse.success("Resource created successfully", resourceService.createResource(resource));
     }
