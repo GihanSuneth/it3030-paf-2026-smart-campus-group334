@@ -17,7 +17,7 @@ export function ResourceDetailsPage() {
 
   if (error) {
     return <ErrorState message={error} />
-  }
+  }// The ResourceDetailsPage component is responsible for displaying detailed information about a specific resource based on the resource ID obtained from the URL parameters. It uses the useMockQuery hook to fetch the resource data from the backend API using the resourceApi.getResourceById function. While the data is being fetched, a loading state is displayed, and if there is an error during the fetch operation, an error state is shown with the corresponding error message. Once the data is successfully retrieved, the component renders the resource details, including its description, type, location, status, code, and other relevant attributes based on its category (e.g., equipment, PC lab, lecture hall). The page also includes a link to book the resource and a back button to return to the resources list.
 
   const resource = data
   const isEquipment = getResourceCategory(resource.type, resource.category) === RESOURCE_CATEGORIES.EQUIPMENT
