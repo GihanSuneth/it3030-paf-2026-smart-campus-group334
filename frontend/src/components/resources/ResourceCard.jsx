@@ -31,7 +31,7 @@ function buildSummary(resource) {// The buildSummary function generates a summar
       `Smart Boards ${resource.workingSmartBoards ?? 0}/${resource.smartBoardCount ?? 0}`,
       `Projectors ${resource.workingProjectors ?? 0}/${resource.projectorCount ?? 0}`,
       `Sound Systems ${resource.workingSoundSystems ?? 0}/${resource.soundSystemCount ?? 0}`,
-    ]
+    ]// The use of the nullish coalescing operator (??) in the summary construction allows the buildSummary function to provide default values of 0 for any attributes that may be undefined or null in the resource object. This ensures that the summary always contains valid numerical information, even if certain fields are missing from the resource data, and prevents potential issues with displaying undefined values in the ResourceCard component.
   }
 
   if (resource.type === 'Lecture Hall') {
