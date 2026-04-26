@@ -28,7 +28,7 @@ export function ResourceDetailsPage() {
         ['Inventory Type', resource.stockType || 'STANDARD'],
         ['Assigned To', resource.assignedTo || resource.location],
         ['Service Order', resource.serviceOrder || 'Not set'],
-      ]
+      ]// The detailRows variable is constructed based on whether the resource falls under the equipment category. If it is an equipment resource, the detailRows array includes specific attributes such as Asset ID, Inventory Type, Assigned To, and Service Order, with fallback values provided for any missing information. For non-equipment resources, the detailRows array is built based on the resource type (e.g., PC Lab or Lecture Hall) and includes relevant attributes such as capacity, number of working projectors, smart boards, sound systems, etc., with default values of 0 for any undefined attributes. This allows the ResourceDetailsPage to display a comprehensive set of details tailored to the specific type and category of the resource being viewed.
     : resource.type === 'PC Lab'
       ? [
           ['Capacity', resource.capacity],
