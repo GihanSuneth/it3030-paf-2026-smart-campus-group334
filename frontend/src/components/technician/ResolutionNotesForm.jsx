@@ -12,7 +12,7 @@ export function ResolutionNotesForm({ initialValue = '', onSave, submitLabel = '
       await onSave(value)
     } finally {
       setSaving(false)
-    }
+    }// The onSave function is expected to be an asynchronous function that handles the actual saving of the resolution notes, such as making an API call to update the ticket's resolution notes in the backend. By awaiting the onSave function, we ensure that the saving state remains true until the save operation is fully completed, providing feedback to the user that their changes are being saved and preventing multiple submissions while the save is in progress.
   }
 
   return (
