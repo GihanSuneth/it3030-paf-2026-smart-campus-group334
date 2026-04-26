@@ -94,7 +94,7 @@ export function ResourceDetailsPage() {
               </div>
             ))}
           </div>
-        </article>
+        </article>// The first article element displays the main details of the resource, including its description, type, location, status, code, and additional attributes based on its category. The details are organized in a grid layout for better readability, with labels and corresponding values clearly presented to the user.
 
         <article className="panel space-y-3">
           <h2 className="text-xl font-semibold text-slate-950">Availability</h2>
