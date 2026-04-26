@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import java.util.Locale;
 import java.util.List;
 
-@Service
+@Service// The ResourceService class is responsible for managing resources in the smart campus system. It provides methods to create, retrieve, update, and delete resources, as well as to enrich resource data with default values and generate unique identifiers. The service interacts with the ResourceRepository to perform database operations and contains business logic to ensure that resources are properly categorized, assigned, and maintained based on their type and status.
 @RequiredArgsConstructor
 public class ResourceService {
     private static final String LOGISTIC_ROOM = "Logistic Room - Main Building 3rd Floor";
