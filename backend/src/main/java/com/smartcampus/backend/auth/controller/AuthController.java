@@ -17,7 +17,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public ApiResponse<LoginResponse> login(@RequestBody LoginRequest request) {
-        return ApiResponse.success("Login successful", authService.login(request));
+        return ApiResponse.success("Login ", authService.login(request));
     }
 
     @PostMapping("/oauth")
