@@ -40,7 +40,7 @@ function buildSummary(resource) {// The buildSummary function generates a summar
       `Projectors ${resource.workingProjectors ?? 0}/${resource.projectorCount ?? 0}`,
       `Screens ${resource.workingScreens ?? 0}/${resource.screenCount ?? 0}`,
       `Sound Systems ${resource.workingSoundSystems ?? 0}/${resource.soundSystemCount ?? 0}`,
-    ]
+    ]// For a resource of type "Lecture Hall", the buildSummary function creates a summary array that includes the seating capacity, the number of working projectors out of the total projectors, the number of working screens out of the total screens, and the number of working sound systems out of the total sound systems. This summary provides users with essential information about the lecture hall's capabilities and available resources, helping them assess whether the hall meets their requirements for hosting events, lectures, or presentations.
   }
 
   return [
