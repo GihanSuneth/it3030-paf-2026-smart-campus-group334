@@ -15,7 +15,7 @@ function getResourceIcon(type) {
   return '🛠️'
 }
 
-function buildSummary(resource) {
+function buildSummary(resource) {// The buildSummary function generates a summary of key attributes for a given resource based on its type and category. It checks the resource's category to determine if it is equipment and constructs a summary array with relevant details such as stock type, location, and service order for equipment resources. For other types of resources, it builds a summary that includes capacity, the number of working projectors, smart boards, sound systems, and other amenities based on the specific type of resource (e.g., PC Lab or Lecture Hall). This function helps create a concise overview of the resource's features for display in the ResourceCard component.
   if (getResourceCategory(resource.type, resource.category) === RESOURCE_CATEGORIES.EQUIPMENT) {
     return [
       resource.stockType ? `Stock: ${resource.stockType}` : null,
