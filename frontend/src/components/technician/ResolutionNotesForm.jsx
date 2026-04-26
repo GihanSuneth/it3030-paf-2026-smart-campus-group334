@@ -6,7 +6,7 @@ export function ResolutionNotesForm({ initialValue = '', onSave, submitLabel = '
 
   async function handleSubmit(event) {
     event.preventDefault()
-    setSaving(true)
+    setSaving(true)// The handleSubmit function is an asynchronous function that is triggered when the form is submitted. It prevents the default form submission behavior, sets the saving state to true to indicate that the save operation is in progress, and then calls the onSave function with the current value of the resolution notes. The try-finally block ensures that the saving state is reset to false after the save operation completes, regardless of whether it was successful or if an error occurred, allowing the UI to reflect the completion of the save process appropriately.
 
     try {
       await onSave(value)
