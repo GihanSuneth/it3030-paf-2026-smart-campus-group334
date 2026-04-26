@@ -14,12 +14,9 @@ export const sidebarNavigation = {
   [ROLES.ADMIN]: [
     { label: 'Admin Dashboard', path: '/admin' },
     { label: 'Manage Resources', path: '/admin/resources' },
-    { label: 'Pending Bookings', path: '/admin/bookings/pending' },
-    { label: 'All Bookings', path: '/admin/bookings' },
-    { label: 'Manage Tickets', path: '/admin/tickets' },
-    { label: 'Assign Technician', path: '/admin/tickets/assign' },
-    { label: 'Users & Roles', path: '/admin/users' },
-    { label: 'Notifications', path: '/notifications' },
+    { label: 'Booking Handling', path: '/admin/bookings' },
+    { label: 'Ticket Handling', path: '/admin/tickets' },
+    { label: 'User Management', path: '/admin/users' },
     { label: 'Profile', path: '/profile' },
   ],
   [ROLES.TECHNICIAN]: [

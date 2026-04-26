@@ -3,6 +3,7 @@ const statusClasses = {
   APPROVED: 'status-green',
   REJECTED: 'status-red',
   CANCELLED: 'status-slate',
+  
 }
 
 export function BookingStatusBadge({ status }) {

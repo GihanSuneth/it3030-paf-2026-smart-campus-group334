@@ -8,9 +8,9 @@ export function ResourceFilterBar({
   statuses = [],
 }) {
   return (
-    <div className="panel grid gap-4 xl:grid-cols-4">
+    <div className="panel grid gap-3 xl:grid-cols-4">
       <label className="space-y-2">
-        <span className="text-sm font-semibold text-slate-700">Search</span>
+        <span className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Search</span>
         <input
           className="input"
           placeholder="Search by resource or location"
@@ -19,7 +19,7 @@ export function ResourceFilterBar({
         />
       </label>
       <label className="space-y-2">
-        <span className="text-sm font-semibold text-slate-700">Type</span>
+        <span className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Type</span>
         <select
           className="input"
           value={filters.type}
@@ -33,7 +33,7 @@ export function ResourceFilterBar({
         </select>
       </label>
       <label className="space-y-2">
-        <span className="text-sm font-semibold text-slate-700">Location</span>
+        <span className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Location</span>
         <select
           className="input"
           value={filters.location}
@@ -49,7 +49,7 @@ export function ResourceFilterBar({
         </select>
       </label>
       <label className="space-y-2">
-        <span className="text-sm font-semibold text-slate-700">Status</span>
+        <span className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Status</span>
         <select
           className="input"
           value={filters.status}
