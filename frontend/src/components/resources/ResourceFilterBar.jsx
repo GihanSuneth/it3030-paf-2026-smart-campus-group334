@@ -17,7 +17,7 @@ export function ResourceFilterBar({
           value={filters.query}
           onChange={(event) => onChange('query', event.target.value)}
         />
-      </label>
+      </label>// The ResourceFilterBar component provides a user interface for filtering resources based on various criteria such as type, location, and status. It includes a search input for querying resources by name or location, as well as dropdown select inputs for filtering by resource type, location, and status. The component uses the defaultOptions array to include an "All" option in each dropdown, allowing users to reset the filter to show all resources. The onChange function is called whenever a filter value changes, allowing the parent component to update the displayed resources accordingly based on the selected filters.
       <label className="space-y-2">
         <span className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Type</span>
         <select
