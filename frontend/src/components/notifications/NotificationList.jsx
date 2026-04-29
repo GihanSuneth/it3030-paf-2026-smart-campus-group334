@@ -28,6 +28,7 @@ export function NotificationList({ notifications, onRead, compact = false }) {
             </p>
           </div>
         )
+        
 
         const styles = "block rounded-2xl bg-white border border-slate-100 p-5 transition-all shadow-sm hover:shadow-md hover:border-indigo-100 group cursor-pointer"
         
