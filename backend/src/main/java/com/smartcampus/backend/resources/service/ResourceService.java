@@ -8,18 +8,18 @@ import org.springframework.stereotype.Service;
 import java.util.Locale;
 import java.util.List;
 
-@Service
+@Service// The ResourceService class is responsible for managing resources in the smart campus system. It provides methods to create, retrieve, update, and delete resources, as well as to enrich resource data with default values and generate unique identifiers. The service interacts with the ResourceRepository to perform database operations and contains business logic to ensure that resources are properly categorized, assigned, and maintained based on their type and status.
 @RequiredArgsConstructor
 public class ResourceService {
     private static final String LOGISTIC_ROOM = "Logistic Room - Main Building 3rd Floor";
 
     private final ResourceRepository resourceRepository;
 
-    public List<Resource> getAllResources() {
+    public List<Resource> getAllResources() {// The getAllResources method retrieves a list of all resources available in the smart campus system. It interacts with the ResourceRepository to fetch all Resource entities from the MongoDB database and returns them as a list. This method is typically used to display all resources to users or administrators within the application.
         return resourceRepository.findAll();
     }
 
-    public Resource getResourceById(String id) {
+    public Resource getResourceById(String id) {// The getResourceById method retrieves a specific resource from the smart campus system based on its unique identifier (ID). It uses the ResourceRepository to query the MongoDB database for a Resource entity that matches the provided ID. If a resource with the given ID is found, it is returned; otherwise, a RuntimeException is thrown indicating that the resource was not found. This method is commonly used to view or manage details of a specific resource within the application.
         return resourceRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Resource not found"));
     }
@@ -30,15 +30,15 @@ public class ResourceService {
     }
 
     public Resource updateResource(String id, Resource resourceDetails) {
-        Resource resource = getResourceById(id);
+        Resource resource = getResourceById(id);// The updateResource method updates the details of an existing resource in the smart campus system. It first retrieves the current resource using the provided ID, then updates its fields based on the non-null and non-blank values from the resourceDetails object. The method includes logic to ensure that only valid and meaningful updates are applied to the resource, such as checking for text presence and normalizing certain fields. After applying the updates, it calls the enrichResource method to fill in any missing default values and ensure data consistency before saving the updated resource back to the database using the ResourceRepository.
 
-        if (hasText(resourceDetails.getName())) {
+        if (hasText(resourceDetails.getName())) {// The hasText method is a utility function that checks if a given string value is not null and contains non-whitespace characters. In the context of the updateResource method, it is used to determine whether to update specific fields of the resource based on the presence of valid text in the resourceDetails object. This helps prevent overwriting existing resource data with empty or invalid values during an update operation.
             resource.setName(resourceDetails.getName());
         }
         if (hasText(resourceDetails.getType())) {
             resource.setType(resourceDetails.getType());
         }
-        if (hasText(resourceDetails.getCategory())) {
+        if (hasText(resourceDetails.getCategory())) {// The updateResource method includes a conditional check for the category field of the resource. If the resourceDetails object contains valid text for the category, it updates the resource's category with the new value. This allows for changing the classification of a resource (e.g., from "PHYSICAL_RESOURCE" to "SPACE") while ensuring that only meaningful updates are applied to the resource's data.
             resource.setCategory(resourceDetails.getCategory());
         }
         if (hasText(resourceDetails.getStockType())) {

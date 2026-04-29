@@ -26,14 +26,14 @@ export function ResourcesPage() {
     type: 'ALL',
     location: 'ALL',
     status: 'ALL',
-  })
+  })// The ResourcesPage component is responsible for displaying a list of resources available for booking, along with filtering options to help users find specific resources based on their needs. It uses the useMockQuery hook to fetch the list of resources from the backend API and manages the loading and error states accordingly. The component allows users to switch between different categories of resources (e.g., equipment and space resources) using tabs, and provides a filter bar to narrow down the displayed resources based on search queries, resource type, location, and status. The filtered list of resources is then rendered as a series of ResourceCard components, and if no resources match the filter criteria, an EmptyState component is displayed to inform the user that no results were found.
 
   const { data, loading, error } = useMockQuery(() => resourceApi.getResources(), [])
 
   function updateFilter(key, value) {
     setFilters((current) => ({ ...current, [key]: value }))
   }
-
+// The updateFilter function is a helper function used to update the filters state when the user interacts with the filter inputs in the ResourceFilterBar component. It takes a key (representing the filter type, such as 'query', 'type', 'location', or 'status') and a value (the new filter value selected by the user) and updates the filters state by merging the current filters with the new key-value pair. This allows for dynamic filtering of resources based on user input, and ensures that the component re-renders with the updated list of resources that match the selected filter criteria.
   if (loading) {
     return <LoadingState label="Loading resources..." />
   }
@@ -60,7 +60,7 @@ export function ResourcesPage() {
     const matchesStatus = filters.status === 'ALL' || resource.status === filters.status
 
     return matchesQuery && matchesType && matchesLocation && matchesStatus
-  })
+  })//
 
   const locations = [...new Set(categoryResources.map((resource) => resource.location))].sort()
 

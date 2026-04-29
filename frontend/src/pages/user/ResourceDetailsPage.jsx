@@ -18,6 +18,9 @@ export function ResourceDetailsPage() {
     return <LoadingState label="Loading resource details..." />
   }
 
+  if (error) {
+    return <ErrorState message={error} />
+  }// The ResourceDetailsPage component is responsible for displaying detailed information about a specific resource based on the resource ID obtained from the URL parameters. It uses the useMockQuery hook to fetch the resource data from the backend API using the resourceApi.getResourceById function. While the data is being fetched, a loading state is displayed, and if there is an error during the fetch operation, an error state is shown with the corresponding error message. Once the data is successfully retrieved, the component renders the resource details, including its description, type, location, status, code, and other relevant attributes based on its category (e.g., equipment, PC lab, lecture hall). The page also includes a link to book the resource and a back button to return to the resources list.
   if (error || occupiedSlotsQuery.error) {
     return <ErrorState message={error || occupiedSlotsQuery.error} />
   }
@@ -31,7 +34,7 @@ export function ResourceDetailsPage() {
         ['Inventory Type', resource.stockType || 'STANDARD'],
         ['Assigned To', resource.assignedTo || resource.location],
         ['Service Order', resource.serviceOrder || 'Not set'],
-      ]
+      ]// The detailRows variable is constructed based on whether the resource falls under the equipment category. If it is an equipment resource, the detailRows array includes specific attributes such as Asset ID, Inventory Type, Assigned To, and Service Order, with fallback values provided for any missing information. For non-equipment resources, the detailRows array is built based on the resource type (e.g., PC Lab or Lecture Hall) and includes relevant attributes such as capacity, number of working projectors, smart boards, sound systems, etc., with default values of 0 for any undefined attributes. This allows the ResourceDetailsPage to display a comprehensive set of details tailored to the specific type and category of the resource being viewed.
     : resource.type === 'PC Lab'
       ? [
           ['Capacity', resource.capacity],
@@ -68,7 +71,7 @@ export function ResourceDetailsPage() {
             Book Resource
           </Link>
         }
-      />
+      />// The PageHeader component is used to display the header section of the Resource Details page, which includes an eyebrow text indicating that this is a resource details page, the title of the resource being viewed, a description providing context for the user, and an action button that allows the user to book the resource. The action button is a Link component that navigates to the booking creation page with query parameters for the resource ID and booking type, enabling users to easily initiate a booking for the specific resource they are viewing.
 
       <section className="grid gap-6 xl:grid-cols-[minmax(0,1.3fr)_22rem]">
         <article className="panel space-y-4">
@@ -97,7 +100,7 @@ export function ResourceDetailsPage() {
               </div>
             ))}
           </div>
-        </article>
+        </article>// The first article element displays the main details of the resource, including its description, type, location, status, code, and additional attributes based on its category. The details are organized in a grid layout for better readability, with labels and corresponding values clearly presented to the user.
 
         <article className="panel space-y-3">
           <h2 className="text-xl font-semibold text-slate-950">Availability</h2>

@@ -13,9 +13,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+// Service class for managing maintenance tickets. Contains business logic for creating, retrieving, updating, and resolving tickets. The service interacts with the TicketRepository to perform database operations and includes methods for generating unique ticket codes, adding comments to tickets, and handling ticket status updates and technician assignments.
 @Service
 @RequiredArgsConstructor
 public class TicketService {
+    // The TicketService class is responsible for managing maintenance tickets in the smart campus system. It provides methods to create new tickets, retrieve existing tickets by various criteria (such as user ID or technician ID), update ticket status, assign technicians to tickets, resolve tickets with resolution notes, and add comments to tickets. The service uses the TicketRepository to interact with the MongoDB database and perform CRUD operations on Ticket entities. Additionally, it includes a method to generate unique ticket codes to ensure that each ticket can be easily identified and tracked within the system.
     private static final List<String> ALLOWED_CATEGORIES = List.of("EQUIPMENT", "ACCESS", "FACILITY");
     private static final List<String> ALLOWED_STATUSES = List.of(
             "CREATED",
@@ -39,7 +41,7 @@ public class TicketService {
     public List<Ticket> getUserTickets(String userId) {
         return ticketRepository.findByUserIdOrderByCreatedAtDesc(userId);
     }
-
+// The getTechnicianTickets method retrieves a list of maintenance tickets that are assigned to a specific technician. It takes the technician's ID as a parameter and uses the TicketRepository to query the database for tickets that match the given technician ID. This allows technicians to view and manage the tickets they are responsible for resolving within the smart campus system.
     public List<Ticket> getTechnicianTickets(String technicianId) {
         return ticketRepository.findByTechnicianIdOrderByUpdatedAtDesc(technicianId);
     }
@@ -48,7 +50,7 @@ public class TicketService {
         return ticketRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Ticket not found"));
     }
-
+//
     public Ticket createTicket(Ticket ticket) {
         validateTicket(ticket);
 
@@ -180,6 +182,8 @@ public class TicketService {
 
         return saved;
     }
+// The resolveTicket method is responsible for marking a maintenance ticket as resolved. It takes the ticket ID and resolution notes as parameters, retrieves the corresponding ticket from the database, updates its status to "RESOLVED", adds the provided resolution notes, and saves the updated ticket back to the database. This allows technicians to indicate that a maintenance issue has been addressed and provide details about the resolution for future reference.
+    public Ticket resolveTicket(String id, String notes) {
 
     public Ticket resolveTicket(String id, String notes, String configurationDone, String suggestions, String actorId, String actorName) {
         Ticket ticket = getTicketById(id);

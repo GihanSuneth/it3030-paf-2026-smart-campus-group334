@@ -15,23 +15,23 @@ function getResourceIcon(type) {
   return '🛠️'
 }
 
-function buildSummary(resource) {
+function buildSummary(resource) {// The buildSummary function generates a summary of key attributes for a given resource based on its type and category. It checks the resource's category to determine if it is equipment and constructs a summary array with relevant details such as stock type, location, and service order for equipment resources. For other types of resources, it builds a summary that includes capacity, the number of working projectors, smart boards, sound systems, and other amenities based on the specific type of resource (e.g., PC Lab or Lecture Hall). This function helps create a concise overview of the resource's features for display in the ResourceCard component.
   if (getResourceCategory(resource.type, resource.category) === RESOURCE_CATEGORIES.EQUIPMENT) {
     return [
       resource.stockType ? `Stock: ${resource.stockType}` : null,
       resource.location,
       resource.serviceOrder ? `Service order ${resource.serviceOrder}` : null,
-    ].filter(Boolean)
+    ].filter(Boolean)// The filter(Boolean) method is used to remove any null or undefined values from the summary array, ensuring that only valid and meaningful information is included in the final summary for equipment resources. This allows the buildSummary function to return a clean and concise array of attributes that can be easily displayed in the ResourceCard component without showing empty or irrelevant entries.
   }
 
   if (resource.type === 'PC Lab') {
-    return [
+    return [// For a resource of type "PC Lab", the buildSummary function constructs a summary array that includes the lab's capacity, the number of working PCs out of the total PCs, the number of working smart boards out of the total smart boards, the number of working projectors out of the total projectors, and the number of working sound systems out of the total sound systems. This detailed summary provides users with a clear overview of the available resources and their functionality within the PC Lab, helping them make informed decisions about using or reserving the lab for their needs.
       `Capacity ${resource.capacity ?? 0}`,
       `PCs ${resource.workingPcs ?? 0}/${resource.totalPcs ?? 0} working`,
       `Smart Boards ${resource.workingSmartBoards ?? 0}/${resource.smartBoardCount ?? 0}`,
       `Projectors ${resource.workingProjectors ?? 0}/${resource.projectorCount ?? 0}`,
       `Sound Systems ${resource.workingSoundSystems ?? 0}/${resource.soundSystemCount ?? 0}`,
-    ]
+    ]// The use of the nullish coalescing operator (??) in the summary construction allows the buildSummary function to provide default values of 0 for any attributes that may be undefined or null in the resource object. This ensures that the summary always contains valid numerical information, even if certain fields are missing from the resource data, and prevents potential issues with displaying undefined values in the ResourceCard component.
   }
 
   if (resource.type === 'Lecture Hall') {
@@ -40,7 +40,7 @@ function buildSummary(resource) {
       `Projectors ${resource.workingProjectors ?? 0}/${resource.projectorCount ?? 0}`,
       `Screens ${resource.workingScreens ?? 0}/${resource.screenCount ?? 0}`,
       `Sound Systems ${resource.workingSoundSystems ?? 0}/${resource.soundSystemCount ?? 0}`,
-    ]
+    ]// For a resource of type "Lecture Hall", the buildSummary function creates a summary array that includes the seating capacity, the number of working projectors out of the total projectors, the number of working screens out of the total screens, and the number of working sound systems out of the total sound systems. This summary provides users with essential information about the lecture hall's capabilities and available resources, helping them assess whether the hall meets their requirements for hosting events, lectures, or presentations.
   }
 
   return [
@@ -48,7 +48,7 @@ function buildSummary(resource) {
     `Projectors ${resource.workingProjectors ?? 0}/${resource.projectorCount ?? 0}`,
     `Sound Systems ${resource.workingSoundSystems ?? 0}/${resource.soundSystemCount ?? 0}`,
   ]
-}
+}// For resources that do not fall into the specific categories of "PC Lab" or "Lecture Hall", the buildSummary function generates a more general summary that includes the resource's capacity, the number of working projectors out of the total projectors, and the number of working sound systems out of the total sound systems. This allows for a consistent summary format across various types of resources while still providing key information about their capabilities and available equipment, even if they do not fit into the predefined categories.
 
 export function ResourceCard({ resource }) {
   const isEquipment = getResourceCategory(resource.type, resource.category) === RESOURCE_CATEGORIES.EQUIPMENT

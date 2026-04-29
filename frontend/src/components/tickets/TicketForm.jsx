@@ -13,6 +13,9 @@ const initialState = {
   attachments: [],
 }
 
+/// A form for creating or editing a maintenance ticket. Can be used in different contexts (e.g. new ticket, edit existing ticket) by passing different onSubmit handlers and initial form state.
+export function TicketForm({ resources, onSubmit, submitLabel = 'Create Ticket' }) {
+  const [formState, setFormState] = useState(initialState)
 function toBase64(file) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader()
@@ -51,6 +54,7 @@ export function TicketForm({ resources, onSubmit, submitLabel = 'Submit Ticket',
     }
   }
 
+  // When the user selects a resource, we automatically populate the location field based on that resource's data. This helps ensure accurate location info without relying on the user to input it manually.
   function handleResourceChange(resourceId) {
     const selectedResource = resources.find((resource) => resource.id === resourceId)
 
@@ -63,6 +67,14 @@ export function TicketForm({ resources, onSubmit, submitLabel = 'Submit Ticket',
     }))
   }
 
+  // For simplicity, we're not actually uploading files in this example. Instead, we just capture the file names and sizes to show how attachments could be handled in the form state. In a real implementation, you would need to handle file uploads to your server or a cloud storage service.
+  function handleFiles(event) {
+    const files = Array.from(event.target.files ?? [])
+      .slice(0, 3)
+      .map((file) => ({
+        name: file.name,
+        size: file.size,
+      }))
   async function handleFiles(event) {
     const files = Array.from(event.target.files ?? []).slice(0, 3)
 
@@ -84,6 +96,7 @@ export function TicketForm({ resources, onSubmit, submitLabel = 'Submit Ticket',
     }
   }
 
+  // The form is organized into sections with clear labels and helper text to guide the user in providing all necessary information for the ticket. We use a combination of input fields, select dropdowns, and a textarea to capture different types of data. The submit button is disabled while the form is submitting to prevent duplicate submissions, and we display success or error messages based on the outcome of the submission.
   return (
     <form className="form-shell" onSubmit={handleSubmit}>
       <div className="form-content">
@@ -253,6 +266,7 @@ export function TicketForm({ resources, onSubmit, submitLabel = 'Submit Ticket',
           </div>
         </div>
 
+        {/* Error and success messages */}
         {error ? <p className="text-sm text-red-600">{error}</p> : null}
         {success ? <p className="text-sm text-emerald-600">{success}</p> : null}
 
