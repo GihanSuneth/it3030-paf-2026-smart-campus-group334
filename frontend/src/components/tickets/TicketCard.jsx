@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { TicketStatusBadge } from './TicketStatusBadge'
+import { formatDateTime } from '../../utils/formatters'
 
 export function TicketCard({ ticket, href = `/tickets/${ticket.id}` }) {
   return (
@@ -16,13 +17,23 @@ export function TicketCard({ ticket, href = `/tickets/${ticket.id}` }) {
         <p className="text-sm font-medium text-slate-500">
           {ticket.location}
         </p>
+        <p className="text-sm leading-6 text-slate-600">
+          {ticket.description || 'No problem details added.'}
+        </p>
+        {ticket.rejectionReason ? (
+          <p className="text-sm font-medium text-rose-600">Rejected with note: {ticket.rejectionReason}</p>
+        ) : null}
+        {ticket.technicianName ? (
+          <p className="text-sm font-medium text-indigo-600">Technician assigned: {ticket.technicianName}</p>
+        ) : null}
 
         <div className="flex flex-wrap gap-x-6 gap-y-2 pt-1 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
           <span>Priority: <span className={ticket.priority === 'HIGH' ? 'text-rose-500' : 'text-slate-600'}>{ticket.priority}</span></span>
           <span>Category: <span className="text-slate-600">{ticket.category}</span></span>
-          {ticket.technicianName && (
-             <span className="text-indigo-400">Assigned: <span className="text-indigo-600">{ticket.technicianName}</span></span>
-          )}
+          <span>Created: <span className="text-slate-600 normal-case">{formatDateTime(ticket.createdAt)}</span></span>
+          {ticket.rating ? (
+            <span className="text-emerald-500">Rating: <span className="text-emerald-700">{ticket.rating}/5</span></span>
+          ) : null}
         </div>
       </div>
 
@@ -31,10 +42,6 @@ export function TicketCard({ ticket, href = `/tickets/${ticket.id}` }) {
           Track Issue
         </Link>
       </div>
-      // View Ticket Button
-      <Link className="btn-ghost text-center" to={href}>
-        View Ticket
-      </Link>
     </article>
   )
 }

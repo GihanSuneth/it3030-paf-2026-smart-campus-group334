@@ -25,13 +25,14 @@ export function CreateTicketPage() {
       <PageHeader
         eyebrow="Support"
         title="Create Ticket"
-        description="Report a maintenance or incident issue with location, priority, and attachments."
+        description="Report an equipment, access, or facility issue with contact details and a supporting photo."
       />
 
       <section className="page-grid">
         <TicketForm
           onSubmit={(payload) => ticketApi.createTicket(payload, currentUser)}
           resources={data}
+          currentUser={currentUser}
         />
         <aside className="space-y-4">
           <article className="info-band">

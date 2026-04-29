@@ -24,11 +24,11 @@ export function AuthProvider({ children }) {
     }
   }
 
-  async function oauthLogin(provider, role) {
+  async function oauthLogin(provider, role, accessToken) {
     setAuthLoading(true)
-    
+
     try {
-      const user = await authApi.oauthLogin(provider, role)
+      const user = await authApi.oauthLogin(provider, role, accessToken)
       setCurrentUser(user)
       return user
     } finally {

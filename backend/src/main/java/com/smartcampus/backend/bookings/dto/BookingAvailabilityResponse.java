@@ -14,5 +14,7 @@ import java.util.List;
 public class BookingAvailabilityResponse {
     private boolean available;
     private String message;
+    private String conflictDetails;
     private List<BookingAlternativeResponse> suggestedResources;
+    private List<BookingOccupiedSlotResponse> occupiedSlots;
 }

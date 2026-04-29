@@ -29,6 +29,7 @@ export function BookingForm({
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
   const [availability, setAvailability] = useState(null)
+  const [hasCheckedAvailability, setHasCheckedAvailability] = useState(false)
 
   const equipment = resources.filter(
     (resource) => getResourceCategory(resource.type, resource.category) === RESOURCE_CATEGORIES.EQUIPMENT,
@@ -49,9 +50,26 @@ export function BookingForm({
       resourceId: initialResourceId,
     }))
     setAvailability(null)
+    setHasCheckedAvailability(false)
     setError('')
     setSuccess('')
   }, [initialBookingType, initialResourceId])
+
+  useEffect(() => {
+    setAvailability(null)
+    setHasCheckedAvailability(false)
+    setError('')
+    setSuccess('')
+  }, [
+    formState.bookingType,
+    formState.resourceId,
+    formState.date,
+    formState.startTime,
+    formState.endTime,
+    formState.expectedAttendees,
+  ])
+
+  const today = new Date().toISOString().split('T')[0]
 
   async function handleAvailabilityCheck() {
     setCheckingAvailability(true)
@@ -59,18 +77,25 @@ export function BookingForm({
     setSuccess('')
 
     try {
+      validateFormState()
       const result = await onCheckAvailability({
         ...formState,
         expectedAttendees: Number(formState.expectedAttendees),
       })
       setAvailability(result)
+      setHasCheckedAvailability(true)
       setSuccess(result.available ? result.message : '')
       if (!result.available) {
-        setError(result.message)
+        setError(result.conflictDetails ? `${result.message} ${result.conflictDetails}` : result.message)
+        window.alert(result.conflictDetails ? `${result.message}\n${result.conflictDetails}` : result.message)
+      } else {
+        window.alert(result.message)
       }
     } catch (availabilityError) {
       setAvailability(null)
+      setHasCheckedAvailability(false)
       setError(availabilityError.message)
+      window.alert(availabilityError.message)
     } finally {
       setCheckingAvailability(false)
     }
@@ -83,6 +108,16 @@ export function BookingForm({
     setSuccess('')
 
     try {
+      validateFormState()
+
+      if (!hasCheckedAvailability) {
+        throw new Error('Check availability before submitting the booking request.')
+      }
+
+      if (!availability?.available) {
+        throw new Error('Resolve the booking conflict or choose an alternative resource before submitting.')
+      }
+
       await onSubmit({ ...formState, expectedAttendees: Number(formState.expectedAttendees) })
       setFormState({
         ...initialState,
@@ -90,11 +125,43 @@ export function BookingForm({
         resourceId: '',
       })
       setAvailability(null)
+      setHasCheckedAvailability(false)
       setSuccess('Booking request submitted successfully.')
+      window.alert('Booking request submitted successfully. Admin will review it next.')
     } catch (submitError) {
       setError(submitError.message)
     } finally {
       setSubmitting(false)
+    }
+  }
+
+  function validateFormState() {
+    if (!formState.bookingType) {
+      throw new Error('Booking type is required.')
+    }
+
+    if (!formState.resourceId) {
+      throw new Error('Select a resource or equipment.')
+    }
+
+    if (!formState.date) {
+      throw new Error('Booking date is required.')
+    }
+
+    if (!formState.startTime) {
+      throw new Error('Start time is required.')
+    }
+
+    if (!formState.endTime) {
+      throw new Error('End time is required.')
+    }
+
+    if (!formState.purpose.trim()) {
+      throw new Error('Booking purpose is required.')
+    }
+
+    if (!Number(formState.expectedAttendees) || Number(formState.expectedAttendees) <= 0) {
+      throw new Error('Expected attendees must be greater than zero.')
     }
   }
 
@@ -161,6 +228,7 @@ export function BookingForm({
                 className="input"
                 required
                 type="date"
+                min={today}
                 value={formState.date}
                 onChange={(event) =>
                   setFormState((current) => ({ ...current, date: event.target.value }))
@@ -294,6 +362,38 @@ export function BookingForm({
               </div>
             </div>
           ) : null}
+
+          {availability?.occupiedSlots?.length > 0 ? (
+            <div className="rounded-2xl border border-slate-200 bg-white p-4">
+              <p className="text-sm font-semibold text-slate-900">Occupied time windows on selected date</p>
+              <div className="mt-3 grid gap-3">
+                {availability.occupiedSlots.map((slot) => (
+                  <div key={slot.bookingId} className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
+                    <p className="text-sm font-semibold text-slate-900">
+                      {slot.bookingCode || slot.bookingId} • {slot.startTime} - {slot.endTime}
+                    </p>
+                    <p className="text-xs text-slate-500">
+                      {slot.status} {slot.purpose ? `• ${slot.purpose}` : ''}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : null}
+
+          {availability?.available ? (
+            <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-4">
+              <p className="text-sm font-semibold text-emerald-900">Availability confirmed</p>
+              <p className="mt-1 text-sm text-emerald-800">{availability.message}</p>
+            </div>
+          ) : null}
+
+          {availability?.conflictDetails ? (
+            <div className="rounded-2xl border border-rose-200 bg-rose-50 p-4">
+              <p className="text-sm font-semibold text-rose-900">Conflict details</p>
+              <p className="mt-1 text-sm text-rose-800">{availability.conflictDetails}</p>
+            </div>
+          ) : null}
         </div>
 
         {error ? <p className="text-sm text-red-600">{error}</p> : null}
@@ -305,45 +405,6 @@ export function BookingForm({
           </button>
         </div>
       </div>
-      <label className="space-y-2">
-        <span className="text-sm font-semibold text-slate-700">Purpose</span>
-        <textarea
-          className="textarea"
-          required
-          rows="4"
-          value={formState.purpose}
-          onChange={(event) =>
-            setFormState((current) => ({ ...current, purpose: event.target.value }))
-          }
-        />
-      </label>
-      
-      <label className="space-y-2">
-        <span className="text-sm font-semibold text-slate-700">Expected attendees</span>
-        <input
-          className="input"
-          min="1"
-          required
-          type="number"
-          value={formState.expectedAttendees}
-          onChange={(event) =>
-            setFormState((current) => ({
-              ...current,
-              expectedAttendees: event.target.value,
-            }))
-          }
-        />
-      </label>
-
-      {error ? <p className="text-sm text-red-600">{error}</p> : null}
-      {success ? <p className="text-sm text-emerald-600">{success}</p> : null}
-
-
-      <button className="btn-primary w-full justify-center" disabled={submitting} type="submit">
-        {submitting ? 'Saving...' : submitLabel}
-      </button>
     </form>
-   
-   
   )
 }

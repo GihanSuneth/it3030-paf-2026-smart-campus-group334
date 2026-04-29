@@ -1,7 +1,19 @@
 import { useState } from 'react'
 
-export function ResolutionNotesForm({ initialValue = '', onSave, submitLabel = 'Save Notes' }) {
-  const [value, setValue] = useState(initialValue)
+export function ResolutionNotesForm({
+  initialValues = {
+    resolutionNotes: '',
+    configurationDone: '',
+    suggestions: '',
+  },
+  onSave,
+  submitLabel = 'Save Resolution',
+}) {
+  const [value, setValue] = useState({
+    resolutionNotes: initialValues.resolutionNotes || '',
+    configurationDone: initialValues.configurationDone || '',
+    suggestions: initialValues.suggestions || '',
+  })
   const [saving, setSaving] = useState(false)
 
   async function handleSubmit(event) {
@@ -24,6 +36,43 @@ export function ResolutionNotesForm({ initialValue = '', onSave, submitLabel = '
         value={value}
         onChange={(event) => setValue(event.target.value)}
       />// The textarea element is a controlled component that displays the current value of the resolution notes and updates the value state whenever the user types in the textarea. This allows for real-time updates to the resolution notes as the user edits them, and ensures that the latest value is available when the form is submitted and the onSave function is called.
+
+      <label className="space-y-2 block">
+        <span className="text-sm font-semibold text-slate-700">Resolution Reason</span>
+        <textarea
+          className="textarea"
+          rows="2"
+          value={value.resolutionNotes}
+          onChange={(event) =>
+            setValue((current) => ({ ...current, resolutionNotes: event.target.value }))
+          }
+        />
+      </label>
+
+      <label className="space-y-2 block">
+        <span className="text-sm font-semibold text-slate-700">Configuration Done</span>
+        <textarea
+          className="textarea"
+          rows="2"
+          value={value.configurationDone}
+          onChange={(event) =>
+            setValue((current) => ({ ...current, configurationDone: event.target.value }))
+          }
+        />
+      </label>
+
+      <label className="space-y-2 block">
+        <span className="text-sm font-semibold text-slate-700">Other Suggestions</span>
+        <textarea
+          className="textarea"
+          rows="2"
+          value={value.suggestions}
+          onChange={(event) =>
+            setValue((current) => ({ ...current, suggestions: event.target.value }))
+          }
+        />
+      </label>
+
       <button className="btn-primary w-full justify-center" disabled={saving} type="submit">
         {saving ? 'Saving...' : submitLabel}
       </button>

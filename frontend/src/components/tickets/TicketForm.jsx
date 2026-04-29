@@ -1,27 +1,38 @@
 import { useState } from 'react'
 
-import { getResourceCategory, RESOURCE_CATEGORIES } from '../../constants/resources'
-
 const initialState = {
   resourceId: '',
+  resourceName: '',
   location: '',
-  category: 'Equipment',
+  category: 'EQUIPMENT',
   title: '',
   description: '',
   priority: 'MEDIUM',
-  preferredContact: '',
+  contactEmail: '',
+  contactPhone: '',
   attachments: [],
 }
 
 /// A form for creating or editing a maintenance ticket. Can be used in different contexts (e.g. new ticket, edit existing ticket) by passing different onSubmit handlers and initial form state.
 export function TicketForm({ resources, onSubmit, submitLabel = 'Create Ticket' }) {
   const [formState, setFormState] = useState(initialState)
+function toBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onload = () => resolve(reader.result)
+    reader.onerror = () => reject(new Error(`Failed to read ${file.name}.`))
+    reader.readAsDataURL(file)
+  })
+}
+
+export function TicketForm({ resources, onSubmit, submitLabel = 'Submit Ticket', currentUser }) {
+  const [formState, setFormState] = useState({
+    ...initialState,
+    contactEmail: currentUser?.email || '',
+  })
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
-
-  const equipment = resources.filter(r => getResourceCategory(r.type) === RESOURCE_CATEGORIES.EQUIPMENT)
-  const spaces = resources.filter(r => getResourceCategory(r.type) === RESOURCE_CATEGORIES.SPACES)
 
   async function handleSubmit(event) {
     event.preventDefault()
@@ -31,8 +42,11 @@ export function TicketForm({ resources, onSubmit, submitLabel = 'Create Ticket' 
 
     try {
       await onSubmit(formState)
-      setFormState(initialState)
-      setSuccess('Ticket submitted successfully.')
+      setFormState({
+        ...initialState,
+        contactEmail: currentUser?.email || '',
+      })
+      setSuccess('Ticket submitted successfully and routed for admin review.')
     } catch (submitError) {
       setError(submitError.message)
     } finally {
@@ -47,7 +61,9 @@ export function TicketForm({ resources, onSubmit, submitLabel = 'Create Ticket' 
     setFormState((current) => ({
       ...current,
       resourceId,
-      location: selectedResource?.location ?? current.location,
+      resourceName: selectedResource?.name ?? '',
+      location: selectedResource?.location ?? '',
+      title: current.title || selectedResource?.name || '',
     }))
   }
 
@@ -59,8 +75,25 @@ export function TicketForm({ resources, onSubmit, submitLabel = 'Create Ticket' 
         name: file.name,
         size: file.size,
       }))
+  async function handleFiles(event) {
+    const files = Array.from(event.target.files ?? []).slice(0, 3)
 
-    setFormState((current) => ({ ...current, attachments: files }))
+    try {
+      const attachments = await Promise.all(
+        files.map(async (file) => ({
+          name: file.name,
+          size: file.size,
+          content: await toBase64(file),
+        }))
+      )
+
+      setFormState((current) => ({
+        ...current,
+        attachments: attachments.map((attachment) => attachment.content),
+      }))
+    } catch (fileError) {
+      setError(fileError.message)
+    }
   }
 
   // The form is organized into sections with clear labels and helper text to guide the user in providing all necessary information for the ticket. We use a combination of input fields, select dropdowns, and a textarea to capture different types of data. The submit button is disabled while the form is submitting to prevent duplicate submissions, and we display success or error messages based on the outcome of the submission.
@@ -69,16 +102,16 @@ export function TicketForm({ resources, onSubmit, submitLabel = 'Create Ticket' 
       <div className="form-content">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
-            <span className="subtle-pill">Incident Report</span>
-            <h2 className="mt-3 text-2xl font-semibold tracking-tight text-slate-950">Describe the issue clearly</h2>
+            <span className="subtle-pill">Issue Ticket</span>
+            <h2 className="mt-3 text-2xl font-semibold tracking-tight text-slate-950">Raise a resource-related ticket</h2>
             <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">
-              Good issue reports help technicians triage faster and reduce back-and-forth.
+              Select the affected resource, add contact details, attach a photo if needed, and send it for admin review.
             </p>
           </div>
           <div className="info-band max-w-xs">
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Best Practice</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Ticket Flow</p>
             <p className="mt-2 text-sm leading-6 text-slate-600">
-              Include the exact resource, what happened, and any visible evidence that could help diagnosis.
+              Admin reviews the ticket first, then assigns a technician for follow-up and resolution.
             </p>
           </div>
         </div>
@@ -94,65 +127,84 @@ export function TicketForm({ resources, onSubmit, submitLabel = 'Create Ticket' 
                 onChange={(event) => handleResourceChange(event.target.value)}
               >
                 <option value="">Choose a resource</option>
-                {equipment.length > 0 && (
-                  <optgroup label="Equipment">
-                    {equipment.map((resource) => (
-                      <option key={resource.id} value={resource.id}>
-                        {resource.name}
-                      </option>
-                    ))}
-                  </optgroup>
-                )}
-                {spaces.length > 0 && (
-                  <optgroup label="Spaces">
-                    {spaces.map((resource) => (
-                      <option key={resource.id} value={resource.id}>
-                        {resource.name}
-                      </option>
-                    ))}
-                  </optgroup>
-                )}
+                {resources.map((resource) => (
+                  <option key={resource.id} value={resource.id}>
+                    {resource.name} ({resource.location})
+                  </option>
+                ))}
               </select>
             </label>
+
             <label className="space-y-2">
               <span className="text-sm font-semibold text-slate-700">Category</span>
               <select
                 className="input"
+                required
                 value={formState.category}
                 onChange={(event) =>
                   setFormState((current) => ({ ...current, category: event.target.value }))
                 }
               >
-                <option value="Equipment">Equipment</option>
-                <option value="Facilities">Facilities</option>
-                <option value="Safety">Safety</option>
-                <option value="Access">Access</option>
+                <option value="EQUIPMENT">Equipment</option>
+                <option value="ACCESS">Access</option>
+                <option value="FACILITY">Facility</option>
               </select>
             </label>
           </div>
+
           <div className="grid gap-4 md:grid-cols-2">
             <label className="space-y-2">
-              <span className="text-sm font-semibold text-slate-700">Title</span>
+              <span className="text-sm font-semibold text-slate-700">Issue Summary</span>
               <input
                 className="input"
                 required
+                placeholder="Short issue title"
                 value={formState.title}
                 onChange={(event) =>
                   setFormState((current) => ({ ...current, title: event.target.value }))
                 }
               />
             </label>
+
             <label className="space-y-2">
-              <span className="text-sm font-semibold text-slate-700">Preferred contact</span>
+              <span className="text-sm font-semibold text-slate-700">Location</span>
               <input
                 className="input"
                 required
-                value={formState.preferredContact}
+                placeholder="Location"
+                value={formState.location}
                 onChange={(event) =>
-                  setFormState((current) => ({
-                    ...current,
-                    preferredContact: event.target.value,
-                  }))
+                  setFormState((current) => ({ ...current, location: event.target.value }))
+                }
+              />
+            </label>
+          </div>
+
+          <div className="grid gap-4 md:grid-cols-2">
+            <label className="space-y-2">
+              <span className="text-sm font-semibold text-slate-700">Contact Email</span>
+              <input
+                className="input"
+                required
+                placeholder="Email"
+                type="email"
+                value={formState.contactEmail}
+                onChange={(event) =>
+                  setFormState((current) => ({ ...current, contactEmail: event.target.value }))
+                }
+              />
+            </label>
+
+            <label className="space-y-2">
+              <span className="text-sm font-semibold text-slate-700">Cell Number</span>
+              <input
+                className="input"
+                required
+                pattern="[0-9+ ]{8,15}"
+                placeholder="07XXXXXXXX"
+                value={formState.contactPhone}
+                onChange={(event) =>
+                  setFormState((current) => ({ ...current, contactPhone: event.target.value }))
                 }
               />
             </label>
@@ -161,22 +213,24 @@ export function TicketForm({ resources, onSubmit, submitLabel = 'Create Ticket' 
 
         <div className="field-group space-y-6">
           <label className="space-y-2 block">
-            <span className="text-xs font-bold uppercase tracking-widest text-slate-500">Problem Description</span>
+            <span className="text-xs font-bold uppercase tracking-widest text-slate-500">Brief Description</span>
             <textarea
               className="textarea"
               required
-              placeholder="What specifically isn't working? Please provide as much detail as possible..."
+              placeholder="Describe the issue briefly and clearly."
               value={formState.description}
               onChange={(event) =>
                 setFormState((current) => ({ ...current, description: event.target.value }))
               }
             />
           </label>
+
           <div className="grid gap-6 md:grid-cols-[1fr_1.5fr]">
             <label className="space-y-2">
               <span className="text-xs font-bold uppercase tracking-widest text-slate-500">Urgency Level</span>
               <select
                 className="input"
+                required
                 value={formState.priority}
                 onChange={(event) =>
                   setFormState((current) => ({ ...current, priority: event.target.value }))
@@ -185,27 +239,27 @@ export function TicketForm({ resources, onSubmit, submitLabel = 'Create Ticket' 
                 <option value="LOW">LOW - Minor inconvenience</option>
                 <option value="MEDIUM">MEDIUM - Affecting workflow</option>
                 <option value="HIGH">HIGH - Critical failure</option>
+                <option value="URGENT">URGENT - Immediate attention needed</option>
               </select>
             </label>
+
             <div className="space-y-2">
-              <span className="text-xs font-bold uppercase tracking-widest text-slate-500">Visual Evidence (Images)</span>
+              <span className="text-xs font-bold uppercase tracking-widest text-slate-500">Issue Photo</span>
               <div className="rounded-xl border-2 border-dashed border-slate-200 bg-slate-50/50 p-4 transition-all hover:bg-white hover:border-indigo-300">
-                <input 
-                  accept="image/*" 
-                  className="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 cursor-pointer" 
-                  multiple 
-                  type="file" 
-                  onChange={handleFiles} 
+                <input
+                  accept="image/*"
+                  className="w-full cursor-pointer text-xs text-slate-500 file:mr-4 file:rounded-lg file:border-0 file:bg-indigo-50 file:px-4 file:py-2 file:text-xs file:font-bold file:text-indigo-700 hover:file:bg-indigo-100"
+                  multiple
+                  type="file"
+                  onChange={handleFiles}
                 />
-                <p className="mt-2 text-[10px] text-slate-400 font-medium italic">Max 3 images. Photos of error messages or physical damage are helpful.</p>
+                <p className="mt-2 text-[10px] font-medium italic text-slate-400">
+                  Upload up to 3 images. Photos help admins and technicians understand the issue faster.
+                </p>
                 {formState.attachments.length > 0 ? (
-                  <div className="mt-3 flex flex-wrap gap-2">
-                    {formState.attachments.map((attachment) => (
-                      <span key={attachment.name} className="inline-flex items-center gap-1.5 px-2 py-1 rounded-md bg-white border border-slate-100 text-[10px] font-bold text-slate-600 shadow-sm">
-                        {attachment.name}
-                      </span>
-                    ))}
-                  </div>
+                  <p className="mt-3 text-xs font-semibold text-slate-600">
+                    {formState.attachments.length} image{formState.attachments.length > 1 ? 's' : ''} attached.
+                  </p>
                 ) : null}
               </div>
             </div>
@@ -218,7 +272,7 @@ export function TicketForm({ resources, onSubmit, submitLabel = 'Create Ticket' 
 
         <div className="flex items-center justify-end">
           <button className="btn-primary min-w-44 justify-center" disabled={submitting} type="submit">
-            {submitting ? 'Saving...' : submitLabel}
+            {submitting ? 'Submitting...' : submitLabel}
           </button>
         </div>
       </div>

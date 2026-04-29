@@ -1,16 +1,21 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { Navigate, useNavigate } from 'react-router-dom'
 import { useGoogleLogin } from '@react-oauth/google'
 import { motion, AnimatePresence } from 'framer-motion'
-import { User, Shield, Wrench, ArrowRight, Code, Globe } from 'lucide-react'
+import { User, Shield, Wrench, ArrowRight, Globe } from 'lucide-react'
 import axios from 'axios'
 import { authApi } from '../../api/authApi'
 import { ROLE_HOME_PATHS, ROLES } from '../../constants/roles'
 import { useAuth } from '../../hooks/useAuth'
 
+const studentEmailDomain = import.meta.env.VITE_STUDENT_EMAIL_DOMAIN || 'my.sliit.lk'
+const staffEmailDomain = import.meta.env.VITE_STAFF_EMAIL_DOMAIN || 'sliit.lk'
+const studentEmailSuffix = `@${studentEmailDomain}`
+const staffEmailSuffix = `@${staffEmailDomain}`
+
 const roleCredentials = {
   [ROLES.USER]: {
-    username: 'user',
+    username: `it12345678${studentEmailSuffix}`,
     password: 'user',
   },
   [ROLES.ADMIN]: {
@@ -62,9 +67,40 @@ const roleOptions = [
   },
 ]
 
+function UniversityGoogleButton({ disabled, onError, onSuccess }) {
+  const googleLogin = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      try {
+        const userInfo = await axios.get('https://www.googleapis.com/oauth2/v3/userinfo', {
+          headers: {
+            Authorization: `Bearer ${tokenResponse.access_token}`,
+          },
+        })
+        await onSuccess(userInfo.data)
+      } catch (err) {
+        onError(err.message)
+      }
+    },
+    onError: () => onError('Google Login Failed'),
+  })
+
+  return (
+    <button
+      type="button"
+      disabled={disabled}
+      onClick={() => googleLogin()}
+      className="flex items-center justify-center gap-3 bg-white border border-slate-200 hover:border-indigo-200 hover:bg-slate-50 text-slate-600 font-bold py-3.5 rounded-2xl transition-all shadow-sm disabled:cursor-not-allowed disabled:opacity-60"
+    >
+      <Globe size={20} className="text-indigo-600" />
+      <span className="text-sm">Continue with Google</span>
+    </button>
+  )
+}
+
 export function LoginPage() {
   const navigate = useNavigate()
-  const { currentUser, login, oauthLogin, authLoading } = useAuth()
+  const { currentUser, login, authLoading } = useAuth()
+  const googleClientConfigured = Boolean(import.meta.env.VITE_GOOGLE_CLIENT_ID)
   const [showSignupModal, setShowSignupModal] = useState(false)
   const [formState, setFormState] = useState({
     username: roleCredentials[ROLES.USER].username,
@@ -83,21 +119,6 @@ export function LoginPage() {
   })
   const [error, setError] = useState('')
 
-  const googleLogin = useGoogleLogin({
-    onSuccess: async (tokenResponse) => {
-      try {
-        const userInfo = await axios.get(
-          'https://www.googleapis.com/oauth2/v3/userinfo',
-          { headers: { Authorization: `Bearer ${tokenResponse.access_token}` } }
-        )
-        await handleOAuth('google')
-      } catch (err) {
-        setError('Failed to fetch Google profile.')
-      }
-    },
-    onError: () => setError('Google Login Failed'),
-  })
-
   if (currentUser) {
     return <Navigate replace to={ROLE_HOME_PATHS[currentUser.role]} />
   }
@@ -105,6 +126,7 @@ export function LoginPage() {
   async function handleSubmit(event) {
     event.preventDefault()
     setError('')
+
     try {
       const user = await login(formState)
 
@@ -119,14 +141,22 @@ export function LoginPage() {
     }
   }
 
-  async function handleOAuth(provider) {
+  async function handleGoogleSignupPrefill(googleUser) {
     setError('')
-    try {
-      const user = await oauthLogin(provider, formState.role)
-      navigate(ROLE_HOME_PATHS[user.role], { replace: true })
-    } catch (err) {
-      setError(err.message)
+    const email = googleUser?.email?.trim() || ''
+
+    if (!email) {
+      setError('Unable to fetch the selected Google email.')
+      return
     }
+
+    setSignupState((state) => ({
+      ...state,
+      name: googleUser?.name || state.name,
+      email,
+      userType: 'STAFF',
+    }))
+    setShowSignupModal(true)
   }
 
   async function handleSignupSubmit(event) {
@@ -163,7 +193,13 @@ export function LoginPage() {
     }
   }
 
-
+  function isStudentOrStaffEmail(value) {
+    const normalizedValue = value.trim().toLowerCase()
+    return (
+      normalizedValue.endsWith(studentEmailSuffix.toLowerCase()) ||
+      normalizedValue.endsWith(staffEmailSuffix.toLowerCase())
+    )
+  }
 
   return (
     <main className="relative min-h-screen bg-[#f8fafc] overflow-hidden flex flex-col justify-center px-4 py-8 md:py-12 md:px-8">
@@ -253,23 +289,32 @@ export function LoginPage() {
           <div className="glass-card border-slate-200 backdrop-blur-3xl rounded-[2.5rem] p-8 md:p-12 shadow-2xl">
             <div className="text-center mb-10">
               <h2 className="text-3xl font-bold text-slate-900 tracking-tight">Access Control</h2>
-              <p className="mt-2 text-slate-500 font-medium">Enter your credentials to proceed</p>
+              <p className="mt-2 text-slate-500 font-medium">
+                {formState.role === ROLES.USER
+                  ? 'Sign in with your email or continue with Google for direct access'
+                  : 'Enter your credentials to proceed'}
+              </p>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="space-y-2">
-                <label className="text-xs font-bold text-slate-500 uppercase tracking-widest ml-1">Identifier</label>
+                <label className="text-xs font-bold text-slate-500 uppercase tracking-widest ml-1">
+                  {formState.role === ROLES.USER ? 'Email' : 'Identifier'}
+                </label>
                 <div className="relative">
                   <input
+                    type={formState.role === ROLES.USER ? 'email' : 'text'}
                     className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-5 py-4 text-slate-900 outline-none focus:border-indigo-500/50 focus:bg-white transition-all placeholder:text-slate-400"
-                    placeholder="Username or email"
+                    placeholder={formState.role === ROLES.USER ? 'Enter your email' : 'Username or email'}
                     value={formState.username}
                     onChange={e => setFormState(s => ({ ...s, username: e.target.value }))}
                   />
                 </div>
-                <p className="text-xs text-slate-400 ml-1">
-                  Demo login for selected role: {roleCredentials[formState.role].username} / {roleCredentials[formState.role].password}
-                </p>
+                {formState.role !== ROLES.USER && (
+                  <p className="text-xs text-slate-400 ml-1">
+                    {`Demo login for selected role: ${roleCredentials[formState.role].username} / ${roleCredentials[formState.role].password}`}
+                  </p>
+                )}
               </div>
 
               <div className="space-y-2">
@@ -308,14 +353,33 @@ export function LoginPage() {
                 <div className="mt-10 pt-10 border-t border-slate-100 space-y-6">
                   <p className="text-center text-xs font-bold text-slate-400 uppercase tracking-widest">Single Sign-On</p>
                   <div className="grid grid-cols-1">
-                    <button 
-                      onClick={() => googleLogin()}
-                      className="flex items-center justify-center gap-3 bg-white border border-slate-200 hover:border-indigo-200 hover:bg-slate-50 text-slate-600 font-bold py-3.5 rounded-2xl transition-all shadow-sm"
-                    >
-                      <Globe size={20} className="text-indigo-600" />
-                      <span className="text-sm">Continue with University Google Account</span>
-                    </button>
+                    {googleClientConfigured ? (
+                      <UniversityGoogleButton
+                        disabled={authLoading}
+                        onError={setError}
+                        onSuccess={handleGoogleSignupPrefill}
+                      />
+                    ) : (
+                      <button
+                        type="button"
+                        disabled
+                        className="flex items-center justify-center gap-3 bg-white border border-slate-200 text-slate-600 font-bold py-3.5 rounded-2xl transition-all shadow-sm disabled:cursor-not-allowed disabled:opacity-60"
+                      >
+                        <Globe size={20} className="text-indigo-600" />
+                        <span className="text-sm">Continue with Google</span>
+                      </button>
+                    )}
                   </div>
+                  {!googleClientConfigured && (
+                    <p className="text-center text-xs text-amber-600">
+                      Add <code>VITE_GOOGLE_CLIENT_ID</code> to <code>frontend/.env.local</code> and restart the Vite server to enable Google sign-in.
+                    </p>
+                  )}
+                  {googleClientConfigured && (
+                    <p className="text-center text-xs text-slate-500">
+                      Google will fetch your email and open the signup form so you can continue as Staff or Student.
+                    </p>
+                  )}
                 </div>
 
                 <p className="mt-8 text-center text-sm text-slate-500">
@@ -387,7 +451,7 @@ export function LoginPage() {
                     />
                     <input
                       className="input"
-                      placeholder="University Email"
+                      placeholder="Email"
                       type="email"
                       required
                       value={signupState.email}

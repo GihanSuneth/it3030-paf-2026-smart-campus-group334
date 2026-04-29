@@ -29,11 +29,15 @@ export const ticketApi = {
     })
   },
 
-  createTicket(payload) {
+  createTicket(payload, currentUser) {
     return simulateRequest({
       method: 'post',
       url: '/tickets',
-      data: payload
+      data: {
+        ...payload,
+        userId: currentUser.id,
+        userName: currentUser.name,
+      }
     })
   },
 
@@ -49,29 +53,72 @@ export const ticketApi = {
     })
   },
 
-  assignTechnician(ticketId, technicianId, techName) {
+  assignTechnician(ticketId, technicianId, technicianName) {
     return simulateRequest({
       method: 'post',
-      url: `/tickets/${ticketId}/assign?techId=${technicianId}&techName=${techName}`
+      url: `/tickets/${ticketId}/assign`,
+      data: {
+        technicianId,
+        technicianName,
+      }
     })
   },
 
-  updateTicketStatus(ticketId, status) {
+  updateTicketStatus(ticketId, payload, currentUser) {
     return simulateRequest({
       method: 'patch',
-      url: `/tickets/${ticketId}/status?status=${status}`
+      url: `/tickets/${ticketId}/status`,
+      data: {
+        ...payload,
+        actorId: currentUser?.id,
+        actorName: currentUser?.name,
+      }
     })
   },
 
-  resolveTicket(ticketId, notes) {
+  resolveTicket(ticketId, payload, currentUser) {
     return simulateRequest({
       method: 'post',
       url: `/tickets/${ticketId}/resolve`,
-      data: notes
+      data: {
+        ...payload,
+        actorId: currentUser?.id,
+        actorName: currentUser?.name,
+      }
     })
   },
 
-  addResolutionNotes(ticketId, notes) {
-    return this.resolveTicket(ticketId, notes)
-  }
+  addResolutionNotes(ticketId, payload, currentUser) {
+    return this.resolveTicket(ticketId, payload, currentUser)
+  },
+
+  acceptResolution(ticketId, currentUser) {
+    return simulateRequest({
+      method: 'post',
+      url: `/tickets/${ticketId}/accept`,
+      data: {
+        actorId: currentUser.id,
+        actorName: currentUser.name,
+      }
+    })
+  },
+
+  submitRating(ticketId, payload) {
+    return simulateRequest({
+      method: 'post',
+      url: `/tickets/${ticketId}/rate`,
+      data: payload
+    })
+  },
+
+  generateRatingToken(ticketId, currentUser) {
+    return simulateRequest({
+      method: 'post',
+      url: `/tickets/${ticketId}/rating-token`,
+      data: {
+        actorId: currentUser.id,
+        actorName: currentUser.name,
+      }
+    })
+  },
 }

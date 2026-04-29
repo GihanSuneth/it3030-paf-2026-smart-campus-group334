@@ -3,11 +3,14 @@ package com.smartcampus.backend.bookings.service;
 import com.smartcampus.backend.bookings.dto.BookingAlternativeResponse;
 import com.smartcampus.backend.bookings.dto.BookingAvailabilityResponse;
 import com.smartcampus.backend.bookings.dto.BookingCreateRequest;
+import com.smartcampus.backend.bookings.dto.BookingOccupiedSlotResponse;
 import com.smartcampus.backend.bookings.model.Booking;
 import com.smartcampus.backend.bookings.repository.BookingRepository;
 import com.smartcampus.backend.notifications.service.NotificationService;
 import com.smartcampus.backend.resources.model.Resource;
 import com.smartcampus.backend.resources.repository.ResourceRepository;
+import com.smartcampus.backend.users.model.User;
+import com.smartcampus.backend.users.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +28,7 @@ public class BookingService {
     private final BookingRepository bookingRepository;
     private final ResourceRepository resourceRepository;
     private final NotificationService notificationService;
+    private final UserRepository userRepository;
 
     public List<Booking> getAllBookings() {
         return bookingRepository.findAllByOrderByCreatedAtDesc();
@@ -38,7 +42,21 @@ public class BookingService {
         return bookingRepository.findByUserIdOrderByCreatedAtDesc(userId);
     }
 
+    public List<BookingOccupiedSlotResponse> getOccupiedSlots(String resourceId, String date) {
+        if (resourceId == null || resourceId.isBlank()) {
+            throw new RuntimeException("Resource or equipment is required.");
+        }
+
+        if (date == null || date.isBlank()) {
+            throw new RuntimeException("Date is required.");
+        }
+
+        getActiveResource(resourceId);
+        return getOccupiedSlotsForDate(resourceId, date);
+    }
+
     public BookingAvailabilityResponse checkAvailability(BookingCreateRequest request) {
+        validateBookingRequest(request);
         Resource resource = getActiveResource(request.getResourceId());
         LocalDateTime startDateTime = parseDateTime(request.getDate(), request.getStartTime());
         LocalDateTime endDateTime = parseDateTime(request.getDate(), request.getEndTime());
@@ -48,23 +66,29 @@ public class BookingService {
             return BookingAvailabilityResponse.builder()
                     .available(false)
                     .message("Expected attendance exceeds the selected resource capacity.")
+                    .conflictDetails("Requested attendance: " + request.getExpectedAttendance() + ", capacity: " + resource.getCapacity() + ".")
                     .suggestedResources(findSuggestedResources(resource, request.getBookingType(), request.getExpectedAttendance(), startDateTime, endDateTime))
+                    .occupiedSlots(getOccupiedSlotsForDate(resource.getId(), request.getDate()))
                     .build();
         }
 
-        boolean available = isResourceAvailable(resource.getId(), startDateTime, endDateTime);
-        if (available) {
+        Booking conflictingBooking = findConflictingBooking(resource.getId(), startDateTime, endDateTime);
+        if (conflictingBooking == null) {
             return BookingAvailabilityResponse.builder()
                     .available(true)
-                    .message("The selected slot is available and ready for admin review.")
+                    .message("No conflicts found. You can proceed with the booking request.")
+                    .conflictDetails("")
                     .suggestedResources(List.of())
+                    .occupiedSlots(getOccupiedSlotsForDate(resource.getId(), request.getDate()))
                     .build();
         }
 
         return BookingAvailabilityResponse.builder()
                 .available(false)
                 .message("This resource is already booked or awaiting review for the selected time.")
+                .conflictDetails("Conflict: " + conflictingBooking.getDate() + " from " + conflictingBooking.getStartTime() + " to " + conflictingBooking.getEndTime() + " (" + conflictingBooking.getStatus() + ").")
                 .suggestedResources(findSuggestedResources(resource, request.getBookingType(), request.getExpectedAttendance(), startDateTime, endDateTime))
+                .occupiedSlots(getOccupiedSlotsForDate(resource.getId(), request.getDate()))
                 .build();
     }
 
@@ -82,6 +106,7 @@ public class BookingService {
         Booking booking = Booking.builder()
                 .userId(request.getUserId())
                 .userName(request.getUserName())
+                .bookingCode(generateBookingCode())
                 .bookingType(request.getBookingType())
                 .resourceId(resource.getId())
                 .resourceName(resource.getName())
@@ -99,7 +124,9 @@ public class BookingService {
                 .updatedAt(now)
                 .build();
 
-        return bookingRepository.save(booking);
+        Booking savedBooking = bookingRepository.save(booking);
+        notifyAdminsAboutPendingBooking(savedBooking);
+        return savedBooking;
     }
 
     public Booking approveBooking(String id) {
@@ -146,17 +173,57 @@ public class BookingService {
     }
 
     private Resource getActiveResource(String resourceId) {
-        Resource resource = resourceRepository.findById(resourceId)
-                .orElseThrow(() -> new RuntimeException("Resource not found"));
-
-        if (!"ACTIVE".equalsIgnoreCase(resource.getStatus())) {
-            throw new RuntimeException("Selected resource is not available for booking.");
+        if (resourceId == null || resourceId.isBlank()) {
+            throw new RuntimeException("Select a resource or equipment before checking availability.");
         }
 
-        return resource;
+        return resourceRepository.findById(resourceId)
+                .orElseThrow(() -> new RuntimeException("Resource not found"));
+    }
+
+    private void validateBookingRequest(BookingCreateRequest request) {
+        if (request.getUserId() == null || request.getUserId().isBlank()) {
+            throw new RuntimeException("Booking user is required.");
+        }
+
+        if (request.getUserName() == null || request.getUserName().isBlank()) {
+            throw new RuntimeException("Booking user name is required.");
+        }
+
+        if (request.getBookingType() == null || request.getBookingType().isBlank()) {
+            throw new RuntimeException("Booking type is required.");
+        }
+
+        if (request.getResourceId() == null || request.getResourceId().isBlank()) {
+            throw new RuntimeException("Resource or equipment is required.");
+        }
+
+        if (request.getDate() == null || request.getDate().isBlank()) {
+            throw new RuntimeException("Booking date is required.");
+        }
+
+        if (request.getStartTime() == null || request.getStartTime().isBlank()) {
+            throw new RuntimeException("Start time is required.");
+        }
+
+        if (request.getEndTime() == null || request.getEndTime().isBlank()) {
+            throw new RuntimeException("End time is required.");
+        }
+
+        if (request.getPurpose() == null || request.getPurpose().isBlank()) {
+            throw new RuntimeException("Booking purpose is required.");
+        }
+
+        if (request.getExpectedAttendance() <= 0) {
+            throw new RuntimeException("Expected attendees must be greater than zero.");
+        }
     }
 
     private void validateBookingWindow(LocalDateTime startDateTime, LocalDateTime endDateTime) {
+        if (startDateTime.isBefore(LocalDateTime.now())) {
+            throw new RuntimeException("You cannot book a resource or equipment for a past date or time.");
+        }
+
         if (!endDateTime.isAfter(startDateTime)) {
             throw new RuntimeException("End time must be after start time.");
         }
@@ -167,10 +234,29 @@ public class BookingService {
     }
 
     private boolean isResourceAvailable(String resourceId, LocalDateTime startDateTime, LocalDateTime endDateTime) {
+        return findConflictingBooking(resourceId, startDateTime, endDateTime) == null;
+    }
+
+    private Booking findConflictingBooking(String resourceId, LocalDateTime startDateTime, LocalDateTime endDateTime) {
         List<Booking> existingBookings = bookingRepository.findByResourceIdAndStatusIn(resourceId, BLOCKING_STATUSES);
-        return existingBookings.stream().noneMatch(booking ->
+        return existingBookings.stream().filter(booking ->
                 startDateTime.isBefore(booking.getEndDateTime()) && booking.getStartDateTime().isBefore(endDateTime)
-        );
+        ).min(Comparator.comparing(Booking::getStartDateTime)).orElse(null);
+    }
+
+    private List<BookingOccupiedSlotResponse> getOccupiedSlotsForDate(String resourceId, String date) {
+        return bookingRepository.findByResourceIdAndDateAndStatusInOrderByStartDateTimeAsc(resourceId, date, BLOCKING_STATUSES).stream()
+                .map(booking -> BookingOccupiedSlotResponse.builder()
+                        .bookingId(booking.getId())
+                        .bookingCode(booking.getBookingCode())
+                        .date(booking.getDate())
+                        .startTime(booking.getStartTime())
+                        .endTime(booking.getEndTime())
+                        .status(booking.getStatus())
+                        .resourceName(booking.getResourceName())
+                        .purpose(booking.getPurpose())
+                        .build())
+                .toList();
     }
 
     private List<BookingAlternativeResponse> findSuggestedResources(
@@ -180,7 +266,7 @@ public class BookingService {
             LocalDateTime startDateTime,
             LocalDateTime endDateTime
     ) {
-        return resourceRepository.findByStatus("ACTIVE").stream()
+        return resourceRepository.findAll().stream()
                 .filter(resource -> !resource.getId().equals(selectedResource.getId()))
                 .filter(resource -> resource.getCategory() != null && resource.getCategory().equalsIgnoreCase(bookingType))
                 .filter(resource -> resource.getCapacity() <= 0 || resource.getCapacity() >= expectedAttendance)
@@ -197,5 +283,28 @@ public class BookingService {
                         .capacity(resource.getCapacity())
                         .build())
                 .toList();
+    }
+
+    private void notifyAdminsAboutPendingBooking(Booking booking) {
+        for (User admin : userRepository.findByRoleIgnoreCase("ADMIN")) {
+            notificationService.createNotification(
+                    admin.getId(),
+                    "New booking request",
+                    booking.getBookingCode() + " - " + booking.getUserName() + " requested " + booking.getResourceName() + " for " + booking.getDate() + " at " + booking.getStartTime() + ".",
+                    "/admin/bookings/pending"
+            );
+        }
+    }
+
+    private String generateBookingCode() {
+        return bookingRepository.findAllByOrderByBookingCodeDesc().stream()
+                .map(Booking::getBookingCode)
+                .filter(code -> code != null && code.startsWith("BK"))
+                .findFirst()
+                .map(code -> {
+                    int next = Integer.parseInt(code.substring(2)) + 1;
+                    return "BK" + next;
+                })
+                .orElse("BK1001");
     }
 }

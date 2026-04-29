@@ -7,11 +7,9 @@ import { PageHeader } from '../../components/common/PageHeader'
 import { PageContainer } from '../../components/layout/PageContainer'
 import { TechnicianAssignmentPanel } from '../../components/technician/TechnicianAssignmentPanel'
 import { ROLES } from '../../constants/roles'
-import { useAuth } from '../../hooks/useAuth'
 import { useMockQuery } from '../../hooks/useMockQuery'
 
 export function AssignTechnicianPage() {
-  const { currentUser } = useAuth()
   const ticketsQuery = useMockQuery(() => ticketApi.getAllTickets(), [])
   const usersQuery = useMockQuery(() => authApi.getUsers(), [])
 
@@ -25,11 +23,13 @@ export function AssignTechnicianPage() {
 
   const technicians = usersQuery.data.filter((user) => user.role === ROLES.TECHNICIAN)
   const assignableTickets = ticketsQuery.data.filter(
-    (ticket) => ['OPEN', 'IN_PROGRESS'].includes(ticket.status),
+    (ticket) => ['CREATED', 'UNDER_REVIEW'].includes(ticket.status),
   )
 
   async function handleAssign(ticketId, technicianId) {
-    await ticketApi.assignTechnician(ticketId, technicianId, currentUser)
+    const technician = technicians.find((item) => item.id === technicianId)
+    if (!technician) return
+    await ticketApi.assignTechnician(ticketId, technicianId, technician.name)
     await ticketsQuery.refetch()
   }
 

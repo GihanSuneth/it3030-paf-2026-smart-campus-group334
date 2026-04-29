@@ -2,6 +2,7 @@ package com.smartcampus.backend.bookings.controller;
 
 import com.smartcampus.backend.bookings.dto.BookingAvailabilityResponse;
 import com.smartcampus.backend.bookings.dto.BookingCreateRequest;
+import com.smartcampus.backend.bookings.dto.BookingOccupiedSlotResponse;
 import com.smartcampus.backend.bookings.dto.BookingStatusUpdateRequest;
 import com.smartcampus.backend.bookings.model.Booking;
 import com.smartcampus.backend.bookings.service.BookingService;
@@ -30,6 +31,14 @@ public class BookingController {
     @GetMapping("/user/{userId}")
     public ApiResponse<List<Booking>> getUserBookings(@PathVariable String userId) {
         return ApiResponse.success("User bookings retrieved", bookingService.getUserBookings(userId));
+    }
+
+    @GetMapping("/resource/{resourceId}")
+    public ApiResponse<List<BookingOccupiedSlotResponse>> getResourceOccupiedSlots(
+            @PathVariable String resourceId,
+            @RequestParam String date
+    ) {
+        return ApiResponse.success("Resource occupied slots retrieved", bookingService.getOccupiedSlots(resourceId, date));
     }
 
     @PostMapping("/availability")
