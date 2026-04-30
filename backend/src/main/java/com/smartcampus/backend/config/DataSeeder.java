@@ -6,6 +6,7 @@ import com.smartcampus.backend.tickets.model.Ticket;
 import com.smartcampus.backend.tickets.repository.TicketRepository;
 import com.smartcampus.backend.users.model.User;
 import com.smartcampus.backend.users.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Configuration
+@Slf4j
 @RequiredArgsConstructor
 public class DataSeeder {
     private final UserRepository userRepository;
@@ -27,14 +29,18 @@ public class DataSeeder {
     @Bean
     CommandLineRunner seedData() {
         return args -> {
-            if (userRepository.count() <= 3) {
-                seedUsers();
-            }
+            try {
+                if (userRepository.count() <= 3) {
+                    seedUsers();
+                }
 
-            seedResources();
+                seedResources();
 
-            if (ticketRepository.count() == 0) {
-                seedTickets();
+                if (ticketRepository.count() == 0) {
+                    seedTickets();
+                }
+            } catch (Exception exception) {
+                log.warn("Skipping development seed data because MongoDB is not ready: {}", exception.getMessage());
             }
         };
     }

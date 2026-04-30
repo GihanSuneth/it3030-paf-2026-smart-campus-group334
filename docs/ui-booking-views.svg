@@ -1,0 +1,159 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1080" viewBox="0 0 1600 1080" font-family="Arial, Helvetica, sans-serif">
+  <rect width="1600" height="1080" fill="#F5F7FB"/>
+  <rect x="0" y="0" width="1600" height="86" fill="#1D4ED8"/>
+  <text x="70" y="52" fill="white" font-size="30" font-weight="bold">Booking UI Board</text>
+  <text x="70" y="76" fill="#DBEAFE" font-size="15">User booking flow and admin booking review screens for the Smart Campus system</text>
+
+  <rect x="44" y="116" width="474" height="908" rx="28" fill="#FFFFFF" stroke="#D6DFEA"/>
+  <rect x="562" y="116" width="474" height="908" rx="28" fill="#FFFFFF" stroke="#D6DFEA"/>
+  <rect x="1080" y="116" width="474" height="908" rx="28" fill="#FFFFFF" stroke="#D6DFEA"/>
+
+  <text x="74" y="160" fill="#1E293B" font-size="24" font-weight="bold">User: Create Booking</text>
+  <text x="592" y="160" fill="#1E293B" font-size="24" font-weight="bold">User: My Bookings</text>
+  <text x="1110" y="160" fill="#1E293B" font-size="24" font-weight="bold">Admin: Booking Handling</text>
+
+  <rect x="74" y="188" width="414" height="58" rx="20" fill="#EEF4FF"/>
+  <text x="98" y="214" fill="#4F46E5" font-size="12" font-weight="bold">BOOKINGS</text>
+  <text x="98" y="235" fill="#0F172A" font-size="24" font-weight="bold">Create Booking Request</text>
+
+  <rect x="74" y="266" width="280" height="700" rx="24" fill="#FCFDFF" stroke="#E2E8F0"/>
+  <rect x="374" y="266" width="114" height="160" rx="22" fill="#F8FAFC" stroke="#E2E8F0"/>
+  <rect x="374" y="442" width="114" height="150" rx="22" fill="#F8FAFC" stroke="#E2E8F0"/>
+  <rect x="374" y="610" width="114" height="180" rx="22" fill="#F8FAFC" stroke="#E2E8F0"/>
+
+  <rect x="98" y="292" width="92" height="28" rx="14" fill="#E0E7FF"/>
+  <text x="117" y="311" fill="#4338CA" font-size="11" font-weight="bold">Booking Request</text>
+  <text x="98" y="350" fill="#0F172A" font-size="22" font-weight="bold">Plan the session</text>
+  <text x="98" y="378" fill="#64748B" font-size="13">Booking type</text>
+  <rect x="98" y="388" width="232" height="40" rx="12" fill="white" stroke="#CBD5E1"/>
+  <text x="112" y="413" fill="#334155" font-size="13">Space</text>
+  <text x="98" y="452" fill="#64748B" font-size="13">Resource</text>
+  <rect x="98" y="462" width="232" height="40" rx="12" fill="white" stroke="#CBD5E1"/>
+  <text x="112" y="487" fill="#334155" font-size="13">A-401 Smart Classroom</text>
+  <text x="98" y="526" fill="#64748B" font-size="13">Date / Start / End</text>
+  <rect x="98" y="536" width="104" height="40" rx="12" fill="white" stroke="#CBD5E1"/>
+  <rect x="210" y="536" width="58" height="40" rx="12" fill="white" stroke="#CBD5E1"/>
+  <rect x="276" y="536" width="54" height="40" rx="12" fill="white" stroke="#CBD5E1"/>
+  <text x="111" y="561" fill="#334155" font-size="13">2026-05-03</text>
+  <text x="222" y="561" fill="#334155" font-size="13">09:00</text>
+  <text x="287" y="561" fill="#334155" font-size="13">11:00</text>
+  <rect x="98" y="600" width="232" height="98" rx="16" fill="#EEF4FF" stroke="#C7D2FE"/>
+  <text x="112" y="624" fill="#334155" font-size="12" font-weight="bold">Selected resource details</text>
+  <text x="112" y="646" fill="#64748B" font-size="12">Resource: A-401 Smart Classroom</text>
+  <text x="112" y="664" fill="#64748B" font-size="12">Location: Main Building - A401</text>
+  <text x="112" y="682" fill="#64748B" font-size="12">Status: AVAILABLE</text>
+  <text x="98" y="728" fill="#64748B" font-size="13">Purpose</text>
+  <rect x="98" y="738" width="232" height="96" rx="16" fill="white" stroke="#CBD5E1"/>
+  <text x="112" y="763" fill="#94A3B8" font-size="12">Discussion session for final-year project review</text>
+  <text x="98" y="860" fill="#64748B" font-size="13">Expected attendees</text>
+  <rect x="98" y="870" width="112" height="40" rx="12" fill="white" stroke="#CBD5E1"/>
+  <text x="112" y="895" fill="#334155" font-size="13">28</text>
+  <rect x="98" y="928" width="120" height="42" rx="16" fill="#E2E8F0"/>
+  <rect x="228" y="928" width="124" height="42" rx="16" fill="#1D4ED8"/>
+  <text x="116" y="954" fill="#334155" font-size="13" font-weight="bold">Check Availability</text>
+  <text x="257" y="954" fill="white" font-size="13" font-weight="bold">Submit Booking</text>
+
+  <text x="390" y="294" fill="#64748B" font-size="11" font-weight="bold">AVAILABLE</text>
+  <text x="390" y="320" fill="#0F172A" font-size="28" font-weight="bold">74</text>
+  <text x="390" y="344" fill="#64748B" font-size="12">resources live</text>
+  <text x="390" y="470" fill="#0F172A" font-size="16" font-weight="bold">Before you submit</text>
+  <text x="390" y="494" fill="#64748B" font-size="12">Check timing conflicts</text>
+  <text x="390" y="512" fill="#64748B" font-size="12">Confirm attendance</text>
+  <text x="390" y="530" fill="#64748B" font-size="12">State academic purpose</text>
+  <text x="390" y="638" fill="#0F172A" font-size="16" font-weight="bold">Selected Resource</text>
+  <text x="390" y="666" fill="#334155" font-size="13">A-401 Smart Classroom</text>
+  <text x="390" y="688" fill="#64748B" font-size="12">A401 - Main Building</text>
+  <text x="390" y="724" fill="#64748B" font-size="12">Prefilled from the resource</text>
+  <text x="390" y="742" fill="#64748B" font-size="12">detail page for faster booking.</text>
+
+  <rect x="592" y="188" width="414" height="58" rx="20" fill="#EEF4FF"/>
+  <text x="616" y="214" fill="#4F46E5" font-size="12" font-weight="bold">RESERVATIONS</text>
+  <text x="616" y="235" fill="#0F172A" font-size="24" font-weight="bold">My Bookings</text>
+  <rect x="592" y="266" width="124" height="106" rx="20" fill="#F8FAFC" stroke="#E2E8F0"/>
+  <rect x="736" y="266" width="124" height="106" rx="20" fill="#F8FAFC" stroke="#E2E8F0"/>
+  <rect x="880" y="266" width="124" height="106" rx="20" fill="#F8FAFC" stroke="#E2E8F0"/>
+  <text x="616" y="294" fill="#64748B" font-size="11" font-weight="bold">TOTAL REQUESTS</text>
+  <text x="616" y="334" fill="#0F172A" font-size="30" font-weight="bold">12</text>
+  <text x="616" y="354" fill="#64748B" font-size="12">all scheduled sessions</text>
+  <text x="760" y="294" fill="#64748B" font-size="11" font-weight="bold">AWAITING REVIEW</text>
+  <text x="760" y="334" fill="#0F172A" font-size="30" font-weight="bold">3</text>
+  <text x="760" y="354" fill="#64748B" font-size="12">pending admin approval</text>
+  <text x="904" y="294" fill="#64748B" font-size="11" font-weight="bold">APPROVED SLOTS</text>
+  <text x="904" y="334" fill="#0F172A" font-size="30" font-weight="bold">7</text>
+  <text x="904" y="354" fill="#64748B" font-size="12">ready for use</text>
+
+  <rect x="592" y="402" width="414" height="154" rx="26" fill="white" stroke="#E2E8F0"/>
+  <rect x="614" y="426" width="82" height="26" rx="13" fill="#FEF3C7"/>
+  <text x="630" y="443" fill="#B45309" font-size="11" font-weight="bold">PENDING</text>
+  <text x="714" y="445" fill="#0F172A" font-size="20" font-weight="bold">A-401 Smart Classroom</text>
+  <text x="614" y="480" fill="#4F46E5" font-size="13" font-weight="bold">2026-05-03 • 09:00 - 11:00</text>
+  <text x="614" y="512" fill="#64748B" font-size="13">"Final-year project review with visiting lecturer."</text>
+  <text x="614" y="540" fill="#94A3B8" font-size="11" font-weight="bold">ATTENDEES: 28</text>
+  <rect x="806" y="488" width="88" height="38" rx="14" fill="#E2E8F0"/>
+  <rect x="904" y="488" width="78" height="38" rx="14" fill="#FDECEC"/>
+  <text x="823" y="512" fill="#334155" font-size="12" font-weight="bold">Download PDF</text>
+  <text x="926" y="512" fill="#DC2626" font-size="12" font-weight="bold">Cancel</text>
+
+  <rect x="592" y="578" width="414" height="154" rx="26" fill="white" stroke="#E2E8F0"/>
+  <rect x="614" y="602" width="94" height="26" rx="13" fill="#DCFCE7"/>
+  <text x="631" y="619" fill="#15803D" font-size="11" font-weight="bold">APPROVED</text>
+  <text x="724" y="621" fill="#0F172A" font-size="20" font-weight="bold">Lab 03 Computer Facility</text>
+  <text x="614" y="656" fill="#4F46E5" font-size="13" font-weight="bold">2026-05-06 • 13:00 - 15:00</text>
+  <text x="614" y="688" fill="#64748B" font-size="13">"Workshop rehearsal and system demo preparation."</text>
+  <text x="614" y="716" fill="#94A3B8" font-size="11" font-weight="bold">ATTENDEES: 20</text>
+  <rect x="848" y="664" width="134" height="38" rx="14" fill="#E2E8F0"/>
+  <text x="870" y="688" fill="#334155" font-size="12" font-weight="bold">Download PDF</text>
+
+  <rect x="592" y="754" width="414" height="154" rx="26" fill="white" stroke="#E2E8F0"/>
+  <rect x="614" y="778" width="94" height="26" rx="13" fill="#FEE2E2"/>
+  <text x="632" y="795" fill="#DC2626" font-size="11" font-weight="bold">REJECTED</text>
+  <text x="724" y="797" fill="#0F172A" font-size="20" font-weight="bold">Projector Unit P-14</text>
+  <text x="614" y="832" fill="#4F46E5" font-size="13" font-weight="bold">2026-05-09 • 08:00 - 10:00</text>
+  <text x="614" y="864" fill="#64748B" font-size="13">Requested slot overlaps with operational maintenance.</text>
+  <text x="614" y="892" fill="#EF4444" font-size="11" font-weight="bold">REJECTED NOTE: Facility conflict.</text>
+
+  <rect x="1110" y="188" width="414" height="58" rx="20" fill="#EEF4FF"/>
+  <text x="1134" y="214" fill="#4F46E5" font-size="12" font-weight="bold">CAMPUS LOGISTICS</text>
+  <text x="1134" y="235" fill="#0F172A" font-size="24" font-weight="bold">Booking Handling</text>
+  <rect x="1110" y="266" width="166" height="42" rx="18" fill="#F1F5F9"/>
+  <rect x="1116" y="272" width="78" height="30" rx="14" fill="white"/>
+  <text x="1132" y="291" fill="#4F46E5" font-size="11" font-weight="bold">All Requests</text>
+  <text x="1210" y="291" fill="#64748B" font-size="11" font-weight="bold">Pending Review 5</text>
+
+  <rect x="1110" y="332" width="126" height="104" rx="20" fill="#F8FAFC" stroke="#E2E8F0"/>
+  <rect x="1254" y="332" width="126" height="104" rx="20" fill="#F8FAFC" stroke="#E2E8F0"/>
+  <rect x="1398" y="332" width="126" height="104" rx="20" fill="#F8FAFC" stroke="#E2E8F0"/>
+  <text x="1134" y="360" fill="#64748B" font-size="11" font-weight="bold">TOTAL BOOKINGS</text>
+  <text x="1134" y="398" fill="#0F172A" font-size="28" font-weight="bold">48</text>
+  <text x="1278" y="360" fill="#64748B" font-size="11" font-weight="bold">QUEUE SIZE</text>
+  <text x="1278" y="398" fill="#0F172A" font-size="28" font-weight="bold">5</text>
+  <text x="1422" y="360" fill="#64748B" font-size="11" font-weight="bold">UTILIZATION</text>
+  <text x="1422" y="398" fill="#0F172A" font-size="28" font-weight="bold">31</text>
+
+  <rect x="1110" y="468" width="414" height="168" rx="26" fill="white" stroke="#E2E8F0"/>
+  <rect x="1132" y="492" width="82" height="26" rx="13" fill="#FEF3C7"/>
+  <text x="1148" y="509" fill="#B45309" font-size="11" font-weight="bold">PENDING</text>
+  <text x="1232" y="511" fill="#0F172A" font-size="20" font-weight="bold">Seminar Hall B</text>
+  <text x="1132" y="544" fill="#4F46E5" font-size="13" font-weight="bold">2026-05-08 • 14:00 - 16:00</text>
+  <text x="1132" y="576" fill="#64748B" font-size="13">Department presentation booking awaiting decision.</text>
+  <rect x="1320" y="530" width="88" height="40" rx="14" fill="#DCFCE7"/>
+  <rect x="1418" y="530" width="84" height="40" rx="14" fill="#FEE2E2"/>
+  <text x="1344" y="555" fill="#15803D" font-size="12" font-weight="bold">Approve</text>
+  <text x="1444" y="555" fill="#DC2626" font-size="12" font-weight="bold">Reject</text>
+
+  <rect x="1110" y="660" width="414" height="168" rx="26" fill="white" stroke="#E2E8F0"/>
+  <rect x="1132" y="684" width="82" height="26" rx="13" fill="#FEF3C7"/>
+  <text x="1148" y="701" fill="#B45309" font-size="11" font-weight="bold">PENDING</text>
+  <text x="1232" y="703" fill="#0F172A" font-size="20" font-weight="bold">PC Lab 02</text>
+  <text x="1132" y="736" fill="#4F46E5" font-size="13" font-weight="bold">2026-05-11 • 10:00 - 12:00</text>
+  <text x="1132" y="768" fill="#64748B" font-size="13">Hands-on session for software tools training.</text>
+  <rect x="1320" y="722" width="88" height="40" rx="14" fill="#DCFCE7"/>
+  <rect x="1418" y="722" width="84" height="40" rx="14" fill="#FEE2E2"/>
+  <text x="1344" y="747" fill="#15803D" font-size="12" font-weight="bold">Approve</text>
+  <text x="1444" y="747" fill="#DC2626" font-size="12" font-weight="bold">Reject</text>
+
+  <rect x="1110" y="852" width="414" height="126" rx="26" fill="#F8FAFC" stroke="#E2E8F0"/>
+  <text x="1134" y="888" fill="#0F172A" font-size="18" font-weight="bold">Admin Interaction Pattern</text>
+  <text x="1134" y="918" fill="#64748B" font-size="13">Review queue cards, compare time and resource, then approve or reject inline.</text>
+  <text x="1134" y="944" fill="#64748B" font-size="13">The same area also supports full-history browsing through the All Requests tab.</text>
+</svg>
