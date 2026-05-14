@@ -1,0 +1,202 @@
+<svg width="1200" height="840" xmlns="http://www.w3.org/2000/svg" font-family="Arial, Helvetica, sans-serif">
+  <rect width="1200" height="840" fill="#F8F7F4"/>
+
+  <rect x="0" y="0" width="1200" height="72" fill="#1D4ED8"/>
+  <text x="600" y="32" text-anchor="middle" fill="white" font-size="22" font-weight="bold">Smart Campus / Nexora</text>
+  <text x="600" y="56" text-anchor="middle" fill="#DBEAFE" font-size="14">System Architecture - Full Stack Overview (IT3030 PAF 2026)</text>
+
+  <text x="28" y="126" fill="#6B7280" font-size="11" font-weight="bold" transform="rotate(-90,28,126)" text-anchor="middle">CLIENT</text>
+  <text x="28" y="268" fill="#6B7280" font-size="11" font-weight="bold" transform="rotate(-90,28,268)" text-anchor="middle">NETWORK</text>
+  <text x="28" y="480" fill="#6B7280" font-size="11" font-weight="bold" transform="rotate(-90,28,480)" text-anchor="middle">API SERVER</text>
+  <text x="28" y="714" fill="#6B7280" font-size="11" font-weight="bold" transform="rotate(-90,28,714)" text-anchor="middle">DATA</text>
+
+  <rect x="50" y="90" width="1130" height="128" rx="10" fill="#EFF6FF" stroke="#BFDBFE" stroke-width="1"/>
+  <rect x="50" y="228" width="1130" height="86" rx="10" fill="#F0FDF4" stroke="#BBF7D0" stroke-width="1"/>
+  <rect x="50" y="324" width="1130" height="326" rx="10" fill="#FFFBEB" stroke="#FDE68A" stroke-width="1"/>
+  <rect x="50" y="660" width="1130" height="146" rx="10" fill="#FDF4FF" stroke="#E9D5FF" stroke-width="1"/>
+
+  <rect x="78" y="106" width="210" height="94" rx="10" fill="white" stroke="#1D4ED8" stroke-width="2"/>
+  <rect x="78" y="106" width="210" height="28" rx="10" fill="#1D4ED8"/>
+  <rect x="78" y="120" width="210" height="14" fill="#1D4ED8"/>
+  <text x="183" y="124" text-anchor="middle" fill="white" font-size="12" font-weight="bold">React Web App (Vite)</text>
+  <text x="183" y="150" text-anchor="middle" fill="#374151" font-size="11">React 19 + React Router 7</text>
+  <text x="183" y="166" text-anchor="middle" fill="#374151" font-size="11">Tailwind CSS + Framer Motion</text>
+  <text x="183" y="182" text-anchor="middle" fill="#374151" font-size="11">Axios client + JWT bearer token</text>
+
+  <rect x="312" y="106" width="216" height="94" rx="10" fill="white" stroke="#1D4ED8" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <text x="420" y="128" text-anchor="middle" fill="#1D4ED8" font-size="12" font-weight="bold">Pages and Route Guards</text>
+  <text x="420" y="150" text-anchor="middle" fill="#374151" font-size="11">Dashboard - Resources - Bookings</text>
+  <text x="420" y="166" text-anchor="middle" fill="#374151" font-size="11">Tickets - Notifications - Profile</text>
+  <text x="420" y="182" text-anchor="middle" fill="#374151" font-size="11">ProtectedRoute + RoleRoute</text>
+
+  <rect x="552" y="106" width="216" height="94" rx="10" fill="white" stroke="#1D4ED8" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <text x="660" y="128" text-anchor="middle" fill="#1D4ED8" font-size="12" font-weight="bold">Client State and UX</text>
+  <text x="660" y="150" text-anchor="middle" fill="#374151" font-size="11">AuthContext + NotificationContext</text>
+  <text x="660" y="166" text-anchor="middle" fill="#374151" font-size="11">localStorage user + token</text>
+  <text x="660" y="182" text-anchor="middle" fill="#374151" font-size="11">PDF export + QR rating flow</text>
+
+  <rect x="792" y="106" width="180" height="94" rx="10" fill="white" stroke="#DB4437" stroke-width="2"/>
+  <rect x="792" y="106" width="180" height="28" rx="10" fill="#DB4437"/>
+  <rect x="792" y="120" width="180" height="14" fill="#DB4437"/>
+  <text x="882" y="124" text-anchor="middle" fill="white" font-size="12" font-weight="bold">Google OAuth</text>
+  <text x="882" y="150" text-anchor="middle" fill="#374151" font-size="11">Frontend obtains access token</text>
+  <text x="882" y="166" text-anchor="middle" fill="#374151" font-size="11">Backend verifies via Google API</text>
+  <text x="882" y="182" text-anchor="middle" fill="#374151" font-size="11">Allowed for student/staff user flow</text>
+
+  <rect x="996" y="106" width="156" height="94" rx="10" fill="white" stroke="#9CA3AF" stroke-width="1.5" stroke-dasharray="6,4"/>
+  <text x="1074" y="128" text-anchor="middle" fill="#6B7280" font-size="12" font-weight="bold">User Roles</text>
+  <text x="1074" y="150" text-anchor="middle" fill="#374151" font-size="11">USER</text>
+  <text x="1074" y="166" text-anchor="middle" fill="#374151" font-size="11">ADMIN</text>
+  <text x="1074" y="182" text-anchor="middle" fill="#374151" font-size="11">TECHNICIAN</text>
+
+  <line x1="183" y1="200" x2="183" y2="242" stroke="#1D4ED8" stroke-width="2.5" marker-end="url(#arr-blue)"/>
+  <rect x="104" y="244" width="198" height="44" rx="8" fill="white" stroke="#0F6E56" stroke-width="1.5"/>
+  <text x="203" y="262" text-anchor="middle" fill="#0F6E56" font-size="11" font-weight="bold">Frontend API Base URL</text>
+  <text x="203" y="278" text-anchor="middle" fill="#374151" font-size="10">`VITE_API_BASE_URL` -> `http://localhost:8080/api`</text>
+
+  <rect x="360" y="246" width="436" height="38" rx="18" fill="white" stroke="#1D4ED8" stroke-width="1.5"/>
+  <text x="578" y="270" text-anchor="middle" fill="#1D4ED8" font-size="13" font-weight="bold">HTTPS / REST JSON - Axios Interceptors - JWT Authorization Header</text>
+
+  <line x1="302" y1="266" x2="358" y2="266" stroke="#1D4ED8" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr-blue)"/>
+  <line x1="796" y1="266" x2="868" y2="266" stroke="#1D4ED8" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr-blue)"/>
+  <line x1="882" y1="200" x2="882" y2="242" stroke="#DB4437" stroke-width="1.5" stroke-dasharray="5,3"/>
+
+  <rect x="70" y="338" width="268" height="296" rx="10" fill="white" stroke="#F59E0B" stroke-width="2"/>
+  <rect x="70" y="338" width="268" height="32" rx="10" fill="#F59E0B"/>
+  <rect x="70" y="356" width="268" height="14" fill="#F59E0B"/>
+  <text x="204" y="359" text-anchor="middle" fill="white" font-size="13" font-weight="bold">Spring Boot 3.3.4 (Java 17)</text>
+
+  <rect x="84" y="380" width="240" height="36" rx="6" fill="#FEF3C7" stroke="#F59E0B" stroke-width="1"/>
+  <text x="204" y="394" text-anchor="middle" fill="#78350F" font-size="11" font-weight="bold">Controllers Layer</text>
+  <text x="204" y="408" text-anchor="middle" fill="#78350F" font-size="10">Auth - Users - Resources - Bookings - Tickets - Notifications - Dashboard</text>
+
+  <rect x="84" y="424" width="240" height="36" rx="6" fill="#FEF3C7" stroke="#F59E0B" stroke-width="1"/>
+  <text x="204" y="438" text-anchor="middle" fill="#78350F" font-size="11" font-weight="bold">Service Layer</text>
+  <text x="204" y="452" text-anchor="middle" fill="#78350F" font-size="10">Business rules, validation, approval flow, assignment flow</text>
+
+  <rect x="84" y="468" width="240" height="36" rx="6" fill="#FEF3C7" stroke="#F59E0B" stroke-width="1"/>
+  <text x="204" y="482" text-anchor="middle" fill="#78350F" font-size="11" font-weight="bold">Repository Layer</text>
+  <text x="204" y="496" text-anchor="middle" fill="#78350F" font-size="10">Spring Data Mongo repositories for users, resources, bookings, tickets, notifications</text>
+
+  <rect x="84" y="512" width="240" height="36" rx="6" fill="#FEF3C7" stroke="#F59E0B" stroke-width="1"/>
+  <text x="204" y="526" text-anchor="middle" fill="#78350F" font-size="11" font-weight="bold">Security and Auth</text>
+  <text x="204" y="540" text-anchor="middle" fill="#78350F" font-size="10">BCrypt password hashing, JWT issue, Google userinfo validation</text>
+
+  <rect x="84" y="556" width="240" height="54" rx="6" fill="#FEF3C7" stroke="#F59E0B" stroke-width="1"/>
+  <text x="204" y="571" text-anchor="middle" fill="#78350F" font-size="11" font-weight="bold">Cross-cutting</text>
+  <text x="204" y="586" text-anchor="middle" fill="#78350F" font-size="10">ApiResponse wrapper, CORS config, Mongo config, global exception handling</text>
+  <text x="204" y="600" text-anchor="middle" fill="#78350F" font-size="10">DataSeeder and shared web configuration</text>
+
+  <line x1="204" y1="288" x2="204" y2="336" stroke="#1D4ED8" stroke-width="2.5" marker-end="url(#arr-blue)"/>
+
+  <rect x="364" y="338" width="202" height="296" rx="10" fill="white" stroke="#7C3AED" stroke-width="2"/>
+  <rect x="364" y="338" width="202" height="32" rx="10" fill="#7C3AED"/>
+  <rect x="364" y="356" width="202" height="14" fill="#7C3AED"/>
+  <text x="465" y="359" text-anchor="middle" fill="white" font-size="13" font-weight="bold">Security View</text>
+  <text x="465" y="392" text-anchor="middle" fill="#374151" font-size="11" font-weight="bold">Authentication</text>
+  <text x="465" y="409" text-anchor="middle" fill="#374151" font-size="10">Email/password login</text>
+  <text x="465" y="424" text-anchor="middle" fill="#374151" font-size="10">Google OAuth login for USER</text>
+  <text x="465" y="439" text-anchor="middle" fill="#374151" font-size="10">24 hour JWT expiry</text>
+  <line x1="380" y1="448" x2="550" y2="448" stroke="#E9D5FF" stroke-width="1"/>
+  <text x="465" y="469" text-anchor="middle" fill="#374151" font-size="11" font-weight="bold">Authorization</text>
+  <text x="465" y="486" text-anchor="middle" fill="#374151" font-size="10">Frontend route guards by role</text>
+  <text x="465" y="501" text-anchor="middle" fill="#374151" font-size="10">Backend currently permits all routes</text>
+  <text x="465" y="516" text-anchor="middle" fill="#374151" font-size="10">Security tightening is still pending</text>
+  <line x1="380" y1="526" x2="550" y2="526" stroke="#E9D5FF" stroke-width="1"/>
+  <text x="465" y="547" text-anchor="middle" fill="#374151" font-size="11" font-weight="bold">Client-side Protection</text>
+  <text x="465" y="564" text-anchor="middle" fill="#374151" font-size="10">ProtectedRoute</text>
+  <text x="465" y="579" text-anchor="middle" fill="#374151" font-size="10">RoleRoute</text>
+  <text x="465" y="594" text-anchor="middle" fill="#374151" font-size="10">Role-based redirects after login</text>
+
+  <rect x="592" y="338" width="578" height="296" rx="10" fill="white" stroke="#0F6E56" stroke-width="2"/>
+  <rect x="592" y="338" width="578" height="32" rx="10" fill="#0F6E56"/>
+  <rect x="592" y="356" width="578" height="14" fill="#0F6E56"/>
+  <text x="881" y="359" text-anchor="middle" fill="white" font-size="13" font-weight="bold">Business Modules</text>
+
+  <rect x="606" y="380" width="130" height="236" rx="8" fill="#EFF6FF" stroke="#1D4ED8" stroke-width="1.5"/>
+  <text x="671" y="400" text-anchor="middle" fill="#1D4ED8" font-size="11" font-weight="bold">Resources</text>
+  <line x1="614" y1="408" x2="728" y2="408" stroke="#BFDBFE" stroke-width="1"/>
+  <text x="671" y="428" text-anchor="middle" fill="#374151" font-size="10">Catalog + details</text>
+  <text x="671" y="443" text-anchor="middle" fill="#374151" font-size="10">Type, category, location</text>
+  <text x="671" y="458" text-anchor="middle" fill="#374151" font-size="10">Capacity + amenities</text>
+  <text x="671" y="473" text-anchor="middle" fill="#374151" font-size="10">Equipment counts</text>
+  <text x="671" y="488" text-anchor="middle" fill="#374151" font-size="10">Admin management</text>
+
+  <rect x="746" y="380" width="130" height="236" rx="8" fill="#F0FDF4" stroke="#0F6E56" stroke-width="1.5"/>
+  <text x="811" y="400" text-anchor="middle" fill="#0F6E56" font-size="11" font-weight="bold">Bookings</text>
+  <line x1="754" y1="408" x2="868" y2="408" stroke="#BBF7D0" stroke-width="1"/>
+  <text x="811" y="428" text-anchor="middle" fill="#374151" font-size="10">Availability checks</text>
+  <text x="811" y="443" text-anchor="middle" fill="#374151" font-size="10">Conflict detection</text>
+  <text x="811" y="458" text-anchor="middle" fill="#374151" font-size="10">PENDING -> APPROVED</text>
+  <text x="811" y="473" text-anchor="middle" fill="#374151" font-size="10">Approve / reject / cancel</text>
+  <text x="811" y="488" text-anchor="middle" fill="#374151" font-size="10">Alternative suggestions</text>
+
+  <rect x="886" y="380" width="130" height="236" rx="8" fill="#FFF7ED" stroke="#EA580C" stroke-width="1.5"/>
+  <text x="951" y="400" text-anchor="middle" fill="#EA580C" font-size="11" font-weight="bold">Tickets</text>
+  <line x1="894" y1="408" x2="1008" y2="408" stroke="#FED7AA" stroke-width="1"/>
+  <text x="951" y="428" text-anchor="middle" fill="#374151" font-size="10">Create and track issues</text>
+  <text x="951" y="443" text-anchor="middle" fill="#374151" font-size="10">Assignment workflow</text>
+  <text x="951" y="458" text-anchor="middle" fill="#374151" font-size="10">Worklog + comments</text>
+  <text x="951" y="473" text-anchor="middle" fill="#374151" font-size="10">Resolution notes</text>
+  <text x="951" y="488" text-anchor="middle" fill="#374151" font-size="10">Rating token + QR handoff</text>
+
+  <rect x="1026" y="380" width="130" height="236" rx="8" fill="#FDF4FF" stroke="#7C3AED" stroke-width="1.5"/>
+  <text x="1091" y="400" text-anchor="middle" fill="#7C3AED" font-size="11" font-weight="bold">Users + Insight</text>
+  <line x1="1034" y1="408" x2="1148" y2="408" stroke="#E9D5FF" stroke-width="1"/>
+  <text x="1091" y="428" text-anchor="middle" fill="#374151" font-size="10">User approvals</text>
+  <text x="1091" y="443" text-anchor="middle" fill="#374151" font-size="10">Technician creation</text>
+  <text x="1091" y="458" text-anchor="middle" fill="#374151" font-size="10">Notifications</text>
+  <text x="1091" y="473" text-anchor="middle" fill="#374151" font-size="10">Admin / user dashboards</text>
+  <text x="1091" y="488" text-anchor="middle" fill="#374151" font-size="10">Profile management</text>
+
+  <line x1="338" y1="486" x2="362" y2="486" stroke="#374151" stroke-width="1.5" marker-end="url(#arr-dark)"/>
+  <line x1="566" y1="486" x2="590" y2="486" stroke="#374151" stroke-width="1.5" marker-end="url(#arr-dark)"/>
+
+  <rect x="70" y="676" width="308" height="112" rx="10" fill="white" stroke="#10B981" stroke-width="2"/>
+  <rect x="70" y="676" width="308" height="30" rx="10" fill="#10B981"/>
+  <rect x="70" y="692" width="308" height="14" fill="#10B981"/>
+  <text x="224" y="694" text-anchor="middle" fill="white" font-size="13" font-weight="bold">MongoDB</text>
+  <text x="224" y="718" text-anchor="middle" fill="#374151" font-size="11">Database: `smart_campus`</text>
+  <text x="224" y="734" text-anchor="middle" fill="#374151" font-size="11">Collections: users - resources - bookings</text>
+  <text x="224" y="750" text-anchor="middle" fill="#374151" font-size="11">tickets - notifications</text>
+  <text x="224" y="766" text-anchor="middle" fill="#374151" font-size="11">Spring Data MongoDB repositories</text>
+
+  <rect x="404" y="676" width="226" height="112" rx="10" fill="white" stroke="#6B7280" stroke-width="1.5"/>
+  <rect x="404" y="676" width="226" height="30" rx="10" fill="#6B7280"/>
+  <rect x="404" y="692" width="226" height="14" fill="#6B7280"/>
+  <text x="517" y="694" text-anchor="middle" fill="white" font-size="13" font-weight="bold">External Service Call</text>
+  <text x="517" y="718" text-anchor="middle" fill="#374151" font-size="11">Google `userinfo` endpoint</text>
+  <text x="517" y="734" text-anchor="middle" fill="#374151" font-size="11">Used only during OAuth login</text>
+  <text x="517" y="750" text-anchor="middle" fill="#374151" font-size="11">Validated by backend RestClient</text>
+
+  <rect x="656" y="676" width="226" height="112" rx="10" fill="white" stroke="#F59E0B" stroke-width="1.5"/>
+  <rect x="656" y="676" width="226" height="30" rx="10" fill="#F59E0B"/>
+  <rect x="656" y="692" width="226" height="14" fill="#F59E0B"/>
+  <text x="769" y="694" text-anchor="middle" fill="white" font-size="13" font-weight="bold">Frontend Output Assets</text>
+  <text x="769" y="718" text-anchor="middle" fill="#374151" font-size="11">Generated PDFs</text>
+  <text x="769" y="734" text-anchor="middle" fill="#374151" font-size="11">QR code for ticket rating page</text>
+  <text x="769" y="750" text-anchor="middle" fill="#374151" font-size="11">Browser-side downloadable artifacts</text>
+
+  <rect x="908" y="676" width="252" height="112" rx="10" fill="white" stroke="#1D4ED8" stroke-width="1.5"/>
+  <rect x="908" y="676" width="252" height="30" rx="10" fill="#1D4ED8"/>
+  <rect x="908" y="692" width="252" height="14" fill="#1D4ED8"/>
+  <text x="1034" y="694" text-anchor="middle" fill="white" font-size="13" font-weight="bold">Primary Runtime Flow</text>
+  <text x="1034" y="718" text-anchor="middle" fill="#374151" font-size="11">User action -> React page/component</text>
+  <text x="1034" y="734" text-anchor="middle" fill="#374151" font-size="11">API helper -> controller -> service</text>
+  <text x="1034" y="750" text-anchor="middle" fill="#374151" font-size="11">repository -> MongoDB -> ApiResponse -> UI update</text>
+
+  <line x1="224" y1="634" x2="224" y2="674" stroke="#10B981" stroke-width="2" marker-end="url(#arr-green)"/>
+  <line x1="1034" y1="634" x2="1034" y2="674" stroke="#1D4ED8" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr-blue)"/>
+
+  <defs>
+    <marker id="arr-blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="#1D4ED8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+    <marker id="arr-green" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="#10B981" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+    <marker id="arr-dark" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="#374151" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+  </defs>
+</svg>

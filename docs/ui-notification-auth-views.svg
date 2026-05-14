@@ -1,0 +1,118 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1700" height="1080" viewBox="0 0 1700 1080" font-family="Arial, Helvetica, sans-serif">
+  <rect width="1700" height="1080" fill="#F5F7FB"/>
+  <rect x="0" y="0" width="1700" height="86" fill="#7C3AED"/>
+  <text x="70" y="52" fill="white" font-size="30" font-weight="bold">Notification, Authentication and Google Auth UI Board</text>
+  <text x="70" y="76" fill="#E9D5FF" font-size="15">Login experience, Google sign-in, notification bell, full inbox, and technician rating page</text>
+
+  <rect x="40" y="116" width="760" height="924" rx="30" fill="#FFFFFF" stroke="#D6DFEA"/>
+  <rect x="836" y="116" width="392" height="924" rx="30" fill="#FFFFFF" stroke="#D6DFEA"/>
+  <rect x="1264" y="116" width="396" height="924" rx="30" fill="#FFFFFF" stroke="#D6DFEA"/>
+
+  <text x="70" y="160" fill="#1E293B" font-size="24" font-weight="bold">Authentication UI</text>
+  <text x="866" y="160" fill="#1E293B" font-size="24" font-weight="bold">Notification UI</text>
+  <text x="1294" y="160" fill="#1E293B" font-size="24" font-weight="bold">Google / Rating UI</text>
+
+  <rect x="70" y="188" width="700" height="812" rx="28" fill="#F8FAFC" stroke="#E2E8F0"/>
+  <circle cx="150" cy="272" r="96" fill="#6366F1" fill-opacity="0.10"/>
+  <circle cx="640" cy="896" r="114" fill="#6366F1" fill-opacity="0.08"/>
+  <text x="108" y="242" fill="#4F46E5" font-size="11" font-weight="bold">V2.0 SMART CAMPUS</text>
+  <text x="108" y="326" fill="#0F172A" font-size="58" font-weight="bold">Nexora</text>
+  <text x="108" y="382" fill="#4F46E5" font-size="58" font-weight="bold">Workspace.</text>
+  <text x="108" y="430" fill="#64748B" font-size="18">The next generation of university management with role-based access and Google-supported sign-in.</text>
+
+  <rect x="108" y="492" width="180" height="154" rx="24" fill="#EEF4FF" stroke="#C7D2FE"/>
+  <rect x="304" y="492" width="180" height="154" rx="24" fill="white" stroke="#E2E8F0"/>
+  <rect x="500" y="492" width="180" height="154" rx="24" fill="white" stroke="#E2E8F0"/>
+  <text x="132" y="526" fill="#1E3A8A" font-size="18" font-weight="bold">Student/Staff</text>
+  <text x="132" y="552" fill="#64748B" font-size="12">Access resources and campus support.</text>
+  <text x="132" y="582" fill="#64748B" font-size="12">Search campus facilities</text>
+  <text x="132" y="602" fill="#64748B" font-size="12">Request room bookings</text>
+  <text x="132" y="622" fill="#64748B" font-size="12">Track support tickets</text>
+  <text x="328" y="526" fill="#334155" font-size="18" font-weight="bold">Administrator</text>
+  <text x="524" y="526" fill="#334155" font-size="18" font-weight="bold">Service Tech</text>
+
+  <rect x="108" y="690" width="572" height="250" rx="28" fill="#FFFFFF" stroke="#E2E8F0"/>
+  <text x="136" y="728" fill="#0F172A" font-size="22" font-weight="bold">Login Form</text>
+  <text x="136" y="758" fill="#64748B" font-size="13">Role-based credentials are prefilled and can be changed before sign-in.</text>
+  <text x="136" y="800" fill="#64748B" font-size="13">Role</text>
+  <rect x="136" y="810" width="160" height="40" rx="14" fill="white" stroke="#CBD5E1"/>
+  <text x="150" y="835" fill="#334155" font-size="13">USER</text>
+  <text x="324" y="800" fill="#64748B" font-size="13">Username</text>
+  <rect x="324" y="810" width="320" height="40" rx="14" fill="white" stroke="#CBD5E1"/>
+  <text x="338" y="835" fill="#334155" font-size="13">it12345678@my.sliit.lk</text>
+  <text x="136" y="872" fill="#64748B" font-size="13">Password</text>
+  <rect x="136" y="882" width="216" height="40" rx="14" fill="white" stroke="#CBD5E1"/>
+  <text x="150" y="907" fill="#334155" font-size="13">user</text>
+  <rect x="372" y="882" width="132" height="40" rx="14" fill="#7C3AED"/>
+  <text x="413" y="907" fill="white" font-size="13" font-weight="bold">Login</text>
+  <rect x="520" y="882" width="124" height="40" rx="14" fill="white" stroke="#CBD5E1"/>
+  <text x="539" y="907" fill="#334155" font-size="13" font-weight="bold">Request Access</text>
+  <rect x="136" y="942" width="508" height="40" rx="14" fill="white" stroke="#E2E8F0"/>
+  <text x="278" y="967" fill="#334155" font-size="13" font-weight="bold">Continue with Google</text>
+  <circle cx="252" cy="962" r="12" fill="#EEF4FF"/>
+  <text x="247" y="968" fill="#4F46E5" font-size="12" font-weight="bold">G</text>
+
+  <rect x="866" y="188" width="332" height="200" rx="28" fill="#FCFDFF" stroke="#E2E8F0"/>
+  <text x="892" y="224" fill="#0F172A" font-size="20" font-weight="bold">Notification Bell Dropdown</text>
+  <circle cx="908" cy="280" r="24" fill="white" stroke="#CBD5E1"/>
+  <path d="M897 283c0-11 4-17 11-17s11 6 11 17v8l6 6h-34l6-6z" fill="none" stroke="#334155" stroke-width="2"/>
+  <circle cx="926" cy="260" r="10" fill="#F2E3CF"/>
+  <text x="922" y="264" fill="#7F5530" font-size="10" font-weight="bold">4</text>
+  <rect x="892" y="314" width="280" height="52" rx="16" fill="white" stroke="#E2E8F0"/>
+  <text x="908" y="338" fill="#0F172A" font-size="13" font-weight="bold">Notifications</text>
+  <text x="1088" y="338" fill="#365F8B" font-size="12" font-weight="bold">View all</text>
+  <text x="908" y="356" fill="#64748B" font-size="12">Recent activity across the system</text>
+
+  <rect x="866" y="414" width="332" height="586" rx="28" fill="#FFFFFF" stroke="#E2E8F0"/>
+  <text x="892" y="450" fill="#0F172A" font-size="22" font-weight="bold">Notifications Page</text>
+  <rect x="892" y="476" width="124" height="88" rx="18" fill="#F8FAFC" stroke="#E2E8F0"/>
+  <rect x="1032" y="476" width="124" height="88" rx="18" fill="#F8FAFC" stroke="#E2E8F0"/>
+  <text x="910" y="502" fill="#64748B" font-size="10" font-weight="bold">TOTAL INBOX</text>
+  <text x="910" y="536" fill="#0F172A" font-size="24" font-weight="bold">18</text>
+  <text x="1050" y="502" fill="#64748B" font-size="10" font-weight="bold">UNREAD</text>
+  <text x="1050" y="536" fill="#0F172A" font-size="24" font-weight="bold">4</text>
+  <rect x="1082" y="442" width="104" height="32" rx="12" fill="#E2E8F0"/>
+  <text x="1103" y="463" fill="#334155" font-size="11" font-weight="bold">Mark All Read</text>
+  <rect x="892" y="590" width="280" height="112" rx="18" fill="white" stroke="#E2E8F0"/>
+  <text x="910" y="616" fill="#0F172A" font-size="14" font-weight="bold">Booking Approved</text>
+  <text x="1072" y="616" fill="#64748B" font-size="10" font-weight="bold">Clear Alert</text>
+  <text x="910" y="642" fill="#64748B" font-size="12">Your request for PC Lab 03 was approved by admin.</text>
+  <text x="910" y="676" fill="#CBD5E1" font-size="10" font-weight="bold">SYNCED: 2026-05-01 09:15</text>
+  <rect x="892" y="724" width="280" height="112" rx="18" fill="white" stroke="#E2E8F0"/>
+  <text x="910" y="750" fill="#0F172A" font-size="14" font-weight="bold">Technician Assigned</text>
+  <text x="1072" y="750" fill="#64748B" font-size="10" font-weight="bold">Clear Alert</text>
+  <text x="910" y="776" fill="#64748B" font-size="12">K. Perera is now handling ticket TK1042.</text>
+  <text x="910" y="810" fill="#CBD5E1" font-size="10" font-weight="bold">SYNCED: 2026-05-01 10:02</text>
+  <rect x="892" y="858" width="280" height="112" rx="18" fill="white" stroke="#E2E8F0"/>
+  <text x="910" y="884" fill="#0F172A" font-size="14" font-weight="bold">New Access Request</text>
+  <text x="1072" y="884" fill="#64748B" font-size="10" font-weight="bold">Clear Alert</text>
+  <text x="910" y="910" fill="#64748B" font-size="12">Admin review needed for a new student/staff signup request.</text>
+  <text x="910" y="944" fill="#CBD5E1" font-size="10" font-weight="bold">SYNCED: 2026-05-01 10:44</text>
+
+  <rect x="1294" y="188" width="336" height="264" rx="28" fill="#FCFDFF" stroke="#E2E8F0"/>
+  <text x="1320" y="224" fill="#0F172A" font-size="20" font-weight="bold">Google Authentication UI</text>
+  <text x="1320" y="256" fill="#64748B" font-size="13">The login page includes a "Continue with Google" action for student/staff access.</text>
+  <rect x="1320" y="296" width="252" height="48" rx="16" fill="white" stroke="#CBD5E1"/>
+  <circle cx="1350" cy="320" r="12" fill="#EEF4FF"/>
+  <text x="1345" y="326" fill="#4F46E5" font-size="12" font-weight="bold">G</text>
+  <text x="1374" y="326" fill="#334155" font-size="14" font-weight="bold">Continue with Google</text>
+  <rect x="1320" y="370" width="280" height="54" rx="16" fill="#EEF4FF" stroke="#C7D2FE"/>
+  <text x="1338" y="394" fill="#1E3A8A" font-size="12" font-weight="bold">Google user info is fetched first</text>
+  <text x="1338" y="412" fill="#64748B" font-size="12">then passed to backend OAuth login flow.</text>
+
+  <rect x="1294" y="480" width="336" height="520" rx="28" fill="#FFFFFF" stroke="#E2E8F0"/>
+  <text x="1320" y="516" fill="#0F172A" font-size="22" font-weight="bold">Ticket Rating Page</text>
+  <text x="1320" y="546" fill="#64748B" font-size="13">Standalone screen opened by QR scan or direct tokenized link.</text>
+  <rect x="1320" y="582" width="280" height="302" rx="24" fill="#FFFFFF" stroke="#E2E8F0"/>
+  <text x="1342" y="610" fill="#4F46E5" font-size="11" font-weight="bold">SERVICE RATING</text>
+  <text x="1342" y="646" fill="#0F172A" font-size="28" font-weight="bold">Rate Technician Support</text>
+  <text x="1342" y="678" fill="#64748B" font-size="12">Share how the technician handled service, communication and resolution quality.</text>
+  <text x="1342" y="724" fill="#64748B" font-size="13">Rating</text>
+  <rect x="1342" y="734" width="228" height="40" rx="14" fill="white" stroke="#CBD5E1"/>
+  <text x="1356" y="759" fill="#334155" font-size="13">5 - Excellent</text>
+  <text x="1342" y="802" fill="#64748B" font-size="13">Feedback</text>
+  <rect x="1342" y="812" width="228" height="86" rx="16" fill="white" stroke="#CBD5E1"/>
+  <text x="1356" y="838" fill="#94A3B8" font-size="12">Optional feedback for the technician</text>
+  <rect x="1342" y="918" width="228" height="42" rx="16" fill="#7C3AED"/>
+  <text x="1406" y="944" fill="white" font-size="13" font-weight="bold">Submit Rating</text>
+</svg>

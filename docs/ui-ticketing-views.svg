@@ -1,0 +1,182 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1180" viewBox="0 0 1800 1180" font-family="Arial, Helvetica, sans-serif">
+  <rect width="1800" height="1180" fill="#F5F7FB"/>
+  <rect x="0" y="0" width="1800" height="86" fill="#EA580C"/>
+  <text x="70" y="52" fill="white" font-size="30" font-weight="bold">Incident Ticketing and Handling UI Board</text>
+  <text x="70" y="76" fill="#FFEDD5" font-size="15">User submission and tracking, admin triage, and technician resolution interfaces</text>
+
+  <rect x="38" y="116" width="410" height="1016" rx="28" fill="#FFFFFF" stroke="#D6DFEA"/>
+  <rect x="474" y="116" width="410" height="1016" rx="28" fill="#FFFFFF" stroke="#D6DFEA"/>
+  <rect x="910" y="116" width="410" height="1016" rx="28" fill="#FFFFFF" stroke="#D6DFEA"/>
+  <rect x="1346" y="116" width="416" height="1016" rx="28" fill="#FFFFFF" stroke="#D6DFEA"/>
+
+  <text x="68" y="160" fill="#1E293B" font-size="24" font-weight="bold">User: Create Ticket</text>
+  <text x="504" y="160" fill="#1E293B" font-size="24" font-weight="bold">User: My Tickets &amp; Details</text>
+  <text x="940" y="160" fill="#1E293B" font-size="24" font-weight="bold">Admin: Ticket Handling</text>
+  <text x="1376" y="160" fill="#1E293B" font-size="24" font-weight="bold">Technician: Assigned &amp; Resolution</text>
+
+  <rect x="68" y="188" width="350" height="58" rx="20" fill="#FFF7ED"/>
+  <text x="92" y="214" fill="#EA580C" font-size="12" font-weight="bold">SUPPORT</text>
+  <text x="92" y="235" fill="#0F172A" font-size="24" font-weight="bold">Create Ticket</text>
+  <rect x="68" y="266" width="238" height="716" rx="24" fill="white" stroke="#E2E8F0"/>
+  <rect x="322" y="266" width="96" height="146" rx="22" fill="#F8FAFC" stroke="#E2E8F0"/>
+  <rect x="322" y="430" width="96" height="128" rx="22" fill="#F8FAFC" stroke="#E2E8F0"/>
+  <text x="92" y="300" fill="#0F172A" font-size="22" font-weight="bold">Raise a resource-related ticket</text>
+  <text x="92" y="330" fill="#64748B" font-size="13">Resource</text>
+  <rect x="92" y="340" width="190" height="38" rx="12" fill="white" stroke="#CBD5E1"/>
+  <text x="104" y="364" fill="#334155" font-size="13">PC Lab 03</text>
+  <text x="92" y="398" fill="#64748B" font-size="13">Category</text>
+  <rect x="92" y="408" width="190" height="38" rx="12" fill="white" stroke="#CBD5E1"/>
+  <text x="104" y="432" fill="#334155" font-size="13">Equipment</text>
+  <text x="92" y="466" fill="#64748B" font-size="13">Issue Summary</text>
+  <rect x="92" y="476" width="190" height="38" rx="12" fill="white" stroke="#CBD5E1"/>
+  <text x="104" y="500" fill="#334155" font-size="13">Projector not turning on</text>
+  <text x="92" y="534" fill="#64748B" font-size="13">Location</text>
+  <rect x="92" y="544" width="190" height="38" rx="12" fill="white" stroke="#CBD5E1"/>
+  <text x="104" y="568" fill="#334155" font-size="13">Main Building - Lab Wing</text>
+  <text x="92" y="602" fill="#64748B" font-size="13">Contact Email</text>
+  <rect x="92" y="612" width="190" height="38" rx="12" fill="white" stroke="#CBD5E1"/>
+  <text x="104" y="636" fill="#334155" font-size="13">user@my.sliit.lk</text>
+  <text x="92" y="670" fill="#64748B" font-size="13">Cell Number</text>
+  <rect x="92" y="680" width="190" height="38" rx="12" fill="white" stroke="#CBD5E1"/>
+  <text x="104" y="704" fill="#334155" font-size="13">0771234567</text>
+  <text x="92" y="738" fill="#64748B" font-size="13">Brief Description</text>
+  <rect x="92" y="748" width="190" height="92" rx="14" fill="white" stroke="#CBD5E1"/>
+  <text x="104" y="772" fill="#94A3B8" font-size="12">Projector in the lab does not power on</text>
+  <text x="104" y="790" fill="#94A3B8" font-size="12">for scheduled sessions. Needs quick fix.</text>
+  <text x="92" y="868" fill="#64748B" font-size="13">Urgency</text>
+  <rect x="92" y="878" width="90" height="38" rx="12" fill="white" stroke="#CBD5E1"/>
+  <text x="106" y="902" fill="#334155" font-size="13">HIGH</text>
+  <rect x="192" y="878" width="90" height="38" rx="12" fill="#FFF7ED" stroke="#FDBA74"/>
+  <text x="206" y="902" fill="#C2410C" font-size="12" font-weight="bold">3 images</text>
+  <rect x="92" y="934" width="130" height="40" rx="16" fill="#EA580C"/>
+  <text x="124" y="959" fill="white" font-size="12" font-weight="bold">Submit Ticket</text>
+  <text x="338" y="294" fill="#64748B" font-size="11" font-weight="bold">COVERED</text>
+  <text x="338" y="324" fill="#0F172A" font-size="26" font-weight="bold">74</text>
+  <text x="338" y="346" fill="#64748B" font-size="12">resources</text>
+  <text x="338" y="458" fill="#0F172A" font-size="15" font-weight="bold">Write for fast triage</text>
+  <text x="338" y="482" fill="#64748B" font-size="12">State what failed</text>
+  <text x="338" y="500" fill="#64748B" font-size="12">Add location context</text>
+  <text x="338" y="518" fill="#64748B" font-size="12">Mark urgency clearly</text>
+
+  <rect x="504" y="188" width="350" height="58" rx="20" fill="#FFF7ED"/>
+  <text x="528" y="214" fill="#EA580C" font-size="12" font-weight="bold">SUPPORT</text>
+  <text x="528" y="235" fill="#0F172A" font-size="24" font-weight="bold">My Tickets</text>
+  <rect x="504" y="266" width="80" height="96" rx="18" fill="#F8FAFC" stroke="#E2E8F0"/>
+  <rect x="596" y="266" width="80" height="96" rx="18" fill="#F8FAFC" stroke="#E2E8F0"/>
+  <rect x="688" y="266" width="80" height="96" rx="18" fill="#F8FAFC" stroke="#E2E8F0"/>
+  <rect x="780" y="266" width="80" height="96" rx="18" fill="#F8FAFC" stroke="#E2E8F0"/>
+  <text x="522" y="292" fill="#64748B" font-size="10" font-weight="bold">OPEN</text>
+  <text x="522" y="328" fill="#0F172A" font-size="24" font-weight="bold">4</text>
+  <text x="614" y="292" fill="#64748B" font-size="10" font-weight="bold">ASSIGNED</text>
+  <text x="614" y="328" fill="#0F172A" font-size="24" font-weight="bold">2</text>
+  <text x="706" y="292" fill="#64748B" font-size="10" font-weight="bold">REJECTED</text>
+  <text x="706" y="328" fill="#0F172A" font-size="24" font-weight="bold">1</text>
+  <text x="798" y="292" fill="#64748B" font-size="10" font-weight="bold">RESOLVED</text>
+  <text x="798" y="328" fill="#0F172A" font-size="24" font-weight="bold">6</text>
+  <rect x="504" y="386" width="350" height="40" rx="18" fill="#F1F5F9"/>
+  <rect x="510" y="392" width="64" height="28" rx="14" fill="white"/>
+  <text x="529" y="410" fill="#4F46E5" font-size="11" font-weight="bold">All</text>
+  <text x="589" y="410" fill="#64748B" font-size="11" font-weight="bold">Open Tickets</text>
+  <text x="694" y="410" fill="#64748B" font-size="11" font-weight="bold">Assigned</text>
+  <text x="774" y="410" fill="#64748B" font-size="11" font-weight="bold">Resolved</text>
+  <rect x="504" y="450" width="350" height="168" rx="24" fill="white" stroke="#E2E8F0"/>
+  <rect x="526" y="474" width="112" height="26" rx="13" fill="#DBEAFE"/>
+  <text x="548" y="491" fill="#1D4ED8" font-size="11" font-weight="bold">TECHNICIAN ASSIGNED</text>
+  <text x="648" y="493" fill="#0F172A" font-size="18" font-weight="bold">Projector not turning on</text>
+  <rect x="526" y="520" width="94" height="28" rx="14" fill="#0F172A"/>
+  <text x="547" y="538" fill="white" font-size="11" font-weight="bold">TK1042</text>
+  <text x="526" y="572" fill="#64748B" font-size="13">Technician assigned: K. Perera</text>
+  <text x="526" y="598" fill="#64748B" font-size="13">Priority HIGH • Created today</text>
+  <rect x="720" y="558" width="108" height="38" rx="14" fill="#1D4ED8"/>
+  <text x="746" y="582" fill="white" font-size="12" font-weight="bold">Track Issue</text>
+  <rect x="504" y="642" width="350" height="454" rx="24" fill="#FCFDFF" stroke="#E2E8F0"/>
+  <text x="526" y="678" fill="#0F172A" font-size="20" font-weight="bold">Ticket Details</text>
+  <text x="526" y="710" fill="#64748B" font-size="12">Status badge, ticket ID, priority, category and reported resource</text>
+  <rect x="526" y="732" width="304" height="86" rx="16" fill="white" stroke="#E2E8F0"/>
+  <text x="542" y="758" fill="#334155" font-size="12">Reported by user • Contact details • Current stage</text>
+  <text x="542" y="780" fill="#64748B" font-size="12">Resource: PC Lab 03 • Location: Main Building - Lab Wing</text>
+  <rect x="526" y="838" width="304" height="84" rx="16" fill="white" stroke="#E2E8F0"/>
+  <text x="542" y="864" fill="#334155" font-size="12">Resolution Summary</text>
+  <text x="542" y="886" fill="#64748B" font-size="12">Resolution reason, configuration done, other suggestions</text>
+  <rect x="526" y="942" width="304" height="132" rx="16" fill="#EEF4FF" stroke="#C7D2FE"/>
+  <text x="542" y="968" fill="#1E3A8A" font-size="12" font-weight="bold">Rate Technician Service</text>
+  <text x="542" y="990" fill="#64748B" font-size="12">QR session token shown here after technician generates it.</text>
+  <text x="542" y="1014" fill="#64748B" font-size="12">Manual token input + star rating + suggestions form.</text>
+
+  <rect x="940" y="188" width="350" height="58" rx="20" fill="#FFF7ED"/>
+  <text x="964" y="214" fill="#EA580C" font-size="12" font-weight="bold">OPERATIONS</text>
+  <text x="964" y="235" fill="#0F172A" font-size="24" font-weight="bold">Ticket Handling</text>
+  <rect x="940" y="266" width="170" height="40" rx="18" fill="#F1F5F9"/>
+  <rect x="946" y="272" width="82" height="28" rx="14" fill="white"/>
+  <text x="964" y="290" fill="#4F46E5" font-size="11" font-weight="bold">Manage</text>
+  <text x="1038" y="290" fill="#64748B" font-size="11" font-weight="bold">Assign Technician</text>
+  <rect x="940" y="326" width="108" height="96" rx="18" fill="#F8FAFC" stroke="#E2E8F0"/>
+  <rect x="1060" y="326" width="108" height="96" rx="18" fill="#F8FAFC" stroke="#E2E8F0"/>
+  <rect x="1180" y="326" width="108" height="96" rx="18" fill="#F8FAFC" stroke="#E2E8F0"/>
+  <text x="958" y="352" fill="#64748B" font-size="10" font-weight="bold">TOTAL TICKETS</text>
+  <text x="958" y="388" fill="#0F172A" font-size="24" font-weight="bold">26</text>
+  <text x="1078" y="352" fill="#64748B" font-size="10" font-weight="bold">PENDING TRIAGE</text>
+  <text x="1078" y="388" fill="#0F172A" font-size="24" font-weight="bold">5</text>
+  <text x="1198" y="352" fill="#64748B" font-size="10" font-weight="bold">ACTIVE JOBS</text>
+  <text x="1198" y="388" fill="#0F172A" font-size="24" font-weight="bold">9</text>
+  <rect x="940" y="446" width="350" height="56" rx="18" fill="#FCFDFF" stroke="#E2E8F0"/>
+  <rect x="958" y="458" width="112" height="32" rx="12" fill="white" stroke="#CBD5E1"/>
+  <rect x="1082" y="458" width="188" height="32" rx="12" fill="white" stroke="#CBD5E1"/>
+  <text x="978" y="478" fill="#334155" font-size="12">Priority: ALL</text>
+  <text x="1100" y="478" fill="#94A3B8" font-size="12">Search by ticket ID...</text>
+  <rect x="940" y="526" width="350" height="170" rx="24" fill="white" stroke="#E2E8F0"/>
+  <text x="962" y="552" fill="#0F172A" font-size="18" font-weight="bold">Manage Tickets List</text>
+  <text x="962" y="582" fill="#64748B" font-size="12">TicketCard rows with status, title, location, rejection notes and technician name</text>
+  <rect x="962" y="606" width="304" height="68" rx="16" fill="#F8FAFC" stroke="#E2E8F0"/>
+  <text x="980" y="632" fill="#334155" font-size="12">TK1042 • Projector not turning on • HIGH</text>
+  <text x="980" y="654" fill="#64748B" font-size="12">Track Issue action opens the detailed admin control page.</text>
+  <rect x="940" y="720" width="350" height="376" rx="24" fill="#FCFDFF" stroke="#E2E8F0"/>
+  <text x="962" y="756" fill="#0F172A" font-size="20" font-weight="bold">Admin Detail Actions</text>
+  <rect x="962" y="780" width="304" height="102" rx="16" fill="white" stroke="#E2E8F0"/>
+  <text x="978" y="806" fill="#334155" font-size="12">TechnicianAssignmentPanel</text>
+  <text x="978" y="828" fill="#64748B" font-size="12">Select technician and assign ownership.</text>
+  <rect x="962" y="902" width="304" height="170" rx="16" fill="white" stroke="#E2E8F0"/>
+  <text x="978" y="928" fill="#334155" font-size="12">Administrative Control</text>
+  <text x="978" y="952" fill="#64748B" font-size="12">Mark Under Review</text>
+  <rect x="978" y="966" width="230" height="64" rx="12" fill="#F8FAFC" stroke="#CBD5E1"/>
+  <text x="992" y="992" fill="#94A3B8" font-size="12">Reject note textarea</text>
+  <rect x="978" y="1040" width="132" height="26" rx="13" fill="#FEE2E2"/>
+  <text x="996" y="1057" fill="#DC2626" font-size="10" font-weight="bold">Reject Ticket With Note</text>
+
+  <rect x="1376" y="188" width="356" height="58" rx="20" fill="#FFF7ED"/>
+  <text x="1400" y="214" fill="#EA580C" font-size="12" font-weight="bold">ASSIGNED WORK</text>
+  <text x="1400" y="235" fill="#0F172A" font-size="24" font-weight="bold">Assigned Tickets</text>
+  <rect x="1376" y="266" width="236" height="40" rx="18" fill="#F1F5F9"/>
+  <rect x="1382" y="272" width="56" height="28" rx="14" fill="white"/>
+  <text x="1397" y="290" fill="#4F46E5" font-size="11" font-weight="bold">All</text>
+  <text x="1451" y="290" fill="#64748B" font-size="11" font-weight="bold">Active</text>
+  <text x="1511" y="290" fill="#64748B" font-size="11" font-weight="bold">Resolved</text>
+  <text x="1588" y="290" fill="#64748B" font-size="11" font-weight="bold">Closed</text>
+  <rect x="1376" y="326" width="356" height="156" rx="24" fill="white" stroke="#E2E8F0"/>
+  <text x="1398" y="352" fill="#0F172A" font-size="18" font-weight="bold">Assigned Ticket Card</text>
+  <text x="1398" y="382" fill="#64748B" font-size="12">Technicians open the card and move to resolution notes.</text>
+  <rect x="1398" y="400" width="302" height="56" rx="14" fill="#F8FAFC" stroke="#E2E8F0"/>
+  <text x="1414" y="424" fill="#334155" font-size="12">TK1042 • Projector not turning on • IN_PROGRESS</text>
+  <text x="1414" y="444" fill="#64748B" font-size="12">Track Issue leads to /technician/tickets/:id</text>
+  <rect x="1376" y="506" width="356" height="590" rx="24" fill="#FCFDFF" stroke="#E2E8F0"/>
+  <text x="1398" y="542" fill="#0F172A" font-size="20" font-weight="bold">Resolution Notes Page</text>
+  <rect x="1398" y="566" width="302" height="168" rx="16" fill="white" stroke="#E2E8F0"/>
+  <text x="1414" y="592" fill="#334155" font-size="12">ResolutionNotesForm</text>
+  <text x="1414" y="616" fill="#64748B" font-size="12">Resolution notes</text>
+  <text x="1414" y="636" fill="#64748B" font-size="12">Configuration done</text>
+  <text x="1414" y="656" fill="#64748B" font-size="12">Suggestions</text>
+  <rect x="1414" y="680" width="124" height="34" rx="12" fill="#EA580C"/>
+  <text x="1444" y="702" fill="white" font-size="12" font-weight="bold">Save Resolution</text>
+  <rect x="1398" y="754" width="302" height="170" rx="16" fill="#EEF4FF" stroke="#C7D2FE"/>
+  <text x="1414" y="780" fill="#1E3A8A" font-size="12" font-weight="bold">Rating QR</text>
+  <text x="1414" y="804" fill="#64748B" font-size="12">Generate QR token after resolution.</text>
+  <rect x="1508" y="790" width="92" height="92" rx="12" fill="white" stroke="#CBD5E1"/>
+  <path d="M1526 808h18v18h-18zM1564 808h18v18h-18zM1526 846h18v18h-18zM1564 846h18v18h-18z" fill="#0F172A"/>
+  <text x="1414" y="900" fill="#334155" font-size="12">Token ID: RT-98A4</text>
+  <rect x="1414" y="914" width="144" height="34" rx="12" fill="#1D4ED8"/>
+  <text x="1442" y="936" fill="white" font-size="12" font-weight="bold">Generate QR Token</text>
+  <rect x="1398" y="944" width="302" height="126" rx="16" fill="white" stroke="#E2E8F0"/>
+  <text x="1414" y="970" fill="#334155" font-size="12">Resource Details + Attachments + Worklog</text>
+  <text x="1414" y="994" fill="#64748B" font-size="12">Resource, location, contact details and evidence images</text>
+  <text x="1414" y="1018" fill="#64748B" font-size="12">Technician can review prior notes before finalizing</text>
+</svg>

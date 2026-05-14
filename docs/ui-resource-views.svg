@@ -1,0 +1,153 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1080" viewBox="0 0 1600 1080" font-family="Arial, Helvetica, sans-serif">
+  <rect width="1600" height="1080" fill="#F5F7FB"/>
+  <rect x="0" y="0" width="1600" height="86" fill="#0F766E"/>
+  <text x="70" y="52" fill="white" font-size="30" font-weight="bold">Resource Allocation UI Board</text>
+  <text x="70" y="76" fill="#CCFBF1" font-size="15">User browsing and admin resource management screens for campus facilities and assets</text>
+
+  <rect x="44" y="116" width="474" height="908" rx="28" fill="#FFFFFF" stroke="#D6DFEA"/>
+  <rect x="562" y="116" width="474" height="908" rx="28" fill="#FFFFFF" stroke="#D6DFEA"/>
+  <rect x="1080" y="116" width="474" height="908" rx="28" fill="#FFFFFF" stroke="#D6DFEA"/>
+
+  <text x="74" y="160" fill="#1E293B" font-size="24" font-weight="bold">User: Resources Catalogue</text>
+  <text x="592" y="160" fill="#1E293B" font-size="24" font-weight="bold">User: Resource Details</text>
+  <text x="1110" y="160" fill="#1E293B" font-size="24" font-weight="bold">Admin: Manage Resources</text>
+
+  <rect x="74" y="188" width="414" height="58" rx="20" fill="#ECFEFF"/>
+  <text x="98" y="214" fill="#0F766E" font-size="12" font-weight="bold">FACILITIES CATALOGUE</text>
+  <text x="98" y="235" fill="#0F172A" font-size="24" font-weight="bold">Resources</text>
+  <rect x="74" y="266" width="200" height="42" rx="18" fill="#F1F5F9"/>
+  <rect x="80" y="272" width="92" height="30" rx="14" fill="white"/>
+  <text x="100" y="291" fill="#4F46E5" font-size="11" font-weight="bold">Equipment</text>
+  <text x="185" y="291" fill="#64748B" font-size="11" font-weight="bold">Space Resources</text>
+  <rect x="74" y="328" width="414" height="66" rx="22" fill="#FCFDFF" stroke="#E2E8F0"/>
+  <rect x="92" y="344" width="120" height="34" rx="12" fill="white" stroke="#CBD5E1"/>
+  <rect x="222" y="344" width="76" height="34" rx="12" fill="white" stroke="#CBD5E1"/>
+  <rect x="308" y="344" width="86" height="34" rx="12" fill="white" stroke="#CBD5E1"/>
+  <rect x="404" y="344" width="66" height="34" rx="12" fill="#1D4ED8"/>
+  <text x="109" y="366" fill="#64748B" font-size="12">search...</text>
+  <text x="243" y="366" fill="#334155" font-size="12">Type</text>
+  <text x="327" y="366" fill="#334155" font-size="12">Location</text>
+  <text x="422" y="366" fill="white" font-size="12" font-weight="bold">Filter</text>
+
+  <rect x="74" y="418" width="414" height="180" rx="26" fill="white" stroke="#E2E8F0"/>
+  <circle cx="124" cy="474" r="34" fill="#F8FAFC" stroke="#E2E8F0"/>
+  <text x="111" y="482" font-size="26">💻</text>
+  <text x="172" y="456" fill="#0F172A" font-size="20" font-weight="bold">PC Lab 03</text>
+  <rect x="286" y="438" width="96" height="26" rx="13" fill="#DCFCE7"/>
+  <text x="307" y="455" fill="#15803D" font-size="11" font-weight="bold">AVAILABLE</text>
+  <text x="172" y="482" fill="#4F46E5" font-size="13" font-weight="bold">PC Lab</text>
+  <text x="172" y="504" fill="#64748B" font-size="13">Main Building - Lab Wing</text>
+  <rect x="172" y="526" width="226" height="46" rx="14" fill="#F8FAFC" stroke="#EEF2F7"/>
+  <text x="186" y="554" fill="#64748B" font-size="12">"Networked lab with smart boards and projector setup."</text>
+  <rect x="172" y="582" width="78" height="24" rx="12" fill="#FFFFFF" stroke="#E2E8F0"/>
+  <rect x="258" y="582" width="106" height="24" rx="12" fill="#FFFFFF" stroke="#E2E8F0"/>
+  <rect x="372" y="582" width="72" height="24" rx="12" fill="#FFFFFF" stroke="#E2E8F0"/>
+  <text x="187" y="598" fill="#475569" font-size="10">Capacity 40</text>
+  <text x="272" y="598" fill="#475569" font-size="10">PCs 35/40 working</text>
+  <text x="387" y="598" fill="#475569" font-size="10">Code LAB03</text>
+  <rect x="364" y="528" width="96" height="38" rx="14" fill="#1D4ED8"/>
+  <text x="384" y="552" fill="white" font-size="12" font-weight="bold">View Details</text>
+
+  <rect x="74" y="620" width="414" height="180" rx="26" fill="white" stroke="#E2E8F0"/>
+  <circle cx="124" cy="676" r="34" fill="#F8FAFC" stroke="#E2E8F0"/>
+  <text x="112" y="684" font-size="26">🏢</text>
+  <text x="172" y="658" fill="#0F172A" font-size="20" font-weight="bold">Seminar Hall B</text>
+  <rect x="302" y="640" width="92" height="26" rx="13" fill="#FEE2E2"/>
+  <text x="322" y="657" fill="#DC2626" font-size="11" font-weight="bold">OCCUPIED</text>
+  <text x="172" y="684" fill="#4F46E5" font-size="13" font-weight="bold">Lecture Hall</text>
+  <text x="172" y="706" fill="#64748B" font-size="13">Business Block - Level 2</text>
+  <rect x="172" y="728" width="226" height="46" rx="14" fill="#F8FAFC" stroke="#EEF2F7"/>
+  <text x="186" y="756" fill="#64748B" font-size="12">"Presentation-friendly hall with projector, screens and audio."</text>
+  <rect x="364" y="730" width="96" height="38" rx="14" fill="#1D4ED8"/>
+  <text x="384" y="754" fill="white" font-size="12" font-weight="bold">View Details</text>
+
+  <rect x="592" y="188" width="414" height="58" rx="20" fill="#ECFEFF"/>
+  <text x="616" y="214" fill="#0F766E" font-size="12" font-weight="bold">RESOURCE DETAILS</text>
+  <text x="616" y="235" fill="#0F172A" font-size="24" font-weight="bold">PC Lab 03</text>
+  <rect x="592" y="266" width="260" height="534" rx="24" fill="white" stroke="#E2E8F0"/>
+  <rect x="872" y="266" width="134" height="534" rx="24" fill="#FCFDFF" stroke="#E2E8F0"/>
+  <text x="616" y="300" fill="#64748B" font-size="12" font-weight="bold">Use the details below to confirm the resource matches your booking needs.</text>
+  <text x="616" y="350" fill="#64748B" font-size="13">Type</text>
+  <text x="740" y="350" fill="#334155" font-size="13">PC Lab</text>
+  <text x="616" y="382" fill="#64748B" font-size="13">Location</text>
+  <text x="740" y="382" fill="#334155" font-size="13">Main Building - Lab Wing</text>
+  <text x="616" y="414" fill="#64748B" font-size="13">Status</text>
+  <text x="740" y="414" fill="#334155" font-size="13">AVAILABLE</text>
+  <text x="616" y="446" fill="#64748B" font-size="13">Code</text>
+  <text x="740" y="446" fill="#334155" font-size="13">LAB03</text>
+  <text x="616" y="478" fill="#64748B" font-size="13">Capacity</text>
+  <text x="740" y="478" fill="#334155" font-size="13">40</text>
+  <text x="616" y="510" fill="#64748B" font-size="13">Total PCs</text>
+  <text x="740" y="510" fill="#334155" font-size="13">40</text>
+  <text x="616" y="542" fill="#64748B" font-size="13">Working PCs</text>
+  <text x="740" y="542" fill="#334155" font-size="13">35</text>
+  <text x="616" y="574" fill="#64748B" font-size="13">Projectors</text>
+  <text x="740" y="574" fill="#334155" font-size="13">1/1 working</text>
+  <text x="616" y="606" fill="#64748B" font-size="13">Smart Boards</text>
+  <text x="740" y="606" fill="#334155" font-size="13">1/1 working</text>
+  <rect x="616" y="650" width="184" height="42" rx="16" fill="#1D4ED8"/>
+  <text x="646" y="676" fill="white" font-size="13" font-weight="bold">Book Resource</text>
+  <rect x="616" y="708" width="128" height="40" rx="16" fill="#E2E8F0"/>
+  <text x="645" y="733" fill="#334155" font-size="12" font-weight="bold">Back to Resources</text>
+  <text x="896" y="300" fill="#0F172A" font-size="18" font-weight="bold">Availability</text>
+  <text x="896" y="326" fill="#64748B" font-size="12">currently available for booking</text>
+  <text x="896" y="368" fill="#64748B" font-size="12" font-weight="bold">Occupied time windows today</text>
+  <rect x="890" y="388" width="98" height="72" rx="16" fill="white" stroke="#E2E8F0"/>
+  <text x="902" y="412" fill="#334155" font-size="12" font-weight="bold">BK1012</text>
+  <text x="902" y="434" fill="#64748B" font-size="11">09:00 - 11:00</text>
+  <text x="902" y="452" fill="#64748B" font-size="11">APPROVED</text>
+  <rect x="890" y="474" width="98" height="72" rx="16" fill="white" stroke="#E2E8F0"/>
+  <text x="902" y="498" fill="#334155" font-size="12" font-weight="bold">BK1016</text>
+  <text x="902" y="520" fill="#64748B" font-size="11">13:00 - 15:00</text>
+  <text x="902" y="538" fill="#64748B" font-size="11">PENDING</text>
+
+  <rect x="1110" y="188" width="414" height="58" rx="20" fill="#ECFEFF"/>
+  <text x="1134" y="214" fill="#0F766E" font-size="12" font-weight="bold">FACILITIES &amp; ASSETS</text>
+  <text x="1134" y="235" fill="#0F172A" font-size="24" font-weight="bold">Manage Resources</text>
+  <rect x="1110" y="266" width="126" height="104" rx="20" fill="#F8FAFC" stroke="#E2E8F0"/>
+  <rect x="1254" y="266" width="126" height="104" rx="20" fill="#F8FAFC" stroke="#E2E8F0"/>
+  <rect x="1398" y="266" width="126" height="104" rx="20" fill="#F8FAFC" stroke="#E2E8F0"/>
+  <text x="1134" y="294" fill="#64748B" font-size="11" font-weight="bold">CATALOGUE SIZE</text>
+  <text x="1134" y="334" fill="#0F172A" font-size="28" font-weight="bold">74</text>
+  <text x="1278" y="294" fill="#64748B" font-size="11" font-weight="bold">READY TO USE</text>
+  <text x="1278" y="334" fill="#0F172A" font-size="28" font-weight="bold">61</text>
+  <text x="1422" y="294" fill="#64748B" font-size="11" font-weight="bold">OUT OF SERVICE</text>
+  <text x="1422" y="334" fill="#0F172A" font-size="28" font-weight="bold">13</text>
+  <rect x="1110" y="390" width="414" height="42" rx="18" fill="#F1F5F9"/>
+  <rect x="1116" y="396" width="92" height="30" rx="14" fill="white"/>
+  <text x="1136" y="415" fill="#4F46E5" font-size="11" font-weight="bold">Equipment</text>
+  <text x="1222" y="415" fill="#64748B" font-size="11" font-weight="bold">Space Resources</text>
+
+  <rect x="1110" y="452" width="234" height="466" rx="24" fill="white" stroke="#E2E8F0"/>
+  <rect x="1360" y="452" width="164" height="466" rx="24" fill="#FCFDFF" stroke="#E2E8F0"/>
+  <text x="1132" y="486" fill="#0F172A" font-size="18" font-weight="bold">Resource List</text>
+  <rect x="1132" y="508" width="190" height="118" rx="20" fill="#F8FAFC" stroke="#E2E8F0"/>
+  <text x="1150" y="536" fill="#0F172A" font-size="16" font-weight="bold">Projector Unit P-14</text>
+  <text x="1150" y="560" fill="#64748B" font-size="12">Service order 14</text>
+  <rect x="1150" y="580" width="74" height="26" rx="13" fill="#DCFCE7"/>
+  <rect x="1232" y="580" width="90" height="26" rx="13" fill="#FEE2E2"/>
+  <text x="1164" y="597" fill="#15803D" font-size="10" font-weight="bold">Working</text>
+  <text x="1253" y="597" fill="#DC2626" font-size="10" font-weight="bold">Out Of Order</text>
+  <rect x="1132" y="642" width="190" height="118" rx="20" fill="#F8FAFC" stroke="#E2E8F0"/>
+  <text x="1150" y="670" fill="#0F172A" font-size="16" font-weight="bold">Smart Board SB-02</text>
+  <text x="1150" y="694" fill="#64748B" font-size="12">Assigned to Main Building</text>
+  <rect x="1150" y="714" width="74" height="26" rx="13" fill="#DCFCE7"/>
+  <rect x="1232" y="714" width="58" height="26" rx="13" fill="#FEE2E2"/>
+  <text x="1164" y="731" fill="#15803D" font-size="10" font-weight="bold">Working</text>
+  <text x="1248" y="731" fill="#DC2626" font-size="10" font-weight="bold">Remove</text>
+
+  <text x="1382" y="486" fill="#0F172A" font-size="18" font-weight="bold">Create Resource</text>
+  <text x="1382" y="512" fill="#64748B" font-size="12">Add a new space or asset</text>
+  <text x="1382" y="548" fill="#64748B" font-size="12">Name</text>
+  <rect x="1382" y="556" width="120" height="34" rx="12" fill="white" stroke="#CBD5E1"/>
+  <text x="1382" y="610" fill="#64748B" font-size="12">Type</text>
+  <rect x="1382" y="618" width="120" height="34" rx="12" fill="white" stroke="#CBD5E1"/>
+  <text x="1382" y="672" fill="#64748B" font-size="12">Status</text>
+  <rect x="1382" y="680" width="120" height="34" rx="12" fill="white" stroke="#CBD5E1"/>
+  <text x="1382" y="734" fill="#64748B" font-size="12">Building</text>
+  <rect x="1382" y="742" width="120" height="34" rx="12" fill="white" stroke="#CBD5E1"/>
+  <text x="1382" y="796" fill="#64748B" font-size="12">Description</text>
+  <rect x="1382" y="804" width="120" height="56" rx="12" fill="white" stroke="#CBD5E1"/>
+  <rect x="1382" y="876" width="120" height="40" rx="16" fill="#0F766E"/>
+  <text x="1413" y="901" fill="white" font-size="12" font-weight="bold">Create Resource</text>
+</svg>

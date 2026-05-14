@@ -15,7 +15,7 @@ const staffEmailSuffix = `@${staffEmailDomain}`
 
 const roleCredentials = {
   [ROLES.USER]: {
-    username: `it12345678${studentEmailSuffix}`,
+    username: 'user@campus.local',
     password: 'user',
   },
   [ROLES.ADMIN]: {
