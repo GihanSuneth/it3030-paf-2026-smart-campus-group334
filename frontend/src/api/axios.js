@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const apiClient = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api',
+  baseURL: import.meta.env.VITE_API_BASE_URL || '/api',
   timeout: 30000,
 })
 
@@ -25,7 +25,7 @@ apiClient.interceptors.response.use(
 
     if (!error.response) {
       return Promise.reject(
-        new Error('Cannot reach the backend. Start the Spring server on http://localhost:8080 and try again.')
+        new Error('Cannot reach the backend. Make sure the Spring server is running and the frontend proxy is configured.')
       )
     }
 
